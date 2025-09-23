@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC 
+  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" 
+  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<!-- 홈화면(큰 슬라이드) -->
+	<definition name="slideLayout" template="/WEB-INF/views/include/slideLayout.jsp">
+		<put-attribute name="nav" value="/WEB-INF/views/include/nav.jsp" />
+		<put-attribute name="slide" value="/WEB-INF/views/include/slide.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/views/include/footer.jsp" />
+	</definition>
+
+	<definition name="home" extends="slideLayout">
+		<put-attribute name="body" value="/WEB-INF/views/home.jsp" />
+	</definition>
+	
+	<!-- 관리자 메뉴 -->
+	<definition name="adminMainLayout" template="/WEB-INF/views/admin/adminMainLayout.jsp">
+		<put-attribute name="adminLeft" value="/WEB-INF/views/admin/adminLeft.jsp" />
+	</definition>
+	
+	<definition name="admin/*" extends="adminMainLayout">
+		<put-attribute name="adminContent" value="/WEB-INF/views/admin/{1}.jsp" />
+	</definition>
+	<definition name="admin/*/*" extends="adminMainLayout">
+		<put-attribute name="adminContent" value="/WEB-INF/views/admin/{1}/{2}.jsp" />
+	</definition>
+	
+	<!-- 그 외(작은 슬라이드) -->
+	<definition name="slide2Layout" template="/WEB-INF/views/include/slide2Layout.jsp">
+		<put-attribute name="nav" value="/WEB-INF/views/include/nav.jsp" />
+		<put-attribute name="slide" value="/WEB-INF/views/include/slide2.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/views/include/footer.jsp" />
+	</definition>
+
+	<definition name="*/*" extends="slide2Layout">
+		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}.jsp" />
+	</definition>
+	<definition name="*/*/*" extends="slide2Layout">
+		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}/{3}.jsp" />
+	</definition>
+    
+</tiles-definitions>
