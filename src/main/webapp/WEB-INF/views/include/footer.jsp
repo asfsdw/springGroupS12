@@ -8,5 +8,4 @@
 	<i class="fa fa-twitter w3-hover-opacity"></i>
 	<i class="fa fa-linkedin w3-hover-opacity"></i>
 	<p class="w3-medium">Copyright 2025. 9. 2 Design By <a href="http://localhost:9090/springGroupS12/">길동</a></p>
-	<p><font size="2"><%=request.getSession().getServletContext().getRealPath("/")%></font></p>
 </footer>

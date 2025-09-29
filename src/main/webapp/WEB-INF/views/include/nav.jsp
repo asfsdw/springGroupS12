@@ -28,7 +28,7 @@
 <div class="w3-top">
 	<div class="w3-bar w3-black w3-card">
 		<a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
-		<a href="http://192.168.50.53:9090/springGroupS12/" class="w3-bar-item w3-button w3-padding-large">HOME</a>
+		<a href="http://localhost:9090/springGroupS12/" class="w3-bar-item w3-button w3-padding-large">HOME</a>
 		<c:if test="${sLevel < 4}">
 			<a href="${ctp}/member/MemberMain" class="w3-bar-item w3-button w3-padding-large">내정보</a>
 		</c:if>
@@ -78,11 +78,11 @@
 			</c:if>
 		</div>
 		<c:if test="${empty sLevel}">
-			<a href="${ctp}/member/MemberLogin" class="w3-bar-item w3-button w3-padding-large w3-hide-small">로그인</a>
-			<a href="${ctp}/member/MemberJoin" class="w3-bar-item w3-button w3-padding-large w3-hide-small">회원가입</a>
+			<a href="${ctp}/member/Login" class="w3-bar-item w3-button w3-padding-large w3-hide-small">로그인</a>
+			<a href="${ctp}/member/SignUp" class="w3-bar-item w3-button w3-padding-large w3-hide-small">회원가입</a>
 		</c:if>
 		<c:if test="${!empty sLevel}">
-			<a href="${ctp}/member/MemberLogout" class="w3-bar-item w3-button w3-padding-large w3-hide-small">로그아웃</a>
+			<a href="${ctp}/member/Logout" class="w3-bar-item w3-button w3-padding-large w3-hide-small">로그아웃</a>
 		</c:if>
 		<a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i class="fa fa-search"></i></a>
 	</div>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.springGroupS12.dao.MemberDAO">
+	<select id="getMemberMid" resultType="com.spring.springGroupS12.vo.MemberVO">
+		SELECT * FROM member WHERE mid = #{mid};
+	</select>
+	<select id="getMemberNickName" resultType="com.spring.springGroupS12.vo.MemberVO">
+		SELECT * FROM member WHERE nickName = #{nickName};
+	</select>
+	<select id="getMemberEmail" resultType="com.spring.springGroupS12.vo.MemberVO">
+		SELECT * FROM member WHERE email = #{email};
+	</select>
+	
+	
+	
+	<insert id="setSignUpMember">
+		INSERT INTO member VALUES(DEFAULT,#{vo.mid},#{vo.pwd},#{vo.nickName},#{vo.name},#{vo.age},#{vo.email},
+			#{vo.address},#{vo.content},#{vo.userInfo},#{vo.myImage},DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT);
+	</insert>
+	
+	
+	
+	<update id="setMemberTempPwd">
+		UPDATE member SET pwd = #{tempPwd} WHERE mid = #{mid}; 
+	</update>
+	<update id="setLastDateUpdate">
+		UPDATE member SET lastDate = now() WHERE mid = #{mid};
+	</update>
+</mapper>

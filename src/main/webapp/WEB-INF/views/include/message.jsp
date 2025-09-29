@@ -10,11 +10,14 @@
     <title>message</title>
     <script>
     	'use strict';
+    	
     	let url = "";
+    	
     	if("${message}" != "") alert("${message}");
    		
     	if("${mid}" != "") url = "${url}?mid=${mid}";
     	else url = "${url}";
+    	
     	location.href = "${ctp}/"+url;
     </script>
   </head>

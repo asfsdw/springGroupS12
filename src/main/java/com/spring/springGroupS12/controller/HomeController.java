@@ -13,6 +13,7 @@ import java.util.Locale;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,8 +30,10 @@ import lombok.extern.slf4j.Slf4j;
 public class HomeController {
 	
 	@RequestMapping(value = {"/","/h","/index","main"}, method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
+	public String home(Locale locale, Model model, HttpSession session) {
 		log.info("Welcome home! The client locale is {}.", locale);
+		
+		if(session.getAttribute("sEmailKey") != null) session.removeAttribute("sEmailKey");
 		
 		Date date = new Date();
 		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
