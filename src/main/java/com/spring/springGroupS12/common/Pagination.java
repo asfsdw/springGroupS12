@@ -1,11 +1,18 @@
 package com.spring.springGroupS12.common;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.spring.springGroupS12.service.BoardService;
+import com.spring.springGroupS12.service.MemberService;
 import com.spring.springGroupS12.vo.PageVO;
 
 @Service
 public class Pagination {
+	@Autowired
+	MemberService memberService;
+	@Autowired
+	BoardService boardService;
 	
 	public PageVO pagination(PageVO vo) {
 		vo.setSection(vo.getSection() == null ? "" : vo.getSection());
@@ -25,16 +32,12 @@ public class Pagination {
 		vo.setPageSize(vo.getPageSize()==0 ? 10 : vo.getPageSize());
 		vo.setTotRecCnt(vo.getTotRecCnt() == 0 ? 1 : vo.getTotRecCnt());
 		
-		/*
 		if(vo.getSection().equals("member")) vo.setTotRecCnt(memberService.getTotRecCnt(vo.getFlag()));
-		else if(vo.getSection().equals("guest")) {
-			if(vo.getSearch() == null) vo.setTotRecCnt(guestService.getTotRecCnt(vo.getFlag(), "", ""));
-			else vo.setTotRecCnt(guestService.getTotRecCnt(vo.getFlag(), vo.getSearch(), vo.getSearchStr()));
-		}
 		else if(vo.getSection().equals("board")) {
 			if(vo.getSearch() == null) vo.setTotRecCnt(boardService.getTotRecCnt(vo.getFlag(), "", ""));
 			else vo.setTotRecCnt(boardService.getTotRecCnt(vo.getFlag(), vo.getSearch(), vo.getSearchStr()));
 		}
+		/*
 		else if(vo.getSection().equals("pds")) {
 			if(vo.getSearch() == null) vo.setTotRecCnt(pdsService.getTotRecCnt(vo.getFlag(), vo.getPart(), "", ""));
 			else vo.setTotRecCnt(adminService.getTotRecCnt(vo.getFlag(), vo.getSearch(), vo.getSearchStr()));

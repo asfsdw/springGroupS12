@@ -45,6 +45,7 @@ public class HomeController {
 		return "home";
 	}
 	
+	// 이미지 업로드.
 	@PostMapping("/ImageUpload")
 	public void imageUploadPost(MultipartFile upload, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.setCharacterEncoding("utf-8");
@@ -53,7 +54,6 @@ public class HomeController {
 		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/ckeditor/");
 		String oFileName = upload.getOriginalFilename();
 		
-		// 확장자 제한처리(이미지파일(jpg,gif,png) + 동영상파일(mp4))
 		String regExt = "(jpg|jpeg|gif|png|mp4|webm|ogv)";
 		String ext = oFileName.substring(oFileName.lastIndexOf(".")+1);
 		if(!ext.matches(regExt)) return;
@@ -66,6 +66,7 @@ public class HomeController {
 		byte[] bytes = upload.getBytes();
 		fos.write(bytes);
 		
+		// ckeditor에 결과 보내주기.
 		PrintWriter out = response.getWriter();
 		String fileUrl = request.getContextPath()+"/data/ckeditor/"+oFileName;
 		out.println("{\"originalFilename\":\""+oFileName+"\",\"uploaded\":\"1\",\"url\":\""+fileUrl+"\"}");

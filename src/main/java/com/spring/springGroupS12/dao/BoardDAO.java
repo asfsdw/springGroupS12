@@ -1,0 +1,21 @@
+package com.spring.springGroupS12.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.spring.springGroupS12.vo.BoardVO;
+
+public interface BoardDAO {
+	
+	int getTotRecCnt(@Param("flag") String flag, @Param("search") String search, @Param("searchStr") String searchStr);
+	
+	List<BoardVO> getBoardList();
+
+	BoardVO getBoard(@Param("idx") int idx);
+
+	int getParentIdx();
+	
+	int setBoardInput(@Param("vo") BoardVO vo);
+
+}

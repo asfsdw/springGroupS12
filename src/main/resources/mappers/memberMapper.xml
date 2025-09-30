@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.springGroupS12.dao.MemberDAO">
+	<select id="getTotRecCnt" resultType="int">
+		SELECT count(idx) FROM member 
+		<if test="flag == 'new'">WHERE startDate >= date_add(now(), interval -7 day)</if>;
+	</select>
 	<select id="getMemberMid" resultType="com.spring.springGroupS12.vo.MemberVO">
 		SELECT * FROM member WHERE mid = #{mid};
 	</select>
@@ -17,7 +21,9 @@
 		INSERT INTO member VALUES(DEFAULT,#{vo.mid},#{vo.pwd},#{vo.nickName},#{vo.name},#{vo.age},#{vo.email},
 			#{vo.address},#{vo.content},#{vo.userInfo},#{vo.myImage},DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT);
 	</insert>
-	
+	<insert id="setKakaoMemberInput">
+		INSERT INTO member(mid, pwd, nickName, name, age, email) VALUES(#{mid},#{pwd},#{nickName},#{nickName},#{age},#{email});
+	</insert>
 	
 	
 	<update id="setMemberTempPwd">

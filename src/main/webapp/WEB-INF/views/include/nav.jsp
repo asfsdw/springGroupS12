@@ -30,12 +30,9 @@
 		<a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
 		<a href="http://localhost:9090/springGroupS12/" class="w3-bar-item w3-button w3-padding-large">HOME</a>
 		<c:if test="${sLevel < 4}">
-			<a href="${ctp}/member/MemberMain" class="w3-bar-item w3-button w3-padding-large">내정보</a>
+			<a href="${ctp}/member/Main" class="w3-bar-item w3-button w3-padding-large">내정보</a>
 		</c:if>
-		<a href="${ctp}/guest/GuestList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">방명록</a>
-		<c:if test="${sLevel < 4}">
-			<a href="${ctp}/board/BoardList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">게시판</a>
-		</c:if>
+		<a href="${ctp}/board/BoardList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">게시판</a>
 		<c:if test="${sLevel < 3}">
 			<a href="${ctp}/pds/PDSList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">자료실</a>
 			

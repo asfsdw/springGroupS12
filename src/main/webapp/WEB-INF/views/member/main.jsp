@@ -10,7 +10,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
 	<title>Member Main</title>
-	<!-- 구글 chart 사용하기 위한 스크립트 -->
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 	<script type="text/javascript">
 		// 관리자일 경우에만 스크립트 실행.
@@ -41,7 +40,7 @@
 				chart.draw(data, google.charts.Bar.convertOptions(options));
 			}
 		}
-
+	
 		// chart 변경.
 		function chartView(flag) {
 			if (flag == 1) {
@@ -133,9 +132,6 @@
 			</div>
 		</c:if>
 		<hr/>
-		<div>
-			방명록에 올린 글 수 : ${guestCnt}<br/>
-		</div>
 		<p><br/></p>
 	</div>
 </body>

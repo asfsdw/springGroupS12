@@ -73,10 +73,8 @@ public class ProjectProvide {
 		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
 		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/"+part+"/");
 		FileOutputStream fos = new FileOutputStream(realPath + sFileName);
-		
 		if(fName.getBytes().length != -1) fos.write(fName.getBytes());
 		fos.flush();
-		
 		fos.close();
 	}
 	// 파일 삭제.

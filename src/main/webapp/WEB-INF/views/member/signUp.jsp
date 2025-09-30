@@ -69,26 +69,6 @@
 						</label>
 					</div>
 				</div>
-				<div class="input-group mb-3">
-					<label for="tel" class="input-group-text boxWidth">전화번호</label>
-					<select name="tel1" id="tel1" class="form-control text-center">
-						<option value="010" selected>010</option>
-						<option value="02">서울</option>
-						<option value="031">경기</option>
-						<option value="032">인천</option>
-						<option value="041">충남</option>
-						<option value="042">대전</option>
-						<option value="043">충북</option>
-						<option value="051">부산</option>
-						<option value="052">울산</option>
-						<option value="061">전북</option>
-						<option value="062">광주</option>
-					</select>
-					<span class="input-group-text">-</span>
-					<input type="text" name="tel2" id="tel2" size=4 maxlength=4 value="" class="form-control text-center" />
-					<span class="input-group-text">-</span>
-					<input type="text" name="tel3" id="tel3" size=4 maxlength=4 value="" class="form-control text-center" />
-				</div>
 				<div class="input-group mb-3 col" >
 		     	<label for="address" class="input-group-text boxWidth">주 소</label>
 					<input type="text" name="postcode" id="sample6_postcode" placeholder="우편번호" class="form-control">
@@ -125,12 +105,12 @@
 			</div>
 			<hr/>
 			<div class="text-center">
-				<button type="button" class="btn btn-success" onclick="fCheck()">회원가입</button>&nbsp;
+				<button type="button" class="btn btn-success" onclick="fCheck(${year})">회원가입</button>&nbsp;
 				<button type="button" class="btn btn-warning" onclick="location.reload()">다시작성</button>&nbsp;
 				<button type="button" class="btn btn-info" onclick="location.href='${ctp}/member/Login'">돌아가기</button>&nbsp;
 			</div>
+			<input type="hidden" name="age" id="age" value="" />
 			<input type="hidden" name="email" id="email" value="" />
-			<input type="hidden" name="tel" id="tel" value="" />
 			<input type="hidden" name="address" id="address" value="" />
 		</form>
 	</div>

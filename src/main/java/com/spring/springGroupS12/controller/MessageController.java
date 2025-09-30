@@ -21,9 +21,17 @@ public class MessageController {
 			model.addAttribute("message", "회원가입에 실패했습니다.");
 			model.addAttribute("url", "member/SignUp");
 		}
+		else if(msgFlag.equals("minor")) {
+			model.addAttribute("message", "미성년자는 가입하실 수 없습니다.");
+			model.addAttribute("url", "/main");
+		}
 		else if(msgFlag.equals("idDuplication")) {
 			model.addAttribute("message", "중복된 아이디입니다.");
 			model.addAttribute("url", "member/SignUp");
+		}
+		else if(msgFlag.equals("midSameSearch")) {
+			model.addAttribute("message", "같은 아이디가 존재합니다.\\n다른 이메일로 가입하시거나\\n가입한 아이디로 로그인 해주세요.");
+			model.addAttribute("url", "/member/Login");
 		}
 		else if(msgFlag.equals("nickNameDuplication")) {
 			model.addAttribute("message", "중복된 닉네임입니다.");
@@ -33,6 +41,10 @@ public class MessageController {
 			model.addAttribute("message", mid+"님 로그인되셨습니다.");
 			model.addAttribute("url", "member/Main");
 		}
+		else if(msgFlag.equals("newLoginOk")) {
+			model.addAttribute("message", mid+"님 로그인 되셨습니다.\\n임시 비밀번호가 발급되었습니다.");
+			model.addAttribute("url", "/member/Main");
+		}
 		else if(msgFlag.equals("loginNo")) {
 			model.addAttribute("message", "로그인에 실패했습니다.");
 			model.addAttribute("url", "member/Login");
@@ -40,6 +52,14 @@ public class MessageController {
 		else if(msgFlag.equals("logoutOk")) {
 			model.addAttribute("message", mid+"님 로그아웃 되셨습니다.");
 			model.addAttribute("url", "member/Login");
+		}
+		else if(msgFlag.equals("boardInputOk")) {
+			model.addAttribute("message", "게시글이 등록되었습니다.");
+			model.addAttribute("url", "board/BoardList");
+		}
+		else if(msgFlag.equals("boardInputNo")) {
+			model.addAttribute("message", "게시글 등록에 실패했습니다.");
+			model.addAttribute("url", "board/BoardInput");
 		}
 		return "include/message";
 	}

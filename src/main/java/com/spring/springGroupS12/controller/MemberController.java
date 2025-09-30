@@ -1,7 +1,6 @@
 package com.spring.springGroupS12.controller;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
@@ -67,8 +66,8 @@ public class MemberController {
 	@PostMapping("/MemberEmailCheck")
 	public int memberEmailCheckPost(String email) {
 		int res = 0;
-		List<MemberVO> vos = memberService.getMemberEmail(email);
-		if(vos.size() > 0) res = 1;
+		MemberVO vo = memberService.getMemberEmail(email);
+		if(vo != null) res = 1;
 		return res;
 	}
 	//이메일로 인증번호 발송.
@@ -104,6 +103,7 @@ public class MemberController {
 	// 회원등록.
 	@PostMapping("/SignUp")
 	public String signUpPost(MultipartFile fName, MemberVO vo, HttpSession session) {
+		System.out.println("들어옴");
 		// 아이디, 닉네임 중복 확인.
 		if(memberService.getMemberMid(vo.getMid()) != null) return "redirect:/Message/idDuplication";
 		if(memberService.getMemberNickName(vo.getNickName()) != null) return "redirect:/Message/nickNameDuplication";
@@ -141,9 +141,9 @@ public class MemberController {
 	// 아이디 찾기.
 	@ResponseBody
 	@PostMapping("/MemberIdFind")
-	public List<MemberVO> memberIdFindPost(String email) {
-		List<MemberVO> vos = memberService.getMemberEmail(email);
-		return vos;
+	public MemberVO memberIdFindPost(String email) {
+		MemberVO vo = memberService.getMemberEmail(email);
+		return vo;
 	}
 	// 아이디 확인.
 	@ResponseBody
@@ -156,11 +156,11 @@ public class MemberController {
 	@ResponseBody
 	@PostMapping("/MemberTempPwd")
 	public int memberTempPwdPost(String mid, String email) throws MessagingException {
-		String tempPwd = UUID.randomUUID().toString().substring(0, 4);
+		String tempPwd = UUID.randomUUID().toString().substring(0, 8);
 		int res = memberService.setMemberTempPwd(mid, tempPwd);
-		// 비밀번호를 임시비밀번호로 수정에 성공했을 때.
+		// 비밀번호를 임시 비밀번호로 수정에 성공했을 때.
 		if(res != 0) {
-			projectProvide.mailSend(email, "임시비밀번호입니다.", "임시 비밀번호: "+tempPwd);
+			projectProvide.mailSend(email, "임시 비밀번호입니다.", "임시 비밀번호: "+tempPwd);
 			return 1;
 		}
 		else return 0;
@@ -214,6 +214,67 @@ public class MemberController {
 		else return "redirect:/Message/loginNo";
 		return "redirect:/Message/loginOk?mid="+vo.getMid();
 	}
+	// 카카오 로그인.
+	@GetMapping("/KakaoLogin")
+	public String kakaoLoginPost(HttpSession session, 
+			String nickName, String email, String ageRange, String accessToken) throws MessagingException {
+		System.out.println(ageRange);
+		// 카카오에서는 연령대(30~39...) 처리.
+		if(ageRange.length()>1) ageRange = ageRange.substring(0,1)+"0";
+		if(ageRange.length()<2 || ageRange.equals("10")) return "redirect:/Message/minor";
+		session.setAttribute("sAccessToken", accessToken);
+		
+		MemberVO vo = memberService.getMemberEmail(email);
+		
+		// 신규회원인지에 대한 정의(신규회원 OK, 기존회원 NO).
+		String newMember = "NO";
+		// DB에 존재하지 않는 이메일이면 회원가입처리.
+		if(vo == null) {
+			// 아이디를 이메일에서 가져온다.
+			String mid = email.substring(0, email.indexOf("@"));
+			vo = memberService.getMemberMid(mid);
+			// 아이디가 이미 존재한다면 로그인 유도.
+			if(vo != null) return "redirect:/Message/midSameSearch";
+			
+			// 임시 비밀번호 처리.
+			String pwd = UUID.randomUUID().toString().substring(0, 8);
+			// 연령대 int 처리.
+			int age = Integer.parseInt(ageRange);
+			// 새로 발급된 비밀번호를 암호화 시켜서 DB에 회원가입 처리.
+			memberService.setKakaoMemberInput(mid, passwordEncode.encode(pwd), nickName, age, email);
+			
+			// 새로 발급받은 임시 비밀번호를 메일로 전송.
+			projectProvide.mailSend(email, "임시 비밀번호입니다.", "임시 비밀번호: "+pwd);
+			
+			// 새로 가입처리된 회원의 정보를 다시 vo에 담아준다.
+			vo = memberService.getMemberMid(mid);
+			
+			// 비밀번호를 새로 발급처리했을때 sLogin세션을 발생시켜주고, memberMain창에 비밀번호 변경메세지를 지속적으로 뿌려준다.
+			session.setAttribute("sLoginNew", "OK");
+			
+			newMember = "OK";
+		}
+		
+		String strLevel = "";
+		if(vo.getLevel() == 0) strLevel = "관리자";
+		else if(vo.getLevel() == 1) strLevel = "우수회원";
+		else if(vo.getLevel() == 2) strLevel = "정회원";
+		else if(vo.getLevel() == 3) strLevel = "준회원";
+		
+		// 로그인 세션처리.
+		session.setAttribute("sMid", vo.getMid());
+		session.setAttribute("sNickName", vo.getNickName());
+		session.setAttribute("sLevel", vo.getLevel());
+		session.setAttribute("sStrLevel", strLevel);
+		
+		// 마지막 방문일 처리.
+		session.setAttribute("sLastDate", vo.getLastDate());
+		memberService.setLastDateUpdate(vo.getMid());
+		
+		// 로그인 완료후 모든 처리가 끝나면 필요한 메세지처리후 memberMain으로 보낸다.
+		if(newMember.equals("NO")) return "redirect:/Message/loginOk?mid="+vo.getMid();
+		else return "redirect:/Message/newLoginOk?mid="+vo.getMid();
+	}
 	
 	// 사용자 전용 방.
 	@GetMapping("/Main")
@@ -234,6 +295,7 @@ public class MemberController {
 		session.removeAttribute("sStrLevel");
 		session.removeAttribute("sLastDate");
 		session.removeAttribute("sEmailKey");
+		session.removeAttribute("sAccessToken");
 		return "redirect:/Message/logoutOk?mid="+mid;
 	}
 }
