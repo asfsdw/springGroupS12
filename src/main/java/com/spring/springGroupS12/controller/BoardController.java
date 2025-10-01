@@ -1,22 +1,31 @@
 package com.spring.springGroupS12.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.spring.springGroupS12.common.Pagination;
 import com.spring.springGroupS12.service.BoardService;
+import com.spring.springGroupS12.service.FileService;
+import com.spring.springGroupS12.service.ReplyService;
 import com.spring.springGroupS12.vo.BoardVO;
 import com.spring.springGroupS12.vo.FileVO;
 import com.spring.springGroupS12.vo.PageVO;
+import com.spring.springGroupS12.vo.ReplyVO;
 
+@SuppressWarnings("unchecked")
 @Controller
 @RequestMapping("/board")
 public class BoardController {
@@ -24,6 +33,12 @@ public class BoardController {
 	BoardService boardService;
 	@Autowired
 	Pagination pagination;
+	@Autowired
+	FileService fileService;
+	@Autowired
+	ReplyService replyService;
+	@Autowired
+	BCryptPasswordEncoder passwordEncode;
 	
 	// 게시판 전체글.
 	@GetMapping("/BoardList")
@@ -48,8 +63,17 @@ public class BoardController {
 	public String boardInputPost(MultipartHttpServletRequest mFile, Model model,PageVO pVO,BoardVO vo, FileVO fVO,
 			@RequestParam(name = "fName", defaultValue = "", required = false)String fName) {
 		int res = 0;
-		// 파일 이름이 넘어오지 않았으면(업로드할 파일이 존재하지 않으면).
-		if(fName.equals("")) res = boardService.setBoardInput(vo);
+		// 제목에 대하여 html 태그를 사용할 수 없도록 처리.
+		String title = vo.getTitle();
+		title = title.replace("<", "&lt");
+		title = title.replace(">", "&gt");
+		vo.setTitle(title);
+		
+		// 비밀글이면 비밀번호 암호화처리.
+		if(vo.getOpenSW().equals("비공개")) vo.setPwd(passwordEncode.encode(vo.getPwd()));
+		
+		// 파일 이름이 넘어오지 않았거나 글 내용에 src가 없으면(업로드할 파일이 존재하지 않으면).
+		if(fName.equals("") && !vo.getContent().contains("src=\"/")) res = boardService.setBoardInput(vo);
 		// 파일 이름이 넘어왔으면.
 		else res = boardService.uploadBoardInput(mFile, vo, fVO);
 		
@@ -62,10 +86,39 @@ public class BoardController {
 	
 	// 글보기.
 	@GetMapping("/BoardContent")
-	public String boardContentGet(Model model, PageVO pVO, BoardVO vo) {
+	public String boardContentGet(Model model, PageVO pVO, BoardVO vo, FileVO fiVO, ReplyVO reVO,
+			@RequestParam(name = "password", defaultValue = "", required = false)String password,
+			@RequestParam(name = "idx", defaultValue = "0", required = false)int idx) {
 		vo = boardService.getBoard(vo.getIdx());
+		
+		if(vo.getOpenSW().equals("비공개")) {
+			if(password.equals("")) return "redirect:/Message/pwdInputNo";
+			if(!passwordEncode.matches(password, vo.getPwd())) return "redirect:/Message/boardPwdNo";
+		}
+		
+		fiVO = fileService.getFile(vo.getIdx());
+		List<ReplyVO> reVOS = replyService.getReply(vo.getIdx());
+		
 		model.addAttribute("pVO", pVO);
 		model.addAttribute("vo", vo);
+		model.addAttribute("fiVO", fiVO);
+		model.addAttribute("reVOS", reVOS);
 		return "board/boardContent";
+	}
+	//좋아요, 싫어요 처리.
+	@ResponseBody
+	@PostMapping("/GoodCheckPlusMinus")
+	public int goodCheckPlusMinusPost(HttpSession session, int idx, int goodCnt) {
+		// 세션에 저장한 조회수 증가 리스트 객체 불러온다.
+		List<String> contentView = (List<String>)session.getAttribute("goodPoint");
+		if(contentView == null) contentView = new ArrayList<String>();
+		String contentViewTemp = "boardGood"+session.getAttribute("sMid")+idx;
+		if(!contentView.contains(contentViewTemp)) {
+			boardService.setGood(idx, goodCnt);
+			contentView.add(contentViewTemp);
+			session.setAttribute("goodPoint", contentView);
+			return 1;
+		}
+		return 0;
 	}
 }

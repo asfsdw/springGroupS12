@@ -103,7 +103,6 @@ public class MemberController {
 	// 회원등록.
 	@PostMapping("/SignUp")
 	public String signUpPost(MultipartFile fName, MemberVO vo, HttpSession session) {
-		System.out.println("들어옴");
 		// 아이디, 닉네임 중복 확인.
 		if(memberService.getMemberMid(vo.getMid()) != null) return "redirect:/Message/idDuplication";
 		if(memberService.getMemberNickName(vo.getNickName()) != null) return "redirect:/Message/nickNameDuplication";
@@ -218,7 +217,6 @@ public class MemberController {
 	@GetMapping("/KakaoLogin")
 	public String kakaoLoginPost(HttpSession session, 
 			String nickName, String email, String ageRange, String accessToken) throws MessagingException {
-		System.out.println(ageRange);
 		// 카카오에서는 연령대(30~39...) 처리.
 		if(ageRange.length()>1) ageRange = ageRange.substring(0,1)+"0";
 		if(ageRange.length()<2 || ageRange.equals("10")) return "redirect:/Message/minor";

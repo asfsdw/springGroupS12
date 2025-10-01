@@ -22,4 +22,11 @@
 	<insert id="setBoardInput">
 		INSERT INTO board VALUES(DEFAULT,#{vo.mid},#{vo.nickName},#{vo.title},#{vo.content},#{vo.pwd},#{vo.openSW},DEFAULT,DEFAULT,DEFAULT,DEFAULT);
 	</insert>
+	
+	
+	
+	<update id="setGood">
+		UPDATE board SET good = good + #{goodCnt} WHERE idx = #{idx};
+	</update>
+	
 </mapper>

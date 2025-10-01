@@ -13,9 +13,11 @@ public interface BoardDAO {
 	List<BoardVO> getBoardList();
 
 	BoardVO getBoard(@Param("idx") int idx);
-
+	
 	int getParentIdx();
 	
 	int setBoardInput(@Param("vo") BoardVO vo);
+
+	void setGood(@Param("idx") int idx, @Param("goodCnt") int goodCnt);
 
 }

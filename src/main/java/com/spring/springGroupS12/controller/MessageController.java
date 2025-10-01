@@ -61,6 +61,14 @@ public class MessageController {
 			model.addAttribute("message", "게시글 등록에 실패했습니다.");
 			model.addAttribute("url", "board/BoardInput");
 		}
+		else if(msgFlag.equals("pwdInputNo")) {
+			model.addAttribute("message", "비밀번호를 입력해주세요.");
+			model.addAttribute("url", "board/BoardList");
+		}
+		else if(msgFlag.equals("boardPwdNo")) {
+			model.addAttribute("message", "게시글의 비밀번호가 다릅니다.");
+			model.addAttribute("url", "board/BoardList");
+		}
 		return "include/message";
 	}
 }

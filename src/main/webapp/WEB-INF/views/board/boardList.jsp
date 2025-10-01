@@ -54,25 +54,22 @@
 				<tr>
 					<td>${pVO.curScrStartNo-st.index}</td>
 					<td class="text-start">
-						<c:if test="${vo.complaint == 'HI' && sMid != 'admin'}">
+						<c:if test="${vo.complaint == 'HI' && sLevel != 0}">
 							신고된 글입니다.
 						</c:if>
-						<c:if test="${vo.complaint == 'HI' && sMid == 'admin'}">
+						<c:if test="${vo.complaint == 'HI' && sLevel == 0}">
+							<font color="red">(신고글) </font>
 							<a href="${ctp}/board/BoardContent?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}"
 									class="text-primary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover">${vo.title}</a>
-							<font color="red">(신고글) </font>
 							<c:if test="${vo.replyCnt != 0}">(${vo.replyCnt})</c:if>
 						</c:if>
-						<c:if test="${vo.openSW == 'NO' && vo.complaint != 'HI'}">
-							<c:if test="${vo.mid == sMid || sMid == 'admin'}">
-								<a href="${ctp}/board/BoardContent?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}"
-									class="text-primary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover"></a>
-								<c:if test="${sMid == 'admin'}"><font color="red">(비밀글) </font></c:if>${vo.title}
-								<c:if test="${vo.replyCnt != 0}">(${vo.replyCnt})</c:if>
-							</c:if>
-							<c:if test="${vo.mid != sMid && sAdmin != 'adminOK'}">비밀글입니다.</c:if>
+						<c:if test="${vo.openSW == '비공개' && vo.complaint != 'HI'}">
+							<font color="red">(비밀글) </font>
+							<a href="#" data-bs-toggle="modal" data-bs-target="#myModal" onclick="$('#idx').val(${vo.idx})"
+								class="text-primary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover">${vo.title}</a>
+							<c:if test="${vo.replyCnt != 0}">(${vo.replyCnt})</c:if>
 						</c:if>
-						<c:if test="${vo.openSW != 'NO' && vo.complaint != 'HI'}">
+						<c:if test="${vo.openSW != '비공개' && vo.complaint != 'HI'}">
 							<a href="${ctp}/board/BoardContent?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}"
 								class="text-primary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover">${vo.title}</a>
 							<c:if test="${vo.replyCnt != 0}">(${vo.replyCnt})</c:if>
@@ -130,5 +127,28 @@
 		<!-- 검색기 끝 -->
 	</div>
 	<p><br/></p>
+	<div class="modal fade" id="myModal">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">비밀번호 입력</h4>
+				</div>
+				<div class="modal-body">
+					<form action="${ctp}/board/BoardContent">
+						<div class="input-group">
+							<input type="password" name="password" class="form-control"/>
+							<input type="submit" value="열람" class="btn btn-success" />
+						</div>
+						<input type="hidden" name="idx" id="idx" value="" />
+					</form>
+				</div>
+				<!-- Modal footer -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

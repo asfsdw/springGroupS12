@@ -13,10 +13,12 @@ public interface BoardService {
 
 	List<BoardVO> getBoardList();
 	
+	BoardVO getBoard(int idx);
+	
 	int setBoardInput(BoardVO vo);
 	
 	int uploadBoardInput(MultipartHttpServletRequest mFile, BoardVO vo, FileVO fVO);
 
-	BoardVO getBoard(int idx);
+	void setGood(int idx, int goodCnt);
 
 }

@@ -1,0 +1,241 @@
+// 좋아요 처리.
+function goodCheckPlus(idx) {
+	$.ajax({
+		url : "GoodCheckPlusMinus",
+		type : "post",
+		data : {
+			"idx" : idx,
+			"goodCnt" : 1
+		},
+		success : (res) => {
+			if(res != 0) location.reload();
+		},
+		error : () => alert("전송오류")
+	});
+}
+function goodCheckMinus(idx) {
+	$.ajax({
+		url : "GoodCheckPlusMinus",
+		type : "post",
+		data : {
+			"idx" : idx,
+			"goodCnt" : -1
+		},
+		success : (res) => {
+			if(res != 0) location.reload();
+		},
+		error : () => alert("전송오류")
+	});
+}
+
+// 게시글 삭제.
+function deleteCheck() {
+	let ans = confirm("게시글을 삭제하시겠습니까?");
+	if(ans) location.href = "BoardDelete?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}";
+}
+
+// 댓글 입력.
+function replyCheck(ctp, parentIdx, mid, nickName) {
+	let content = $("#content").val();
+	if(content.trim() == "") {
+		alert("내용을 입력해주세요.");
+		return false;
+	}
+	
+	let query = {
+		"parentIdx" : parentIdx,
+		"part" : "board",
+		"mid" : mid,
+		"nickName" : nickName,
+		"content" : content,
+	};
+	
+	$.ajax ({
+		url : ctp+"/ReplyInput",
+		type : "post",
+		data : query,
+		success : (res) => {
+			if(res != 0) {
+				alert("댓글이 입력되었습니다.");
+				location.reload();
+			}
+			else alert("댓글이 입력되지 않았습니다.");
+		},
+		error : () => alert("전송오류")
+	});
+}
+// 댓글 삭제.
+function replyDelete(ctp, idx) {
+	let ans = confirm("댓글을 삭제하시겠습니까?");
+	if(ans) {
+		$.ajax ({
+			url : ctp+"/ReplyDelete",
+			type : "post",
+			data : {"idx" : idx},
+			success : (res) => {
+				if(res != 0) {
+					alert("댓글이 삭제되었습니다.");
+					location.reload();
+				}
+				else alert("댓글이 삭제되지 않았습니다.");
+			},
+			error : () => alert("전송오류")
+		});
+	}
+}
+// 댓글 수정.
+function replyUpdate(ctp, idx, content) {
+	$("[id^=demo]").html("");
+	
+	let str = "";
+	str += '<td colspan="8" id="replyContent">';
+	str += '<table class="table">';
+	str += '<tr>';
+	str += '<td colspan="4">';
+	str += '<textarea rows="4" name="content'+idx+'" id="content'+idx+'" class="form-control">'+content+'</textarea>';
+	str += '</td>';
+	str += '<tr>';
+	str += '<td colspan="2">';
+	str += '<span>작성자: ${sNickName}</span>';
+	str += '</td>';
+	str += '<td colspan="2" class="text-end">';
+	str += '<span><input type="button" value="댓글수정" id="replyUpdateOk" class="btn btn-info btn-sm me-1" /></span>';
+	str += '<span><input type="button" value="닫기" onclick="replyClose('+idx+')" class="btn btn-warning btn-sm" /></span>';
+	str += '</td>';
+	str += '</tr>';
+	str += '</table>';
+	str += '</td>';
+	$("#demo"+idx).html(str);
+	
+	$(() => {
+		$("#replyUpdateOk").on("click", () => {
+			let query = {
+				"idx" : idx,
+				"content" : $("#content"+idx).val(),
+			};
+			$.ajax({
+				url : ctp+"/ReplyUpdate",
+				type : "post",
+				data : query,
+				success : (res) => {
+					if(res != 0) {
+						alert("댓글이 수정되었습니다.");
+						location.reload();
+					}
+					else alert("댓글 수정에 실패했습니다.");
+				},
+				error : () => alert("전송오류")
+			});
+		});
+	});
+}
+// 댓글 수정창 닫기.
+function replyClose(idx) {
+	$("#demo"+idx).html("");
+}
+
+// 대댓글 창 열기.
+function reReplyForm(ctp, replyIdx, parentIdx, mid, nickName) {
+	$("[id^=demo]").html("");
+	
+	let str = "";
+	str += '<td colspan="8" id="replyContent">';
+	str += '<table class="table">';
+	str += '<tr>';
+	str += '<td colspan="4">';
+	str += '<textarea rows="4" name="content'+replyIdx+'" id="content'+replyIdx+'" class="form-control"></textarea>';
+	str += '</td>';
+	str += '<tr>';
+	str += '<td colspan="2">';
+	str += '<span>작성자: '+nickName+'</span>';
+	str += '</td>';
+	str += '<td colspan="2" class="text-end">';
+	str += '<span><input type="button" value="대댓글달기" id="reReplyInput" class="btn btn-info btn-sm me-1" /></span>';
+	str += '<span><input type="button" value="닫기" onclick="replyClose('+replyIdx+')" class="btn btn-warning btn-sm" /></span>';
+	str += '</td>';
+	str += '</tr>';
+	str += '</table>';
+	str += '</td>';
+	$("#demo"+replyIdx).html(str);
+	
+	// 대댓글 등록.
+	$(() => {
+		$("#reReplyInput").on("click", () => {
+			let query = {
+				"replyIdx" : replyIdx,
+				"parentIdx" : parentIdx,
+				"mid" : mid,
+				"nickName" : nickName,
+				"content" : $("#content"+replyIdx).val(),
+				"flag" : "reReply"
+			};
+			if($("#content"+replyIdx).val().trim() == "") {
+				alert("댓글 내용을 입력해주세요.");
+				$("#content"+replyIdx).focus();
+				return false;
+			}
+			
+			$.ajax({
+				url : ctp+"/ReplyInput",
+				type : "post",
+				data : query,
+				success : (res) => {
+					if(res != 0) {
+						alert("대댓글이 입력되었습니다.");
+						location.reload();
+					}
+					else alert("대댓글 입력에 실패했습니다.");
+				},
+				error : () => alert("전송오류")
+			});
+		});
+	});
+}
+
+// modal 창에서 신고 시, 기타 항목을 선택했을 때 textarea 보여주기.
+function etcShow() {
+	$("#etcTxt").show();
+}
+$(() => {
+	$("[id^=complaint]").on("change", () => {
+		$("#etcTxt").hide();
+	});
+});
+
+/*
+// 게시글 신고 처리.
+function complaintCheck() {
+	if(!$("input[type='radio'][name='complaint']:checked").is(':checked')) {
+		alert("신고항목을 선택해주세요.");
+		return false;
+	}
+	if($("input[type='radio']:checked").val() == '기타' && $("#etcTxt").val() == "") {
+		alert("사유를 입력해주세요.");
+		return false;
+	}
+	
+	let cpContent = modalForm.complaint.value;
+	if(cpContent == "기타") cpContent += "/"+$("#etcTxt").val();
+	
+	let query = {
+			"part" : "board",
+			"partIdx" : ${vo.idx},
+			"cpMid" : "${sMid}",
+			"cpContent" : cpContent
+	}
+	
+	$.ajax({
+		url : "${ctp}/board/BoardComplaintInput",
+		type: "post",
+		data: query,
+		success : (res) => {
+			if(res != 0) {
+				alert("신고되었습니다.");
+				location.reload();
+			}
+			else alert("신고되지 않았습니다.");
+		},
+		error : () => alert("전송오류")
+	});
+}
+*/

@@ -31,7 +31,7 @@
 			</div>
 			<div class="input-group mb-3">
 				<label for="nickName" class="input-group-text boxWidth">닉네임</label>
-				<input type="text" name="nickName" id="nickName" placeholder="별명을 입력하세요." class="form-control" required />
+				<input type="text" name="nickName" id="nickName" placeholder="닉네임을 입력하세요." class="form-control" required />
 				<input type="button" id="nickNameBtn" value="닉네임 중복체크" class="btn btn-secondary btn-sm" onclick="nickNameCheck()"/>
 			</div>
 			<div class="input-group mb-3">
