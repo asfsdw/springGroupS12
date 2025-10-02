@@ -20,4 +20,6 @@ public interface MemberService {
 	
 	void setKakaoMemberInput(String mid, String pwd, String nickName, int age, String email);
 
+	int setMemberDelete(String mid);
+
 }

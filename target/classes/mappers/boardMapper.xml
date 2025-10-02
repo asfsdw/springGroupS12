@@ -3,18 +3,29 @@
 <mapper namespace="com.spring.springGroupS12.dao.BoardDAO">
 	<select id="getTotRecCnt" resultType="int">
 		SELECT count(idx) FROM board WHERE complaint != 'DE' 
+			<if test="flag == 'best'">AND good >= 5</if>
 			<if test="flag == 'new'">AND boardDate >= date_add(now(), interval -7 day)</if>
 			<if test="search != ''">AND ${search} LIKE concat("%"#{searchStr}"%")</if>;
 	</select>
 	<select id="getBoardList" resultType="com.spring.springGroupS12.vo.BoardVO">
 		SELECT *, timestampdiff(hour, boardDate, now()) AS hourDiff, datediff(now(), boardDate) AS dateDiff, 
-			(SELECT count(*) FROM reply WHERE parentIdx = board.idx) AS replyCnt FROM board ORDER BY idx DESC;
+			(SELECT count(*) FROM reply WHERE parentIdx = board.idx) AS replyCnt 
+			FROM board WHERE complaint != 'DE' 
+			<if test="search != ''">AND ${search} LIKE concat("%"#{searchStr}"%")</if> 
+			ORDER BY idx DESC LIMIT #{startIndexNo}, #{pageSize};
 	</select>
 	<select id="getBoard" resultType="com.spring.springGroupS12.vo.BoardVO">
 		SELECT * FROM board WHERE idx = #{idx};
 	</select>
 	<select id="getParentIdx" resultType="int">
 		SELECT idx FROM board ORDER BY idx DESC LIMIT 1; 
+	</select>
+	<select id="getBoardBest" resultType="com.spring.springGroupS12.vo.BoardVO">
+		SELECT *, timestampdiff(hour, boardDate, now()) AS hourDiff, datediff(now(), boardDate) AS dateDiff, 
+			(SELECT count(*) FROM reply WHERE parentIdx = board.idx) AS replyCnt 
+			FROM board WHERE complaint != 'DE' AND good >= 5 
+			<if test="search != ''">AND ${search} LIKE concat("%"#{searchStr}"%")</if> 
+			ORDER BY idx DESC LIMIT #{startIndexNo}, #{pageSize};
 	</select>
 	
 	
@@ -27,6 +38,9 @@
 	
 	<update id="setGood">
 		UPDATE board SET good = good + #{goodCnt} WHERE idx = #{idx};
+	</update>
+	<update id="contentView">
+		UPDATE board SET views = views + 1 WHERE idx = #{idx};
 	</update>
 	
 </mapper>

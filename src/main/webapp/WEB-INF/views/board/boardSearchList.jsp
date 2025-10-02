@@ -8,42 +8,19 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
-		<title>게시판</title>
-		<script>
-			'use strict';
-			
-			$(() => {
-				// 게시글 x개 표시하기.
-				$("#viewPageCnt").on("change", () => {
-					let startIndexNo = ${pVO.startIndexNo};
-					let pageSize = $("#viewPageCnt").val();
-					// 페이지 도중에 바꿨을 때, 가장 위에 글이 포함된 페이지로 이동.
-					let pag = Math.floor(startIndexNo / pageSize) + 1;
-					location.href="${ctp}/board/BoardList?pag="+pag+"&pageSize="+pageSize;
-				});
-			});
-		</script>
+		<script src="${ctp}/js/board.js"></script>
+		<title>검색결과</title>
 	</head>
 <body>
 	<p><br/></p>
 	<div class="container">
-		<h2 class="text-center">게시글 리스트</h2>
+		<h3 class="text-center">
+			<font color="red">${pVO.searchKr}</font>을(를) <font color="blue">${pVO.searchStr}</font>(으)로 검색한 결과를 출력합니다.(<font color="green">${pVO.totRecCnt}</font> 건)
+		</h3>
 		<table class="table table-bordeless m-0 p-0">
 			<tr>
-				<td class="text-start">
-					<a href="${ctp}/board/BoardInput" class="btn btn-success btn-sm me-1">글쓰기</a>
-					<c:if test="${btnSW != 'on'}"><a href="${ctp}/board/BoardBest" id="bestBtn" class="btn btn-info btn-sm">추천글</a></c:if>
-					<c:if test="${btnSW == 'on'}"><a href="${ctp}/board/BoardList" id="allBtn" class="btn btn-info btn-sm">전체글</a></c:if>
-				</td>
-				<td class="text-end">한 페이지에 최대:&nbsp;&nbsp;
-					<select name="viewPageCnt" id="viewPageCnt" onchange="viewPageCheck()">
-						<option value="5" ${pVO.pageSize==5 ? 'selected' : ''}>5개씩 보기</option>
-						<option value="10"<c:if test="${pVO.pageSize == 10}">selected</c:if>>10개씩 보기</option>
-						<option value="15"<c:if test="${pVO.pageSize == 15}">selected</c:if>>15개씩 보기</option>
-						<option value="20"<c:if test="${pVO.pageSize == 20}">selected</c:if>>20개씩 보기</option>
-						<option value="30"<c:if test="${pVO.pageSize == 30}">selected</c:if>>30개씩 보기</option>
-					</select>
-				</td>
+				<td class="text-start"><a href="BoardList" class="btn btn-success btn-sm">돌아가기</a></td>
+				<td class="text-end"></td>
 			</tr>
 		</table>
 		<table class="table table-hover text-center">
@@ -56,25 +33,25 @@
 			</tr>
 			<c:forEach var="vo" items="${vos}" varStatus="st">
 				<tr>
-					<td>${pVO.curScrStartNo-st.index}</td>
-					<td class="text-start" <c:if test="${vo.good>=5}">style="background-color: #ff9"</c:if>>
+					<td>${pVO.curScrStartNo - st.index}</td>
+					<td class="text-start">
 						<c:if test="${vo.complaint == 'HI' && sLevel != 0}">
 							신고된 글입니다.
 						</c:if>
 						<c:if test="${vo.complaint == 'HI' && sLevel == 0}">
 							<font color="red">(신고글) </font>
-							<a href="${ctp}/board/BoardContent?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}"
+							<a href="${ctp}/board/BoardContent?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}"
 									class="text-primary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover">${vo.title}</a>
 							<c:if test="${vo.replyCnt != 0}">(${vo.replyCnt})</c:if>
 						</c:if>
 						<c:if test="${vo.openSW == '비공개' && vo.complaint != 'HI'}">
 							<font color="red">(비밀글) </font>
-							<a href="#" data-bs-toggle="modal" data-bs-target="#myModal" onclick="$('#idx').val(${vo.idx})"
+							<a href="#" onclick="setModalHidden('${vo.idx}','${pVO.pag}','${pVO.pageSize}','${pVO.search}','${pVO.searchStr}')" data-bs-toggle="modal" data-bs-target="#myModal"  
 								class="text-primary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover">${vo.title}</a>
 							<c:if test="${vo.replyCnt != 0}">(${vo.replyCnt})</c:if>
 						</c:if>
 						<c:if test="${vo.openSW != '비공개' && vo.complaint != 'HI'}">
-							<a href="${ctp}/board/BoardContent?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}"
+							<a href="${ctp}/board/BoardContent?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}"
 								class="text-primary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover">${vo.title}</a>
 							<c:if test="${vo.replyCnt != 0}">(${vo.replyCnt})</c:if>
 						</c:if>
@@ -93,23 +70,24 @@
 		<!-- 블록페이지 시작 -->
 		<div class="input-group justify-content-center">
 			<div class="pagination">
-				<c:if test="${pVO.pag > 1}"><a href="${ctp}/board/BoardList?pag=1&pageSize=${pVO.pageSize}" class="page-item page-link text-dark">첫 페이지</a></c:if>
-				<c:if test="${pVO.curBlock > 0}">
-					<a href="${ctp}/board/BoardList?pag=${(pVO.curBlock - 1) * pVO.blockSize + 1}&pageSize=${pVO.pageSize}" class="page-item page-link text-dark">이전 블록</a>
+				<!-- pag와 pageSize를 BoardList에 보내준다. -->
+				<c:if test="${pVO.pag > 1}"><a href="${ctp}/board/BoardSearchList?pag=1&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}" class="page-item page-link text-dark">첫 페이지</a></c:if>
+				<c:if test="${curBlock > 0}">
+					<a href="${ctp}/board/BoardSearchList?pag=${(pVO.curBlock - 1) * pVO.blockSize + 1}&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}" class="page-item page-link text-dark">이전 블록</a>
 				</c:if>
 				<c:forEach var="i" begin="${(pVO.curBlock * pVO.blockSize) + 1}" end="${(pVO.curBlock * pVO.blockSize) + pVO.blockSize}" varStatus="st">
 					<c:if test="${i <= pVO.totPage && i == pVO.pag}">
 						<span class="page-item active page-link bg-secondary border-secondary">${i}</span>
 					</c:if>
 					<c:if test="${i <= pVO.totPage && i != pVO.pag}">
-						<a href="${ctp}/board/BoardList?pag=${i}&pageSize=${pVO.pageSize}" class="page-item page-link text-dark">${i}</a>
+						<a href="${ctp}/board/BoardSearchList?pag=${i}&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}" class="page-item page-link text-dark">${i}</a>
 					</c:if>
 				</c:forEach>
 				<c:if test="${pVO.curBlock < pVO.lastBlock}">
-					<a href="${ctp}/board/BoardList?pag=${(pVO.curBlock + 1) * pVO.blockSize + 1}&pageSize=${pVO.pageSize}" class="page-item page-link text-dark">다음 블록</a>
+					<a href="${ctp}/board/BoardSearchList?pag=${(pVO.curBlock + 1) * pVO.blockSize + 1}&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}" class="page-item page-link text-dark">다음 블록</a>
 				</c:if>
 				<c:if test="${pVO.pag < pVO.totPage}">
-					<a href="${ctp}/board/BoardList?pag=${pVO.totPage}&pageSize=${pVO.pageSize}" class="page-item page-link text-dark">마지막 페이지</a>
+					<a href="${ctp}/board/BoardSearchList?pag=${pVO.totPage}&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}" class="page-item page-link text-dark">마지막 페이지</a>
 				</c:if>
 			</div>
 		</div>
@@ -139,12 +117,16 @@
 					<h4 class="modal-title">비밀번호 입력</h4>
 				</div>
 				<div class="modal-body">
-					<form action="${ctp}/board/BoardContent">
+					<form name="modalForm" action="${ctp}/board/BoardContent">
 						<div class="input-group">
 							<input type="password" name="password" class="form-control"/>
 							<input type="submit" value="열람" class="btn btn-success" />
 						</div>
 						<input type="hidden" name="idx" id="idx" value="" />
+						<input type="hidden" name="pag" id="pag" value="" />
+						<input type="hidden" name="pageSize" id="pageSize" value="" />
+						<input type="hidden" name="search" id="search" value="" />
+						<input type="hidden" name="searchStr" id="searchStr" value="" />
 					</form>
 				</div>
 				<!-- Modal footer -->

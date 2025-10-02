@@ -37,8 +37,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
 	@Override
-	public List<BoardVO> getBoardList() {
-		return boardDAO.getBoardList();
+	public List<BoardVO> getBoardList(int startIndexNo, int pageSize, String search, String searchStr) {
+		return boardDAO.getBoardList(startIndexNo, pageSize, search, searchStr);
 	}
 
 	@Override
@@ -148,6 +148,16 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public void setGood(int idx, int goodCnt) {
 		boardDAO.setGood(idx, goodCnt);
+	}
+
+	@Override
+	public void contentView(int idx) {
+		boardDAO.contentView(idx);
+	}
+
+	@Override
+	public List<BoardVO> getBoardBest(int startIndexNo, int pageSize, String search, String searchStr) {
+		return boardDAO.getBoardBest(startIndexNo, pageSize, search, searchStr);
 	}
 
 }

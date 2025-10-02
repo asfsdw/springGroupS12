@@ -37,6 +37,10 @@ public class Pagination {
 			if(vo.getSearch() == null) vo.setTotRecCnt(boardService.getTotRecCnt(vo.getFlag(), "", ""));
 			else vo.setTotRecCnt(boardService.getTotRecCnt(vo.getFlag(), vo.getSearch(), vo.getSearchStr()));
 		}
+		else if(vo.getSection().equals("boardBest")) {
+			if(vo.getSearch() == null) vo.setTotRecCnt(boardService.getTotRecCnt("best", "", ""));
+			else vo.setTotRecCnt(boardService.getTotRecCnt(vo.getFlag(), vo.getSearch(), vo.getSearchStr()));
+		}
 		/*
 		else if(vo.getSection().equals("pds")) {
 			if(vo.getSearch() == null) vo.setTotRecCnt(pdsService.getTotRecCnt(vo.getFlag(), vo.getPart(), "", ""));

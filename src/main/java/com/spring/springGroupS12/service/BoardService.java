@@ -11,7 +11,7 @@ public interface BoardService {
 
 	int getTotRecCnt(String flag, String search, String searchStr);
 
-	List<BoardVO> getBoardList();
+	List<BoardVO> getBoardList(int startIndexNo, int pageSize, String search, String searchStr);
 	
 	BoardVO getBoard(int idx);
 	
@@ -20,5 +20,9 @@ public interface BoardService {
 	int uploadBoardInput(MultipartHttpServletRequest mFile, BoardVO vo, FileVO fVO);
 
 	void setGood(int idx, int goodCnt);
+
+	void contentView(int idx);
+
+	List<BoardVO> getBoardBest(int startIndexNo, int pageSize, String search, String searchStr);
 
 }

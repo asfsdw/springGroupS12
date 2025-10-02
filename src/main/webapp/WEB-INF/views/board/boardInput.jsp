@@ -24,8 +24,7 @@
 				<tr>
 					<th>글쓴이</th>
 					<td>
-						<c:if test="${empty sNickName}"><input type="text" name="nickName" id="nickName" value="${pageContext.request.remoteAddr}" readonly class="form-control" /></c:if>
-						<c:if test="${!empty sNickName}"><input type="text" name="nickName" id="nickName" value="${sNickName}" readonly class="form-control" /></c:if>
+						<input type="text" name="nickName" id="nickName" value="${sNickName}" readonly class="form-control" />
 					</td>
 				</tr>
 				<tr>

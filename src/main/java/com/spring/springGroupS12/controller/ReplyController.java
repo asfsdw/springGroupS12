@@ -19,6 +19,10 @@ public class ReplyController {
 	@PostMapping("/ReplyInput")
 	public int replyInputPost(ReplyVO vo,
 			@RequestParam(name = "replyIdx", defaultValue = "0", required = false)int replyIdx) {
+		if(vo.getMid().equals("")) {
+			vo.setMid("noMember");
+			vo.setNickName("비회원");
+		}
 		vo.setPart("board");
   	vo.setRe_step(1);
   	vo.setRe_order(1);
@@ -40,7 +44,6 @@ public class ReplyController {
 	  }
 	  // 첫댓글이면 re_order =1.
 	  else if(replyParentVO != null) vo.setRe_order(replyParentVO.getRe_order()+1);
-	  
 	  return replyService.setReply(vo);
 	}
 	// 댓글 수정.

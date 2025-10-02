@@ -13,8 +13,15 @@
 	
 	
 	<insert id="setReply">
-		INSERT INTO reply VALUES(DEFAULT,#{vo.parentIdx},#{vo.part},#{vo.mid},#{vo.nickName},#{vo.content},${vo.re_step},${vo.re_order},
-			DEFAULT,DEFAULT,DEFAULT);
+		INSERT INTO reply 
+			<if test="vo.hostIP == null">
+				VALUES(DEFAULT,#{vo.parentIdx},#{vo.part},#{vo.mid},#{vo.nickName},#{vo.content},${vo.re_step},${vo.re_order},
+				DEFAULT,DEFAULT,DEFAULT,DEFAULT)
+			</if>
+			<if test="vo.hostIP != null">
+				VALUES(DEFAULT,#{vo.parentIdx},#{vo.part},#{vo.mid},#{vo.nickName},#{vo.content},${vo.re_step},${vo.re_order},
+				DEFAULT,DEFAULT,#{vo.hostIP},DEFAULT)
+			</if>;
 	</insert>
 	
 	

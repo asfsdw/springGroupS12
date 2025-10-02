@@ -9,7 +9,7 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
-		<script src="${ctp}/js/boardContent.js"></script>
+		<script src="${ctp}/js/board.js"></script>
 		<title>${vo.title}</title>
 		<style>
 			th {
@@ -26,11 +26,11 @@
 			<c:if test="${sLevel < 4}">
 				/
 				<!-- 한 번 누른 좋아요, 싫어요를 누른 게시글에서는 좋아요, 싫어요를 누르지 못하게 한다. -->
-				<c:if test="${!fn:contains(goodPoint, 'boardGood' += sMid += vo.idx)}">
+				<c:if test="${!fn:contains(sContentIdx, 'boardGood'+=sMid+=vo.idx)}">
 					<a href="javascript:goodCheckPlus(${vo.idx})" title="좋아요" class="text-decoration-none">👍</a>
 					<a href="javascript:goodCheckMinus(${vo.idx})" title="싫어요" class="text-decoration-none">👎</a>
 				</c:if>
-				<c:if test="${fn:contains(goodPoint, 'boardGood' += sMid += vo.idx)}">
+				<c:if test="${fn:contains(sContentIdx, 'boardGood'+=sMid+=vo.idx)}">
 					<a>👌</a>
 				</c:if>
 			</c:if>
@@ -54,6 +54,7 @@
 				<td colspan="5" style="height:230px">${fn:replace(vo.content, newLine, "<br/>")}</td>
 			</tr>
 			<c:if test="${!empty fiVO}">
+				통과
 				<tr>
 					<th>첨부파일</th>
 					<td colspan="5">
@@ -109,11 +110,13 @@
 				<c:forEach var="reVO" items="${reVOS}" varStatus="st">
 					<tr>
 						<td>
-						<c:if test="${reVO.re_step > 1}">
-							<c:forEach var="i" begin="1" end="${reVO.re_step}"> &nbsp;&nbsp;</c:forEach>
-							└▶ 
-						</c:if>
-						${reVO.nickName}</td>
+							<c:if test="${reVO.re_step > 1}">
+								<c:forEach var="i" begin="1" end="${reVO.re_step}"> &nbsp;&nbsp;</c:forEach>
+								└▶ 
+							</c:if>
+							<c:if test="${reVO.hostIP != null}">${reVO.hostIP}</c:if>
+							<c:if test="${reVO.hostIP == null}">${reVO.nickName}</c:if>
+						</td>
 						<td colspan="2">${fn:replace(reVO.content, newLine, "<br/>")}</td>
 						<td class="text-center">${reVO.replyDate}</td>
 						<td class="text-center">
@@ -139,10 +142,11 @@
 				</tr>
 				<tr>
 					<td>
-						<span>작성자: ${sNickName}</span>
+						<c:if test="${empty sNickName}"><span>작성자: ${pageContext.request.remoteAddr}</span></c:if>
+						<c:if test="${!empty sNickName}"><span>작성자: ${sNickName}</span></c:if>
 					</td>
 					<td class="text-end">
-						<span><input type="button" value="댓글달기" onclick="replyCheck('${ctp}','${vo.idx}','${sMid}','${sNickName}')" class="btn btn-info btn-sm" /></span>
+						<span><input type="button" value="댓글달기" onclick="replyCheck('${ctp}','${vo.idx}','${sMid}','${sNickName}','${pageContext.request.remoteAddr}')" class="btn btn-info btn-sm" /></span>
 					</td>
 				</tr>
 			</table>

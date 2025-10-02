@@ -4,6 +4,6 @@ import com.spring.springGroupS12.vo.FileVO;
 
 public interface FileService {
 
-	FileVO getFile(int idx);
+	FileVO getFile(int parentIdx);
 
 }

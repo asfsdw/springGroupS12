@@ -22,4 +22,6 @@ public interface MemberDAO {
 
 	void setKakaoMemberInput(@Param("mid") String mid, @Param("pwd") String pwd, @Param("nickName") String nickName, @Param("age") int age, @Param("email") String email);
 
+	int setMemberDelete(@Param("mid") String mid);
+
 }

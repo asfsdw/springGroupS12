@@ -5,14 +5,13 @@
 	function userDeleteCheck() {
 		let ans = confirm("회원탈퇴를 하시겠습니까?");
 		if(ans) {
-			ans = confirm("탈퇴하시면 1개월간 같은 아이디로는 다시 가입하실 수 없습니다.\n그래도 탈퇴하시겠습니까?");
+			ans = confirm("탈퇴하시면 1개월간 같은 아이디, 닉네임, 이메일로는 가입하실 수 없습니다.\n그래도 탈퇴하시겠습니까?");
 			if(ans) {
 				$.ajax({
-					url : "${ctp}/member/MemberDelete",
-					type: "POST",
+					url : "${ctp}/member/Delete",
+					type: "post",
 					success : (res) => {
-						console.log(res);
-						if(res != "0") {
+						if(res != 0) {
 							alert("회원탈퇴되었습니다.");
 							location.href = "${ctp}/";
 						}

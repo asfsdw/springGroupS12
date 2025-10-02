@@ -2,11 +2,11 @@ package com.spring.springGroupS12.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.spring.springGroupS12.common.Pagination;
+import com.spring.springGroupS12.common.SecurityUtil;
 import com.spring.springGroupS12.service.BoardService;
 import com.spring.springGroupS12.service.FileService;
 import com.spring.springGroupS12.service.ReplyService;
@@ -37,8 +38,6 @@ public class BoardController {
 	FileService fileService;
 	@Autowired
 	ReplyService replyService;
-	@Autowired
-	BCryptPasswordEncoder passwordEncode;
 	
 	// 게시판 전체글.
 	@GetMapping("/BoardList")
@@ -46,10 +45,22 @@ public class BoardController {
 		pVO.setSection("board");
 		pVO = pagination.pagination(pVO);
 		
-		List<BoardVO> vos = boardService.getBoardList();
+		List<BoardVO> vos = boardService.getBoardList(pVO.getStartIndexNo(), pVO.getPageSize(), "", "");
 		
 		model.addAttribute("pVO", pVO);
 		model.addAttribute("vos", vos);
+		return "board/boardList";
+	}
+	@GetMapping("/BoardBest")
+	public String boardBestGet(Model model, PageVO pVO, BoardVO vo) {
+		pVO.setSection("boardBest");
+		pVO = pagination.pagination(pVO);
+		
+		List<BoardVO> vos = boardService.getBoardBest(pVO.getStartIndexNo(), pVO.getPageSize(), "", "");
+		
+		model.addAttribute("pVO", pVO);
+		model.addAttribute("vos", vos);
+		model.addAttribute("btnSW", "on");
 		return "board/boardList";
 	}
 	
@@ -70,7 +81,11 @@ public class BoardController {
 		vo.setTitle(title);
 		
 		// 비밀글이면 비밀번호 암호화처리.
-		if(vo.getOpenSW().equals("비공개")) vo.setPwd(passwordEncode.encode(vo.getPwd()));
+		if(vo.getOpenSW().equals("비공개")) {
+			String salt = UUID.randomUUID().toString().substring(0, 4);
+			SecurityUtil securityUtil = new SecurityUtil();
+			vo.setPwd(salt+securityUtil.encryptSHA256(salt+vo.getPwd()));
+		}
 		
 		// 파일 이름이 넘어오지 않았거나 글 내용에 src가 없으면(업로드할 파일이 존재하지 않으면).
 		if(fName.equals("") && !vo.getContent().contains("src=\"/")) res = boardService.setBoardInput(vo);
@@ -86,16 +101,29 @@ public class BoardController {
 	
 	// 글보기.
 	@GetMapping("/BoardContent")
-	public String boardContentGet(Model model, PageVO pVO, BoardVO vo, FileVO fiVO, ReplyVO reVO,
-			@RequestParam(name = "password", defaultValue = "", required = false)String password,
-			@RequestParam(name = "idx", defaultValue = "0", required = false)int idx) {
+	public String boardContentGet(Model model, HttpSession session, PageVO pVO, BoardVO vo, FileVO fiVO, ReplyVO reVO,
+			@RequestParam(name = "password", defaultValue = "", required = false)String password) {
 		vo = boardService.getBoard(vo.getIdx());
-		
 		if(vo.getOpenSW().equals("비공개")) {
 			if(password.equals("")) return "redirect:/Message/pwdInputNo";
-			if(!passwordEncode.matches(password, vo.getPwd())) return "redirect:/Message/boardPwdNo";
+			else {
+				SecurityUtil securityUtil = new SecurityUtil();
+				String salt = vo.getPwd().substring(0,4);
+				if(!vo.getPwd().equals(salt+securityUtil.encryptSHA256(salt+password))) return "redirect:/Message/boardPwdNo";
+			}
 		}
 		
+		// 조회수 증가.
+		List<String> contentView = (List<String>)session.getAttribute("sContentIdx");
+		if(contentView == null) contentView = new ArrayList<String>();
+		String contentViewTemp = "board"+session.getAttribute("sMid")+vo.getIdx();
+		if(!contentView.contains(contentViewTemp)) {
+			boardService.contentView(vo.getIdx());
+			contentView.add(contentViewTemp);
+		}
+		session.setAttribute("sContentIdx", contentView);
+		
+		vo = boardService.getBoard(vo.getIdx());
 		fiVO = fileService.getFile(vo.getIdx());
 		List<ReplyVO> reVOS = replyService.getReply(vo.getIdx());
 		
@@ -110,15 +138,28 @@ public class BoardController {
 	@PostMapping("/GoodCheckPlusMinus")
 	public int goodCheckPlusMinusPost(HttpSession session, int idx, int goodCnt) {
 		// 세션에 저장한 조회수 증가 리스트 객체 불러온다.
-		List<String> contentView = (List<String>)session.getAttribute("goodPoint");
+		List<String> contentView = (List<String>)session.getAttribute("sContentIdx");
 		if(contentView == null) contentView = new ArrayList<String>();
 		String contentViewTemp = "boardGood"+session.getAttribute("sMid")+idx;
 		if(!contentView.contains(contentViewTemp)) {
 			boardService.setGood(idx, goodCnt);
 			contentView.add(contentViewTemp);
-			session.setAttribute("goodPoint", contentView);
 			return 1;
 		}
 		return 0;
+	}
+	
+	//게시글 검색.
+	@GetMapping("/BoardSearchList")
+	public String boardSearchListPost(Model model, PageVO pVO) {
+		pVO.setSection("board");
+		pVO = pagination.pagination(pVO);
+		
+		List<BoardVO> vos = boardService.getBoardList(pVO.getStartIndexNo(), pVO.getPageSize(), pVO.getSearch(), pVO.getSearchStr());
+		
+		model.addAttribute("vos", vos);
+		model.addAttribute("pVO", pVO);
+		
+		return "board/boardSearchList";
 	}
 }

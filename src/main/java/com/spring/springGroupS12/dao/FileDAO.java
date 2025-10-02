@@ -8,6 +8,6 @@ public interface FileDAO {
 
 	int setFile(@Param("fVO") FileVO fVO);
 
-	FileVO getFile(@Param("idx") int idx);
+	FileVO getFile(@Param("parentIdx") int parentIdx);
 
 }

@@ -171,7 +171,7 @@ public class MemberController {
 			@RequestParam(name = "pwd", defaultValue = "", required = false) String pwd,
 			@RequestParam(name = "idSave", defaultValue = "", required = false) String idSave) {
 		MemberVO vo = memberService.getMemberMid(mid);
-		if(vo != null && vo.getDelete().equals("활동") && passwordEncode.matches(pwd, vo.getPwd())) {
+		if(vo != null && vo.getUserDelete().equals("활동") && passwordEncode.matches(pwd, vo.getPwd())) {
 			String strLevel = "";
 			if(vo.getLevel() == 0) strLevel = "관리자";
 			else if(vo.getLevel() == 1) strLevel = "우수회원";
@@ -252,6 +252,7 @@ public class MemberController {
 			
 			newMember = "OK";
 		}
+		else if(vo.getUserDelete().equals("삭제")) return "redirect:/Message/loginNo";
 		
 		String strLevel = "";
 		if(vo.getLevel() == 0) strLevel = "관리자";
@@ -295,5 +296,24 @@ public class MemberController {
 		session.removeAttribute("sEmailKey");
 		session.removeAttribute("sAccessToken");
 		return "redirect:/Message/logoutOk?mid="+mid;
+	}
+	
+	// 회원탈퇴.
+	@ResponseBody
+	@PostMapping("/Delete")
+	public int memberDeletePost(HttpSession session) {
+		String mid = session.getAttribute("sMid").toString();
+		int res = memberService.setMemberDelete(mid);
+		if(res != 0) {
+			session.removeAttribute("sMid");
+			session.removeAttribute("sNickName");
+			session.removeAttribute("sLevel");
+			session.removeAttribute("sStrLevel");
+			session.removeAttribute("sLastDate");
+			session.removeAttribute("sEmailKey");
+			session.removeAttribute("sAccessToken");
+			return res;
+		}
+		else return res;
 	}
 }

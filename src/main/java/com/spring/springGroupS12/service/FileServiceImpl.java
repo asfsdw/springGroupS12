@@ -12,7 +12,7 @@ public class FileServiceImpl implements FileService {
 	FileDAO fileDAO;
 
 	@Override
-	public FileVO getFile(int idx) {
-		return fileDAO.getFile(idx);
+	public FileVO getFile(int parentIdx) {
+		return fileDAO.getFile(parentIdx);
 	}
 }

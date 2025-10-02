@@ -32,4 +32,7 @@
 	<update id="setLastDateUpdate">
 		UPDATE member SET lastDate = now() WHERE mid = #{mid};
 	</update>
+	<update id="setMemberDelete">
+		UPDATE member SET userDelete = '삭제', lastDate = now() WHERE mid = #{mid};
+	</update>
 </mapper>

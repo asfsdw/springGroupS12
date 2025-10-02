@@ -17,7 +17,7 @@ public class MemberVO {
 	private String myImage;
 	private int level;
 	private int point;
-	private String delete;
+	private String userDelete;
 	private String startDate;
 	private String lastDate;
 }
