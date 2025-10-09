@@ -285,7 +285,6 @@ function fCheck(year) {
 	let ext = fName.substring(fName.lastIndexOf(".")+1).toLowerCase();
 	
 	if(fName != "") {
-		console.log("파일사이즈들어옴");
 		let fileSize = $("#file")[0].files[0].size;
 		if(fileSize > maxSize) {
 			alert("프로필 사진의 파일 크기는 10MB까지입니다.")
@@ -294,19 +293,16 @@ function fCheck(year) {
 	}
 	// 프로필 사진은 안 올려도 상관 없기 때문에 이미지가 맞는지만 체크. 업로드 하지 않을 경우 공백이기 때문에 공백도 허용.
 	if(ext != "jpg" && ext != "jpeg" && ext != "gif" && ext != "png" && ext != "") {
-		console.log("형식들어옴");
 		alert("프로필 사진입니다. 그림파일만 선택해주세요.");
 		return false;
 	}
 	else submitFlag = 1;
 	
 	if(submitFlag != 1) {
-		console.log("노체크들어옴");
 		alert("체크하지 않은 항목이 있습니다.");
 		return false;
 	}
 	else {
-		console.log("최종들어옴");
 		$("#age").val(age);
 		$("#email").val(email);
 		$("#address").val(address);

@@ -32,9 +32,9 @@
 			<a href="${ctp}/member/Main" class="w3-bar-item w3-button w3-padding-large">내정보</a>
 		</c:if>
 		<a href="${ctp}/board/BoardList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">게시판</a>
-		<c:if test="${sLevel < 3}">
-			<a href="${ctp}/pds/PDSList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">자료실</a>
+		<a href="${ctp}/shop/Goods" class="w3-bar-item w3-button w3-padding-large w3-hide-small">굿즈</a>
 			
+		<c:if test="${sLevel < 3}">
 			<div class="w3-dropdown-hover w3-hide-small">
 				<button class="w3-padding-large w3-button" title="More">Study1 <i class="fa fa-caret-down"></i></button>     
 				<div class="w3-dropdown-content w3-bar-block w3-card-4">

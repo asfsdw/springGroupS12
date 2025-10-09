@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.spring.springGroupS12.service.BoardService;
 import com.spring.springGroupS12.service.MemberService;
+import com.spring.springGroupS12.service.ShopService;
 import com.spring.springGroupS12.vo.PageVO;
 
 @Service
@@ -13,6 +14,8 @@ public class Pagination {
 	MemberService memberService;
 	@Autowired
 	BoardService boardService;
+	@Autowired
+	ShopService shopService;
 	
 	public PageVO pagination(PageVO vo) {
 		vo.setSection(vo.getSection() == null ? "" : vo.getSection());
@@ -41,11 +44,11 @@ public class Pagination {
 			if(vo.getSearch() == null) vo.setTotRecCnt(boardService.getTotRecCnt("best", "", ""));
 			else vo.setTotRecCnt(boardService.getTotRecCnt(vo.getFlag(), vo.getSearch(), vo.getSearchStr()));
 		}
-		/*
-		else if(vo.getSection().equals("pds")) {
-			if(vo.getSearch() == null) vo.setTotRecCnt(pdsService.getTotRecCnt(vo.getFlag(), vo.getPart(), "", ""));
-			else vo.setTotRecCnt(adminService.getTotRecCnt(vo.getFlag(), vo.getSearch(), vo.getSearchStr()));
+		else if(vo.getSection().equals("shop")) {
+			if(vo.getSearch() == null) vo.setTotRecCnt(shopService.getTotRecCnt(vo.getFlag(), "", ""));
+			else vo.setTotRecCnt(shopService.getTotRecCnt(vo.getFlag(), vo.getSearch(), vo.getSearchStr()));
 		}
+		/*
 		else if(vo.getSection().equals("admin")) {
 			if(vo.getSearch() == null) vo.setTotRecCnt(adminService.getTotRecCnt(vo.getFlag(), "", ""));
 			else vo.setTotRecCnt(adminService.getTotRecCnt(vo.getFlag(), vo.getSearch(), vo.getSearchStr()));

@@ -4,77 +4,56 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.spring.springGroupS12.common.ProjectProvide;
-import com.spring.springGroupS12.dao.BoardDAO;
 import com.spring.springGroupS12.dao.FileDAO;
-import com.spring.springGroupS12.vo.BoardVO;
+import com.spring.springGroupS12.dao.ShopDAO;
 import com.spring.springGroupS12.vo.FileVO;
+import com.spring.springGroupS12.vo.ShopVO;
 
 @Service
-public class BoardServiceImpl implements BoardService {
+public class ShopServiceImpl implements ShopService {
 	@Autowired
-	BoardDAO boardDAO;
-	@Autowired
-	FileDAO fileDAO;
+	ShopDAO shopDAO;
 	@Autowired
 	ProjectProvide projectProvide;
+	@Autowired
+	FileDAO fileDAO;
 
 	@Override
 	public int getTotRecCnt(String flag, String search, String searchStr) {
-		return boardDAO.getTotRecCnt(flag, search, searchStr);
-	}
-	
-	@Override
-	public List<BoardVO> getBoardList(int startIndexNo, int pageSize, String search, String searchStr) {
-		return boardDAO.getBoardList(startIndexNo, pageSize, search, searchStr);
+		return shopDAO.getTotRecCnt(flag, search, searchStr);
 	}
 
 	@Override
-	public BoardVO getBoard(int idx) {
-		return boardDAO.getBoard(idx);
-	}
-
-	@Override
-	public int setBoardInput(BoardVO vo) {
-		return boardDAO.setBoardInput(vo);
-	}
-
-	@Transactional
-	@Override
-	public int uploadBoardInput(MultipartHttpServletRequest mFile, BoardVO vo, FileVO fVO) {
+	public int setProductImage(MultipartFile fName, ShopVO vo, FileVO fVO) {
 		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
 		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/");
-		
 		int res = 0;
+		
 		String oFileNames = "";
 		String sFileNames = "";
 		String fileSize = "";
 		String content = "";
 		int position = 35;
 		boolean sw = true;
+		
 		if(vo.getContent().contains("src=\"/")) content = vo.getContent().substring(vo.getContent().indexOf("src=\"/")+position);
-		// 					 1				 2				 3
-		// 0123456789012345678901234567890123456789
-		// src="/springGroupS12/data/ckeditor/251001124341_07.jpg" style="height:199px; width:300px" /></p>
+		
 		try {
-			// ckeditor로 파일을 업로드했을 때.
 			if(!content.equals("")) {
 				while(sw) {
 					String imgFile = content.substring(0, content.indexOf("\""));
 					String oFilePath = realPath+"ckeditor/"+imgFile;
-					String copyFilePath = realPath+"board/"+imgFile;
+					String copyFilePath = realPath+"shop/"+imgFile;
 					
 					fileCopyCheck(oFilePath, copyFilePath);
 					
@@ -89,28 +68,26 @@ public class BoardServiceImpl implements BoardService {
 					else content = content.substring(content.indexOf("src=\"/")+position);
 				}
 			}
-			List<MultipartFile> fileList = mFile.getFiles("file");
-			for(MultipartFile file : fileList) {
-				String oFileName = file.getOriginalFilename();
-				// 첨부파일이 있을 때.
-				if(!oFileName.equals("")) {
-					String sFileName = projectProvide.saveFileName(oFileName);
-					projectProvide.writeFile(file, sFileName, "board");
-					
-					oFileNames += oFileName+"/";
-					sFileNames += sFileName+"/";
-					fileSize += file.getSize()+"/";
-				}
+			
+			String oFileName = fName.getOriginalFilename();
+			// 첨부파일이 있을 때.
+			if(!oFileName.equals("")) {
+				String sFileName = projectProvide.saveFileName(oFileName);
+				projectProvide.writeFile(fName, sFileName, "shop");
+				
+				oFileNames += oFileName+"/";
+				sFileNames += sFileName+"/";
+				fileSize += fName.getSize()+"/";
 			}
 			oFileNames = oFileNames.substring(0, oFileNames.length()-1);
 			sFileNames = sFileNames.substring(0, sFileNames.length()-1);
 			fileSize = fileSize.substring(0, fileSize.length()-1);
 			
-			vo.setContent(vo.getContent().replace("ckeditor", "board"));
-			res = boardDAO.setBoardInput(vo);
+			vo.setContent(vo.getContent().replace("ckeditor", "shop"));
+			res = shopDAO.setProductInput(vo);
 			
-			fVO.setPart("board");
-			fVO.setParentIdx(fileDAO.getParentIdx("board"));
+			fVO.setPart("shop");
+			fVO.setParentIdx(fileDAO.getParentIdx("shop"));
 			fVO.setOFileName(oFileNames);
 			fVO.setSFileName(sFileNames);
 			fVO.setFileSize(fileSize);
@@ -123,8 +100,8 @@ public class BoardServiceImpl implements BoardService {
 			}
 		} catch (Exception e) {e.printStackTrace();}
 		
-			projectProvide.fileDelete(sFileNames, "ckeditor");
-			return res;
+		projectProvide.fileDelete(sFileNames, "ckeditor");
+		return res;
 	}
 	//파일 복사.
 	private void fileCopyCheck(String oFilePath, String copyFilePath) {
@@ -144,20 +121,4 @@ public class BoardServiceImpl implements BoardService {
 			e.printStackTrace();
 		}
 	}
-
-	@Override
-	public void setGood(int idx, int goodCnt) {
-		boardDAO.setGood(idx, goodCnt);
-	}
-
-	@Override
-	public void contentView(int idx) {
-		boardDAO.contentView(idx);
-	}
-
-	@Override
-	public List<BoardVO> getBoardBest(int startIndexNo, int pageSize, String search, String searchStr) {
-		return boardDAO.getBoardBest(startIndexNo, pageSize, search, searchStr);
-	}
-
 }

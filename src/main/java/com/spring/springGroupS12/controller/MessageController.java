@@ -13,7 +13,11 @@ public class MessageController {
 	public String MessageGet(Model model,
 			@PathVariable String msgFlag,
 			@RequestParam(name="mid", defaultValue = "", required = false) String mid) {
-		if(msgFlag.equals("SignUpOk")) {
+		if(msgFlag.equals("wrongAccess")) {
+			model.addAttribute("message", "잘못된 접근입니다.");
+			model.addAttribute("url", "/");
+		}
+		else if(msgFlag.equals("SignUpOk")) {
 			model.addAttribute("message", mid+"님 회원가입되었습니다.");
 			model.addAttribute("url", "member/Login");
 		}
@@ -68,6 +72,14 @@ public class MessageController {
 		else if(msgFlag.equals("boardPwdNo")) {
 			model.addAttribute("message", "게시글의 비밀번호가 다릅니다.");
 			model.addAttribute("url", "board/BoardList");
+		}
+		else if(msgFlag.equals("productOk")) {
+			model.addAttribute("message", "상품이 등록되었습니다.");
+			model.addAttribute("url", "shop/Goods");
+		}
+		else if(msgFlag.equals("productNo")) {
+			model.addAttribute("message", "상품등록에 실패했습니다.");
+			model.addAttribute("url", "shop/ProductAdd");
 		}
 		return "include/message";
 	}

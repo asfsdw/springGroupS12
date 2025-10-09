@@ -10,4 +10,6 @@ public interface FileDAO {
 
 	FileVO getFile(@Param("parentIdx") int parentIdx);
 
+	int getParentIdx(@Param("flag") String flag);
+
 }

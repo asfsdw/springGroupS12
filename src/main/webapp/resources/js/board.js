@@ -50,7 +50,6 @@ function fCheck(mid) {
 	for(let i=0; i<files.length; i++) {
 		fName = files[i].name;
 		ext = fName.substring(fName.lastIndexOf(".")+1).toLowerCase();
-		console.log(ext);
 		if(ext != 'jpg' && ext != 'gif' && ext != 'png' && ext != 'mp4' &&
 			ext != 'zip' && ext != 'hwp' && ext != 'doc' && ext != 'ppt' && ext != 'pptx' && ext != 'pdf' && ext != 'txt') {
 			alert("업로드 가능한 파일은 'jpg/gif/png/mp4/zip/hwp/doc/ppt/pptx/pdf/txt'파일 입니다.");

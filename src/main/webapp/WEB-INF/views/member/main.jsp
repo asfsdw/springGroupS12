@@ -87,7 +87,7 @@
 		<hr/>
 		<div class="row">
 			<div class="col text-start">
-				현재 회원 등급: ${strLevel}<br/>
+				현재 회원 등급: ${sStrLevel}<br/>
 				현재 포인트: ${mVO.point}<br/>
 				이전 방문일: ${sLastDate}<br/>
 			</div>

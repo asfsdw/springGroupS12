@@ -4,6 +4,9 @@
 	<select id="getFile" resultType="com.spring.springGroupS12.vo.FileVO">
 		SELECT * FROM file_manage WHERE parentIdx = #{parentIdx};
 	</select>
+	<select id="getParentIdx" resultType="int">
+		SELECT idx FROM ${flag} ORDER BY idx DESC LIMIT 1; 
+	</select>
 	
 	
 	

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.springGroupS12.dao.ShopDAO">
+	<select id="getTotRecCnt" resultType="int">
+		SELECT count(idx) FROM shop ORDER BY idx DESC;
+	</select>
+	
+	
+	
+	<insert id="setProductInput">
+		INSERT INTO shop VALUES(DEFAULT,#{vo.mid},#{vo.nickName},#{vo.kategorie},
+			#{vo.title},#{vo.content},#{vo.price},#{vo.quantity},#{vo.pwd},
+			DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT);
+	</insert>
+</mapper>
