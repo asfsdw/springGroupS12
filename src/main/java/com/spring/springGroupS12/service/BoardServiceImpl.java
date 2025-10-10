@@ -53,7 +53,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Transactional
 	@Override
-	public int uploadBoardInput(MultipartHttpServletRequest mFile, BoardVO vo, FileVO fVO) {
+	public int setUploadBoardInput(MultipartHttpServletRequest mFile, BoardVO vo, FileVO fVO) {
 		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
 		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/");
 		
@@ -151,7 +151,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public void contentView(int idx) {
+	public void setContentView(int idx) {
 		boardDAO.contentView(idx);
 	}
 
@@ -160,4 +160,91 @@ public class BoardServiceImpl implements BoardService {
 		return boardDAO.getBoardBest(startIndexNo, pageSize, search, searchStr);
 	}
 
+	@Transactional
+	@Override
+	public int setUpdateBoardInput(MultipartHttpServletRequest mFile, BoardVO vo, FileVO fVO) {
+		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/");
+		
+		int res = 0;
+		String oFileNames = "";
+		String sFileNames = "";
+		String fileSize = "";
+		String content = "";
+		int position = 32;
+		boolean sw = true;
+		if(vo.getContent().contains("src=\"/")) content = vo.getContent().substring(vo.getContent().indexOf("src=\"/")+position);
+		// 					 1				 2				 3
+		// 0123456789012345678901234567890123456789
+		// src="/springGroupS12/data/board/251001124341_07.jpg" style="height:199px; width:300px" /></p>
+		try {
+			// ckeditor로 파일을 업로드했을 때.
+			if(!content.equals("")) {
+				while(sw) {
+					String imgFile = content.substring(0, content.indexOf("\""));
+					String oFilePath = realPath+"ckeditor/"+imgFile;
+					String copyFilePath = realPath+"board/"+imgFile;
+					
+					fileCopyCheck(oFilePath, copyFilePath);
+					
+					String oFileName = content.substring(content.indexOf("_")+1, content.indexOf("\""));
+					String sFileName = content.substring(0, content.indexOf("\""));
+					oFileNames += oFileName+"/";
+					sFileNames += sFileName+"/";
+					// 업로드한 파일과 배열 수를 맞추기 위해 파일 크기에 0추가.
+					fileSize += "0/";
+					
+					if(content.indexOf("src=\"/") == -1) sw = false;
+					else content = content.substring(content.indexOf("src=\"/")+position);
+				}
+			}
+			
+			List<MultipartFile> fileList = mFile.getFiles("file");
+			for(MultipartFile file : fileList) {
+				String oFileName = file.getOriginalFilename();
+				// 첨부파일이 있을 때.
+				if(!oFileName.equals("")) {
+					String sFileName = projectProvide.saveFileName(oFileName);
+					projectProvide.writeFile(file, sFileName, "board");
+					
+					oFileNames += oFileName+"/";
+					sFileNames += sFileName+"/";
+					fileSize += file.getSize()+"/";
+				}
+			}
+			
+			oFileNames = oFileNames.substring(0, oFileNames.length()-1);
+			sFileNames = sFileNames.substring(0, sFileNames.length()-1);
+			fileSize = fileSize.substring(0, fileSize.length()-1);
+			
+			vo.setContent(vo.getContent().replace("ckeditor", "board"));
+			res = boardDAO.setBoardUpdate(vo);
+			
+			fVO.setPart("board");
+			fVO.setParentIdx(vo.getIdx());
+			fVO.setOFileName(oFileNames);
+			fVO.setSFileName(sFileNames);
+			fVO.setFileSize(fileSize);
+			res = fileDAO.setFileUpdate(fVO);
+			
+			// 파일 처리 끝나면 임시폴더(ckeditor)에 있는 파일 삭제.
+			String deleteFileNames[] = sFileNames.split("/");
+			for(int i=0; i<deleteFileNames.length; i++) {
+				projectProvide.fileDelete(deleteFileNames[i], "ckeditor");
+			}
+		} catch (Exception e) {e.printStackTrace();}
+		
+		projectProvide.fileDelete(sFileNames, "ckeditor");
+		return res;
+	}
+
+	@Override
+	public int setBoardUpdate(BoardVO vo) {
+		return boardDAO.setBoardUpdate(vo);
+	}
+
+	@Override
+	public int setBoardDelete(int idx) {
+		return boardDAO.setBoardDelete(idx);
+	}
 }

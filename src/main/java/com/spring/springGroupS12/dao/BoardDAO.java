@@ -24,4 +24,8 @@ public interface BoardDAO {
 
 	List<BoardVO> getBoardBest(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("search") String search, @Param("searchStr") String searchStr);
 
+	int setBoardUpdate(@Param("vo") BoardVO vo);
+
+	int setBoardDelete(@Param("idx") int idx);
+
 }

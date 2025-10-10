@@ -31,7 +31,7 @@
 	
 	
 	<insert id="setBoardInput">
-		INSERT INTO board VALUES(DEFAULT,#{vo.mid},#{vo.nickName},#{vo.title},#{vo.content},#{vo.pwd},#{vo.openSW},DEFAULT,DEFAULT,DEFAULT,DEFAULT);
+		INSERT INTO board VALUES(DEFAULT,#{vo.mid},#{vo.nickName},#{vo.title},#{vo.content},#{vo.openSW},#{vo.pwd},DEFAULT,DEFAULT,DEFAULT,DEFAULT);
 	</insert>
 	
 	
@@ -42,5 +42,13 @@
 	<update id="contentView">
 		UPDATE board SET views = views + 1 WHERE idx = #{idx};
 	</update>
+	<update id="setBoardUpdate">
+		UPDATE board SET title = #{vo.title}, content = #{vo.content} WHERE idx = #{vo.idx};
+	</update>
 	
+	
+	
+	<delete id="setBoardDelete">
+		DELETE FROM board WHERE idx = #{idx};
+	</delete>
 </mapper>

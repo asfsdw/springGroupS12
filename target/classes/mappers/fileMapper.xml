@@ -2,10 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.springGroupS12.dao.FileDAO">
 	<select id="getFile" resultType="com.spring.springGroupS12.vo.FileVO">
-		SELECT * FROM file_manage WHERE parentIdx = #{parentIdx};
+		SELECT * FROM file_manage WHERE part = #{part} AND parentIdx = #{parentIdx};
 	</select>
 	<select id="getParentIdx" resultType="int">
 		SELECT idx FROM ${flag} ORDER BY idx DESC LIMIT 1; 
+	</select>
+	<select id="getFileList" resultType="com.spring.springGroupS12.vo.FileVO">
+		SELECT * FROM file_manage WHERE part = #{part};
 	</select>
 	
 	
@@ -13,4 +16,10 @@
 	<insert id="setFile">
 		INSERT INTO file_manage VALUES(DEFAULT,#{fVO.parentIdx},#{fVO.part},#{fVO.oFileName},#{fVO.sFileName},#{fVO.fileSize});
 	</insert>
+	
+	
+	
+	<update id="setFileUpdate">
+		UPDATE file_manage SET oFileName = #{fVO.oFileName}, sFileName = #{fVO.sFileName}, fileSize = #{fVO.fileSize} WHERE parentIdx = #{fVO.parentIdx};
+	</update>
 </mapper>

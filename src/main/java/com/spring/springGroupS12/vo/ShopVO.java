@@ -9,6 +9,7 @@ public class ShopVO {
 	private String nickName;
 	private String kategorie;
 	private String title;
+	private String productImage;
 	private String content;
 	private int price;
 	private int quantity;

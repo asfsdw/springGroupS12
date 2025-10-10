@@ -1,10 +1,13 @@
 package com.spring.springGroupS12.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.springGroupS12.dao.MemberDAO;
 import com.spring.springGroupS12.vo.MemberVO;
+import com.spring.springGroupS12.vo.SubScriptVO;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -55,6 +58,16 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int setMemberDelete(String mid) {
 		return memberDAO.setMemberDelete(mid);
+	}
+
+	@Override
+	public int setSubScript(SubScriptVO vo) {
+		return memberDAO.setSubScript(vo);
+	}
+
+	@Override
+	public List<SubScriptVO> getSubScriptList(String mid) {
+		return memberDAO.getSubScriptList(mid);
 	}
 
 }

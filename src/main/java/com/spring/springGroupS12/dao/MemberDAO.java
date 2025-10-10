@@ -1,8 +1,11 @@
 package com.spring.springGroupS12.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.spring.springGroupS12.vo.MemberVO;
+import com.spring.springGroupS12.vo.SubScriptVO;
 
 public interface MemberDAO {
 
@@ -23,5 +26,9 @@ public interface MemberDAO {
 	void setKakaoMemberInput(@Param("mid") String mid, @Param("pwd") String pwd, @Param("nickName") String nickName, @Param("age") int age, @Param("email") String email);
 
 	int setMemberDelete(@Param("mid") String mid);
+
+	int setSubScript(@Param("vo") SubScriptVO vo);
+
+	List<SubScriptVO> getSubScriptList(@Param("mid") String mid);
 
 }

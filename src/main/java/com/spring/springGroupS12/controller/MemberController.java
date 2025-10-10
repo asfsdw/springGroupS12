@@ -1,6 +1,7 @@
 package com.spring.springGroupS12.controller;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.spring.springGroupS12.common.ProjectProvide;
 import com.spring.springGroupS12.service.MemberService;
 import com.spring.springGroupS12.vo.MemberVO;
+import com.spring.springGroupS12.vo.SubScriptVO;
 
 @Controller
 @RequestMapping("/member")
@@ -282,6 +284,23 @@ public class MemberController {
 		MemberVO mVO = memberService.getMemberMid(mid);
 		model.addAttribute("mVO", mVO);
 		return "member/main";
+	}
+	
+	// 신청 관련.
+	@GetMapping("SubScript")
+	public String subScriptGet(HttpSession session, Model model) {
+		String mid = session.getAttribute("sMid").toString();
+		List<SubScriptVO> vos = memberService.getSubScriptList(mid);
+		
+		model.addAttribute("vos", vos);
+		return "member/subScript";
+	}
+	// 신청.
+	@PostMapping("SubScript")
+	public String subScriptPost(SubScriptVO vo) {
+		int res = memberService.setSubScript(vo);
+		if(res != 0) return "redirect:/Message/subScriptOk";
+		else return "redirect:/Message/subScriptNo";
 	}
 	
 	// 로그아웃.

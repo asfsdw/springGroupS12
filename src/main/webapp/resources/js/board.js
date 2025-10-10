@@ -9,11 +9,11 @@ $(() => {
 });
 
 // 게시글 등록 전, 프론트 체크.
-function fCheck(mid) {
+function fCheck(mid, fVO) {
 	let nickName = $("#nickName").val().replace(" ","");
 	let title = $("#title").val().trim();
 	let content = CKEDITOR.instances.CKEDITOR.getData().trim();
-	let pwd = $("#pwd").val().replace(" ","");
+	let openSW = $("[name='openSW']").val();
 	
 	let submitFlag = 0;
 	
@@ -35,9 +35,16 @@ function fCheck(mid) {
 		alert("내용을 입력해주세요.");
 		return false;
 	}
-	else if(pwd.length > 64) {
-		alert("비밀번호가 너무 깁니다.");
-		return false;
+	else if(openSW != "공개") {
+		let pwd = $("#pwd").val().replace(" ","");
+		if(pwd.length > 64) {
+			alert("비밀번호가 너무 깁니다.");
+			return false;
+		}
+		else if(pwd == "") {
+			alert("비밀번호를 입력해주세요.");
+			return false;
+		}
 	}
 	else submitFlag = 1;
 	
@@ -46,6 +53,11 @@ function fCheck(mid) {
 	let maxSize = 1024 * 1024 * 30;
 	let fileSize = 0;
 	let ext = "";
+	
+	if(fVO != null && files.length == 0) {
+		let ans = confirm("첨부파일이 존재하던 글입니다.\n첨부파일을 업로드하지 않고 수정하시겠습니까?");
+		if(!ans) return false;
+	}
 	
 	for(let i=0; i<files.length; i++) {
 		fName = files[i].name;
@@ -103,9 +115,9 @@ function goodCheckMinus(idx) {
 }
 
 // 게시글 삭제.
-function deleteCheck() {
+function deleteCheck(idx) {
 	let ans = confirm("게시글을 삭제하시겠습니까?");
-	if(ans) location.href = "BoardDelete?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}";
+	if(ans) location.href = "BoardDelete?idx="+idx;
 }
 
 // 댓글 입력.
@@ -210,7 +222,8 @@ function replyClose(idx) {
 }
 
 // 대댓글 창 열기.
-function reReplyForm(ctp, replyIdx, parentIdx, mid, nickName) {
+function reReplyForm(ctp, replyIdx, parentIdx, mid, nickName, hostIP) {
+	console.log(mid);
 	$("[id^=demo]").html("");
 	
 	let str = "";
@@ -222,7 +235,8 @@ function reReplyForm(ctp, replyIdx, parentIdx, mid, nickName) {
 	str += '</td>';
 	str += '<tr>';
 	str += '<td colspan="2">';
-	str += '<span>작성자: '+nickName+'</span>';
+	if(nickName == '') str += '<span>작성자: '+hostIP+'</span>';
+	if(nickName != '') str += '<span>작성자: '+nickName+'</span>';
 	str += '</td>';
 	str += '<td colspan="2" class="text-end">';
 	str += '<span><input type="button" value="대댓글달기" id="reReplyInput" class="btn btn-info btn-sm me-1" /></span>';
@@ -241,6 +255,7 @@ function reReplyForm(ctp, replyIdx, parentIdx, mid, nickName) {
 				"parentIdx" : parentIdx,
 				"mid" : mid,
 				"nickName" : nickName,
+				"hostIP" : hostIP,
 				"content" : $("#content"+replyIdx).val(),
 				"flag" : "reReply"
 			};
@@ -277,9 +292,8 @@ $(() => {
 	});
 });
 
-/*
 // 게시글 신고 처리.
-function complaintCheck() {
+function complaintCheck(idx, mid) {
 	if(!$("input[type='radio'][name='complaint']:checked").is(':checked')) {
 		alert("신고항목을 선택해주세요.");
 		return false;
@@ -294,13 +308,13 @@ function complaintCheck() {
 	
 	let query = {
 			"part" : "board",
-			"partIdx" : ${vo.idx},
-			"cpMid" : "${sMid}",
+			"partIdx" : idx,
+			"cpMid" : mid,
 			"cpContent" : cpContent
 	}
 	
 	$.ajax({
-		url : "${ctp}/board/BoardComplaintInput",
+		url : "BoardComplaint",
 		type: "post",
 		data: query,
 		success : (res) => {
@@ -313,7 +327,6 @@ function complaintCheck() {
 		error : () => alert("전송오류")
 	});
 }
-*/
 
 // modal에 hidden값 세팅
 function setModalHidden(idx, pag, pageSize, search, searchStr) {

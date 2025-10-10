@@ -9,7 +9,7 @@
 		<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
 		<script src="${ctp}/resources/ckeditor/ckeditor.js"></script>
 		<script src="${ctp}/js/board.js"></script>
-		<title>게시글 작성</title>
+		<title>게시글 수정</title>
 		<style>
 			th {width:74px;}
 		</style>
@@ -23,21 +23,21 @@
 			<table class="table table-bordered">
 				<tr>
 					<th>글쓴이</th>
-					<td><input type="text" name="nickName" id="nickName" value="${sNickName}" readonly class="form-control" /></td>
+					<td><input type="text" name="nickName" id="nickName" value="${vo.nickName}" readonly class="form-control" /></td>
 				</tr>
 				<tr>
 					<th>제목</th>
-					<td><input type="text" name="title" id="title" value="" placeholder="제목을 입력해주세요." required class="form-control" /></td>
+					<td><input type="text" name="title" id="title" value="${vo.title}" placeholder="제목을 입력해주세요." required class="form-control" /></td>
 				</tr>
 				<tr>
 					<th>내용</th>
 					<td>
-						<textarea rows="6" name="content" id="CKEDITOR" placeholder="내용을 입력해주세요." required class="form-control"></textarea>
+						<textarea rows="6" name="content" id="CKEDITOR" placeholder="내용을 입력해주세요." required class="form-control">${vo.content}</textarea>
 						<script>
 							CKEDITOR.replace("content", {
 								height : 500,
-								filebrowserUploadUrl : "${ctp}/ImageUpload",	// 이미지, 동영상을 서버로 전송버튼을 누를 때 사용.
-								uploadUrl : "${ctp}/ImageUpload"	// 업로드할 이미지를 드래그&드롭으로 한꺼번에 넣을 때 사용.
+								filebrowserUploadUrl : "${ctp}/ImageUpload",
+								uploadUrl : "${ctp}/ImageUpload"
 							});
 						</script>
 					</td>
@@ -49,8 +49,14 @@
 				<tr>
 					<th>공개여부</th>
 					<td>
-						<input type="radio" name="openSW" id="openOK" value="공개" checked />공개 &nbsp;&nbsp;
-						<input type="radio" name="openSW" id="openNO" value="비공개" />비공개
+						<c:if test="${vo.openSW == '공개'}">
+							<input type="radio" name="openSW" id="openOK" value="공개" checked />공개 &nbsp;&nbsp;
+							<input type="radio" name="openSW" id="openNO" value="비공개" />비공개
+						</c:if>
+						<c:if test="${vo.openSW != '공개'}">
+							<input type="radio" name="openSW" id="openOK" value="공개" />공개 &nbsp;&nbsp;
+							<input type="radio" name="openSW" id="openNO" value="비공개" checked />비공개
+						</c:if>
 						<span id="pwdDemo" style="display:none"><br/>비밀번호 : <input type="password" name="pwd" id="pwd" value="" /></span>
 					</td>
 				</tr>
@@ -58,13 +64,14 @@
 			<table class="table table-borderless">
 				<tr>
 					<td colspan="2" class="text-center">
-						<input type="button" value="글올리기" onclick="fCheck('${sMid}')" class="btn btn-success me-2" />
+						<input type="button" value="수정하기" onclick="fCheck('${vo.mid}','${fVO}')" class="btn btn-success me-2" />
 						<input type="reset" value="다시입력" class="btn btn-warning me-2" />
 						<input type="button" value="돌아가기" onclick="location.href='${ctp}/board/BoardList';" class="btn btn-danger" />
 					</td>
 				</tr>
 			</table>
-			<input type="hidden" name="mid" id="mid" value="${sMid}" />
+			<input type="hidden" name="idx" id="idx" value="${vo.idx}" />
+			<input type="hidden" name="mid" id="mid" value="${vo.mid}" />
 			<input type="hidden" name="fName" id="fName" value="" />
 		</form>
 	</div>

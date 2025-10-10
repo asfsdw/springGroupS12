@@ -4,12 +4,18 @@
 	<select id="getTotRecCnt" resultType="int">
 		SELECT count(idx) FROM shop ORDER BY idx DESC;
 	</select>
+	<select id="getProductList" resultType="com.spring.springGroupS12.vo.ShopVO">
+		SELECT * FROM shop ORDER BY idx DESC;
+	</select>
+	<select id="getProduct" resultType="com.spring.springGroupS12.vo.ShopVO">
+		SELECT * FROM shop WHERE idx = #{idx};
+	</select>
 	
 	
 	
 	<insert id="setProductInput">
 		INSERT INTO shop VALUES(DEFAULT,#{vo.mid},#{vo.nickName},#{vo.kategorie},
-			#{vo.title},#{vo.content},#{vo.price},#{vo.quantity},#{vo.pwd},
+			#{vo.title},#{vo.productImage},#{vo.content},#{vo.price},#{vo.quantity},#{vo.pwd},
 			DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT);
 	</insert>
 </mapper>

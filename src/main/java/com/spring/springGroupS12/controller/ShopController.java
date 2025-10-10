@@ -1,5 +1,7 @@
 package com.spring.springGroupS12.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.springGroupS12.common.Pagination;
+import com.spring.springGroupS12.service.FileService;
 import com.spring.springGroupS12.service.ShopService;
 import com.spring.springGroupS12.vo.FileVO;
 import com.spring.springGroupS12.vo.PageVO;
@@ -24,13 +27,18 @@ public class ShopController {
 	Pagination pagination;
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
+	@Autowired
+	FileService fileService;
 	
 	// 상품 리스트.
 	@GetMapping("/Goods")
-	public String GoodsGet(Model model, PageVO pVO, ShopVO vo) {
+	public String GoodsGet(Model model, PageVO pVO) {
 		pVO.setSection("shop");
 		pVO = pagination.pagination(pVO);
+		List<ShopVO> vos = shopService.getProductList();
+		
 		model.addAttribute("pVO", pVO);
+		model.addAttribute("vos", vos);
 		return "shop/goods";
 	}
 	
@@ -55,8 +63,18 @@ public class ShopController {
 		// 상품 등록.
 		int res = 0;
 		vo.setPwd(pwd);
-		if(vo.getContent().contains("src=\"/")) res = shopService.setProductImage(fName, vo, fVO);
+		res = shopService.setProductImage(fName, vo, fVO);
+		
 		if(res != 0) return "redirect:/Message/productOk";
 		else return "redirect:/Message/productNo";
+	}
+	
+	// 상품 상세보기.
+	@GetMapping("/Product")
+	public String productGet(Model model, ShopVO vo) {
+		vo = shopService.getProduct(vo.getIdx());
+		
+		model.addAttribute("vo", vo);
+		return "shop/product";
 	}
 }

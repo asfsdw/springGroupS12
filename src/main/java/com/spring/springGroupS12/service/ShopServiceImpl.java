@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -74,6 +75,7 @@ public class ShopServiceImpl implements ShopService {
 			if(!oFileName.equals("")) {
 				String sFileName = projectProvide.saveFileName(oFileName);
 				projectProvide.writeFile(fName, sFileName, "shop");
+				vo.setProductImage(sFileName);
 				
 				oFileNames += oFileName+"/";
 				sFileNames += sFileName+"/";
@@ -120,5 +122,15 @@ public class ShopServiceImpl implements ShopService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public List<ShopVO> getProductList() {
+		return shopDAO.getProductList();
+	}
+
+	@Override
+	public ShopVO getProduct(int idx) {
+		return shopDAO.getProduct(idx);
 	}
 }

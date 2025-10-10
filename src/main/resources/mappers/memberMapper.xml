@@ -15,6 +15,10 @@
 		SELECT * FROM member WHERE email = #{email};
 	</select>
 	
+	<select id="getSubScriptList" resultType="com.spring.springGroupS12.vo.SubScriptVO">
+		SELECT * FROM sub_script WHERE mid = #{mid};
+	</select>
+	
 	
 	
 	<insert id="setSignUpMember">
@@ -23,6 +27,10 @@
 	</insert>
 	<insert id="setKakaoMemberInput">
 		INSERT INTO member(mid, pwd, nickName, name, age, email) VALUES(#{mid},#{pwd},#{nickName},#{nickName},#{age},#{email});
+	</insert>
+	
+	<insert id="setSubScript">
+		INSERT INTO sub_script VALUES(DEFAULT,#{vo.mid},#{vo.nickName},#{vo.subContent},DEFAULT,DEFAULT);
 	</insert>
 	
 	

@@ -7,6 +7,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
+	<link type="text/css" rel="stylesheet" href="${ctp}/css/linkOrange.css">
 	<title></title>
 	<script>
 		'use strict';
@@ -41,6 +42,20 @@
 			<input type="button" value="상품등록" onclick="location.href='${ctp}/shop/ProductAdd'" class="btn btn-success btn-sm" />
 		</div>
 		<hr/>
+		<div class="row">
+			<c:set var="cnt" value="0" />
+			<c:forEach var="vo" items="${vos}" varStatus="st">
+				<div class="col" style="width:200px">
+					<a href="${ctp}/shop/Product?idx=${vo.idx}" style="display:inline-block">
+						<div><img src=${ctp}/shop/${vo.productImage} style="width:200px" /></div>
+						<div>${vo.title}</div>
+						<div>가격: ${vo.price}원 / 재고: ${vo.quantity}개</div>
+					</a>
+				</div>
+				<c:set var="cnt" value="${cnt+1}" />
+				<c:if test="${cnt > 4}"></div><div class="row"></c:if>
+			</c:forEach>
+		</div>
 		<p><br/></p>
 	</div>
 	<h6 id="topBtn" class="text-end me-3"><img src="${ctp}/images/arrowTop.gif" title="위로이동"/></h6>

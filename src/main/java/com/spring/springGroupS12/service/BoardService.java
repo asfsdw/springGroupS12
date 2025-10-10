@@ -17,12 +17,18 @@ public interface BoardService {
 	
 	int setBoardInput(BoardVO vo);
 	
-	int uploadBoardInput(MultipartHttpServletRequest mFile, BoardVO vo, FileVO fVO);
+	int setUploadBoardInput(MultipartHttpServletRequest mFile, BoardVO vo, FileVO fVO);
 
 	void setGood(int idx, int goodCnt);
 
-	void contentView(int idx);
+	void setContentView(int idx);
 
 	List<BoardVO> getBoardBest(int startIndexNo, int pageSize, String search, String searchStr);
+
+	int setBoardUpdate(BoardVO vo);
+
+	int setUpdateBoardInput(MultipartHttpServletRequest mFile, BoardVO vo, FileVO fVO);
+
+	int setBoardDelete(int idx);
 
 }

@@ -58,3 +58,13 @@ function fCheck() {
 	
 	productAddForm.submit();
 }
+
+function soldCheck() {
+	let orderQuantity = $("#orderQuantity").val();
+	if(orderQuantity <= 0 || orderQuantity == null) {
+		alert("구매하실 수량을 입력해주세요.");
+		return false;
+	}
+	
+	producForm.submit();
+}

@@ -7,12 +7,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.spring.springGroupS12.vo.PageVO;
+
 @Controller
 public class MessageController {
 	@RequestMapping(value = "/Message/{msgFlag}", method = RequestMethod.GET)
-	public String MessageGet(Model model,
+	public String MessageGet(Model model, PageVO pVO,
 			@PathVariable String msgFlag,
-			@RequestParam(name="mid", defaultValue = "", required = false) String mid) {
+			@RequestParam(name="mid", defaultValue = "", required = false) String mid,
+			@RequestParam(name="idx", defaultValue = "0", required = false) int idx) {
 		if(msgFlag.equals("wrongAccess")) {
 			model.addAttribute("message", "잘못된 접근입니다.");
 			model.addAttribute("url", "/");
@@ -65,6 +68,26 @@ public class MessageController {
 			model.addAttribute("message", "게시글 등록에 실패했습니다.");
 			model.addAttribute("url", "board/BoardInput");
 		}
+		else if(msgFlag.equals("boardUpdateOk")) {
+			model.addAttribute("message", "게시글을 수정했습니다.");
+			if(pVO.getSearch() != null) model.addAttribute("url", "/board/BoardContent?idx="+idx+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize()+"&search="+pVO.getSearch()+"&searchStr="+pVO.getSearchStr());
+			else model.addAttribute("url", "/board/BoardContent?idx="+idx+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize());
+		}
+		else if(msgFlag.equals("boardUpdateNo")) {
+			model.addAttribute("message", "게시글 수정에 실패했습니다.");
+			if(pVO.getSearch() != null) model.addAttribute("url", "/board/BoardUpdate?idx="+idx+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize()+"&search="+pVO.getSearch()+"&searchStr="+pVO.getSearchStr());
+			else model.addAttribute("url", "/board/BoardUpdate?idx="+idx+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize());
+		}
+		else if(msgFlag.equals("boardDeleteOk")) {
+			model.addAttribute("message", "게시글을 삭제했습니다.");
+			if(pVO.getSearch() != null) model.addAttribute("url", "/board/BoardSearchList?&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize()+"&search="+pVO.getSearch()+"&searchStr="+pVO.getSearchStr());
+			else model.addAttribute("url", "/board/BoardList?&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize());
+		}
+		else if(msgFlag.equals("boardDeleteNo")) {
+			model.addAttribute("message", "게시글 삭제에 실패했습니다.");
+			if(pVO.getSearch() != null) model.addAttribute("url", "/board/BoardContent?idx="+idx+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize()+"&search="+pVO.getSearch()+"&searchStr="+pVO.getSearchStr());
+			else model.addAttribute("url", "/board/BoardContent?idx="+idx+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize());
+		}
 		else if(msgFlag.equals("pwdInputNo")) {
 			model.addAttribute("message", "비밀번호를 입력해주세요.");
 			model.addAttribute("url", "board/BoardList");
@@ -80,6 +103,14 @@ public class MessageController {
 		else if(msgFlag.equals("productNo")) {
 			model.addAttribute("message", "상품등록에 실패했습니다.");
 			model.addAttribute("url", "shop/ProductAdd");
+		}
+		else if(msgFlag.equals("subScriptOk")) {
+			model.addAttribute("message", "신청이 등록되었습니다.\\n관리자가 승인할 때까지 기다려주세요.");
+			model.addAttribute("url", "member/SubScript");
+		}
+		else if(msgFlag.equals("subScriptNo")) {
+			model.addAttribute("message", "신청에 실패했습니다.");
+			model.addAttribute("url", "member/SubScript");
 		}
 		return "include/message";
 	}

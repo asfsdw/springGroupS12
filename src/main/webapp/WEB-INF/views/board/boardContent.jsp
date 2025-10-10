@@ -23,7 +23,7 @@
 	<div class="container">
 		<h2 class="text-center">
 			${vo.title}
-			<c:if test="${sLevel < 4}">
+			<c:if test="${sLevel < 99}">
 				/
 				<!-- 한 번 누른 좋아요, 싫어요를 누른 게시글에서는 좋아요, 싫어요를 누르지 못하게 한다. -->
 				<c:if test="${!fn:contains(sContentIdx, 'boardGood'+=sMid+=vo.idx)}">
@@ -53,14 +53,13 @@
 				<th>내용</th>
 				<td colspan="5" style="height:230px">${fn:replace(vo.content, newLine, "<br/>")}</td>
 			</tr>
-			<c:if test="${!empty fiVO}">
-				통과
+			<c:if test="${!empty fVO}">
 				<tr>
 					<th>첨부파일</th>
 					<td colspan="5">
-						<c:set var="oFileNames" value="${fn:split(fiVO.OFileName,'/')}" />
-						<c:set var="sFileNames" value="${fn:split(fiVO.SFileName,'/')}" />
-						<c:set var="fileSizes" value="${fn:split(fiVO.fileSize,'/')}" />
+						<c:set var="oFileNames" value="${fn:split(fVO.OFileName,'/')}" />
+						<c:set var="sFileNames" value="${fn:split(fVO.SFileName,'/')}" />
+						<c:set var="fileSizes" value="${fn:split(fVO.fileSize,'/')}" />
 						<c:forEach var="i" begin="0" end="${fn:length(fileSizes)}">
 								<c:if test="${fileSizes[i] != '0'}">
 									<a href="${ctp}/board/${sFileNames[i]}" download=${oFileNames[i]}>${oFileNames[i]}</a>
@@ -85,9 +84,9 @@
 						<input type="button" value="수정" onclick="location.href='${ctp}/board/BoardUpdate?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}';" class="btn btn-warning" />
 					</c:if>
 					<c:if test="${vo.mid == sMid || sLevel == 0 && vo.complaint != 'OK'}">
-						<input type="button" value="삭제" onclick="deleteCheck()" class="btn btn-danger" />
+						<input type="button" value="삭제" onclick="deleteCheck(${vo.idx})" class="btn btn-danger" />
 					</c:if>
-					<c:if test="${vo.complaint != 'OK'}">
+					<c:if test="${!empty sMid && vo.complaint != 'OK'}">
 						<input type="button" value="신고" data-bs-toggle="modal" data-bs-target="#myModal" class="btn btn-secondary" />
 					</c:if>
 					<c:if test="${vo.complaint == 'OK'}">
@@ -111,16 +110,16 @@
 					<tr>
 						<td>
 							<c:if test="${reVO.re_step > 1}">
-								<c:forEach var="i" begin="1" end="${reVO.re_step}"> &nbsp;&nbsp;</c:forEach>
+								<c:forEach var="i" begin="1" end="${reVO.re_step}"> &nbsp;</c:forEach>
 								└▶ 
 							</c:if>
-							<c:if test="${reVO.hostIP != null}">${reVO.hostIP}</c:if>
-							<c:if test="${reVO.hostIP == null}">${reVO.nickName}</c:if>
+							<c:if test="${reVO.mid == 'noMember'}">${reVO.hostIP}</c:if>
+							<c:if test="${reVO.mid != 'noMember'}">${reVO.nickName}</c:if>
 						</td>
 						<td colspan="2">${fn:replace(reVO.content, newLine, "<br/>")}</td>
 						<td class="text-center">${reVO.replyDate}</td>
 						<td class="text-center">
-							<a href="javascript:reReplyForm('${ctp}','${reVO.idx}','${reVO.parentIdx}','${sMid}','${sNickName}')" title="대댓글" class="text-decoration-none">💬</a>
+							<a href="javascript:reReplyForm('${ctp}','${reVO.idx}','${reVO.parentIdx}','${sMid}','${sNickName}','${pageContext.request.remoteAddr}')" title="대댓글" class="text-decoration-none">💬</a>
 							<c:if test="${reVO.nickName == sNickName || sLevel == 0}">
 								<a href="javascript:replyUpdate('${ctp}','${reVO.idx}','${fn:replace(reVO.content, newLine, '<br/>')}')" title="수정" class="text-decoration-none">/✏️</a>
 								<a href="javascript:replyDelete('${ctp}','${reVO.idx}')" title="삭제" class="text-decoration-none">/🗑️</a>
@@ -203,7 +202,7 @@
 						<div><input type="radio" name="complaint" value="기타" onclick="etcShow()"/> 기타</div>
 						<div id="etc"><textarea rows="2" id="etcTxt" class="form-control" style="display:none"></textarea></div>
 						<hr class="border border-secondary">
-						<input type="button" value="신고하기" onclick="complaintCheck()" class="btn btn-success form-control" />
+						<input type="button" value="신고하기" onclick="complaintCheck('${vo.idx}','${sMid}')" class="btn btn-success form-control" />
 					</form>
 				</div>
 				<!-- Modal footer -->
