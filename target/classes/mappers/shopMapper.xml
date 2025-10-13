@@ -5,17 +5,20 @@
 		SELECT count(idx) FROM shop ORDER BY idx DESC;
 	</select>
 	<select id="getProductList" resultType="com.spring.springGroupS12.vo.ShopVO">
-		SELECT * FROM shop ORDER BY idx DESC;
+		SELECT * FROM shop WHERE openSW = '공개' ORDER BY idx DESC;
 	</select>
 	<select id="getProduct" resultType="com.spring.springGroupS12.vo.ShopVO">
 		SELECT * FROM shop WHERE idx = #{idx};
+	</select>
+	<select id="getProductSubList" resultType="com.spring.springGroupS12.vo.ShopVO">
+		SELECT * FROM shop WHERE mid = #{mid} AND (openSW = '신청' OR openSW = '반려');
 	</select>
 	
 	
 	
 	<insert id="setProductInput">
 		INSERT INTO shop VALUES(DEFAULT,#{vo.mid},#{vo.nickName},#{vo.kategorie},
-			#{vo.title},#{vo.productImage},#{vo.content},#{vo.price},#{vo.quantity},#{vo.pwd},
-			DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT);
+			#{vo.title},#{vo.productImage},#{vo.content},#{vo.price},#{vo.quantity},#{vo.pwd}, #{vo.openSW}, 
+			DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT);
 	</insert>
 </mapper>

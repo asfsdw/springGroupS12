@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+	<beans:bean id="level0Interceptor" class="com.spring.springGroupS12.interceptor.Level0Interceptor" />
+	<beans:bean id="level1Interceptor" class="com.spring.springGroupS12.interceptor.Level1Interceptor" />
+	<beans:bean id="level2Interceptor" class="com.spring.springGroupS12.interceptor.Level2Interceptor" />
+	<beans:bean id="level3Interceptor" class="com.spring.springGroupS12.interceptor.Level3Interceptor" />
+	<beans:bean id="level4Interceptor" class="com.spring.springGroupS12.interceptor.Level4Interceptor" />
+	
+	<interceptors>
+		<interceptor>
+			<mapping path="/shop/ShoppingBag"/>
+			<beans:ref bean="level4Interceptor" />
+		</interceptor>
+		<interceptor>
+			<mapping path="/shop/ProductAddSub"/>
+			<beans:ref bean="level2Interceptor" />
+		</interceptor>
+		<interceptor>
+			<mapping path="/shop/**"/>
+			<exclude-mapping path="/shop/Goods"/>
+			<exclude-mapping path="/shop/Product"/>
+			<exclude-mapping path="/shop/ProductAddSub"/>
+			<beans:ref bean="level1Interceptor" />
+		</interceptor>
+		<interceptor>
+			<mapping path="/admin/**"/>
+			<beans:ref bean="level0Interceptor" />
+		</interceptor>
+	</interceptors>
+	
+</beans:beans>

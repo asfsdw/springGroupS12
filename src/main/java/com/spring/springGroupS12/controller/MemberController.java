@@ -15,15 +15,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spring.springGroupS12.common.Pagination;
 import com.spring.springGroupS12.common.ProjectProvide;
 import com.spring.springGroupS12.service.MemberService;
+import com.spring.springGroupS12.service.ShopService;
 import com.spring.springGroupS12.vo.MemberVO;
+import com.spring.springGroupS12.vo.PageVO;
+import com.spring.springGroupS12.vo.ShopVO;
 import com.spring.springGroupS12.vo.SubScriptVO;
 
 @Controller
@@ -35,6 +40,10 @@ public class MemberController {
 	ProjectProvide projectProvide;
 	@Autowired
 	BCryptPasswordEncoder passwordEncode;
+	@Autowired
+	Pagination pagination;
+	@Autowired
+	ShopService shopService;
 	
 	// 회원가입관련.
 	@GetMapping("/SignUp")
@@ -176,9 +185,10 @@ public class MemberController {
 		if(vo != null && vo.getUserDelete().equals("활동") && passwordEncode.matches(pwd, vo.getPwd())) {
 			String strLevel = "";
 			if(vo.getLevel() == 0) strLevel = "관리자";
-			else if(vo.getLevel() == 1) strLevel = "우수회원";
-			else if(vo.getLevel() == 2) strLevel = "정회원";
-			else if(vo.getLevel() == 3) strLevel = "준회원";
+			else if(vo.getLevel() == 1) strLevel = "업자";
+			else if(vo.getLevel() == 2) strLevel = "우수회원";
+			else if(vo.getLevel() == 3) strLevel = "정회원";
+			else if(vo.getLevel() == 4) strLevel = "준회원";
 			
 			// 로그인 세션처리.
 			session.setAttribute("sMid", vo.getMid());
@@ -290,17 +300,91 @@ public class MemberController {
 	@GetMapping("SubScript")
 	public String subScriptGet(HttpSession session, Model model) {
 		String mid = session.getAttribute("sMid").toString();
-		List<SubScriptVO> vos = memberService.getSubScriptList(mid);
+		List<SubScriptVO> subVOS = memberService.getSubScriptList(mid);
+		List<ShopVO> shopVOS = shopService.getProductSubList(mid);
 		
-		model.addAttribute("vos", vos);
+		model.addAttribute("subVOS", subVOS);
+		model.addAttribute("shopVOS", shopVOS);
 		return "member/subScript";
 	}
 	// 신청.
 	@PostMapping("SubScript")
 	public String subScriptPost(SubScriptVO vo) {
-		int res = memberService.setSubScript(vo);
+		int res = memberService.getSubScript(vo);
+		// 검색 결과가 있으며 기타 신청도 아닐 경우 메시지 보여주고 끝.
+		if(res != 0 && !vo.getSubContent().equals("기타")) return "redirect:/Message/subScriptDup";
+		if(!vo.getLevelUp().equals("")) vo.setSubContent(vo.getSubContent()+"/"+vo.getLevelUp()+"/"+vo.getSubEtc());
+		else if(!vo.getSubEtc().equals("")) vo.setSubContent(vo.getSubContent()+"/"+vo.getSubEtc());
+		res = memberService.setSubScript(vo);
 		if(res != 0) return "redirect:/Message/subScriptOk";
 		else return "redirect:/Message/subScriptNo";
+	}
+	
+	//회원 리스트.
+	@GetMapping("/MemberList")
+	public String memberListGet(Model model, HttpSession session, PageVO pVO,
+			@RequestParam(name="level", defaultValue = "100", required = false) int level) {
+		pVO.setSection("member");
+		pVO = pagination.pagination(pVO);
+		
+		List<MemberVO> vos = memberService.getMemberList(pVO.getStartIndexNo(),pVO.getPageSize(),level);
+		
+		model.addAttribute("vos", vos);
+		model.addAttribute("pVO", pVO);
+		
+		return "member/memberList";
+	}
+	
+	// 회원정보 수정 관련.
+	@GetMapping("/MemberPwdCheck/{flag}")
+	public String memberPwdCheckGet(Model model, @PathVariable String flag) {
+		model.addAttribute("flag", flag);
+		return "member/memberPwdCheck";
+	}
+	// 비밀번호 확인.
+	@ResponseBody
+	@PostMapping("/MemberPwdCheck")
+	public String memberPwdCheckPost(String mid, String pwd) {
+		MemberVO vo = memberService.getMemberMid(mid);
+		if(passwordEncode.matches(pwd, vo.getPwd())) return "1";
+		else return "0";
+	}
+	// 회원정보 수정 폼 이동.
+	@GetMapping("/MemberUpdate")
+	public String memberUpdateGet(Model model, String mid) {
+		MemberVO vo = memberService.getMemberMid(mid);
+		model.addAttribute("vo", vo);
+		return "member/memberUpdate";
+	}
+	// 회원정보 수정
+	@PostMapping("/MemberUpdate")
+	public String memberUpdatePost(HttpSession session, MultipartFile fName, MemberVO vo) {
+		String nickName = session.getAttribute("sNickName").toString();
+
+		if(memberService.getMemberNickName(vo.getNickName()) != null && !nickName.equals(vo.getNickName())) {
+			return "redirect:/Message/memberNickNameCheckNo?mid="+vo.getMid();
+		}
+		
+		// 프로필 사진 수정했을 때.
+		if(fName.getOriginalFilename() != null && !fName.getOriginalFilename().equals("")) {
+			if(!vo.getMyImage().equals("noimage.jpg")) projectProvide.fileDelete(vo.getMyImage(), "member");
+			vo.setMyImage(projectProvide.fileUpload(fName, vo.getMid(), "member"));
+		}
+		
+		int res = memberService.setMemberUpdate(vo);
+		if(res != 0) {
+			session.setAttribute("sNickName", vo.getNickName());
+			return "redirect:/Message/memberUpdateOk";
+		}
+		else return "redirect:/Message/memberUpdateNo?mid="+vo.getMid();
+	}
+	// 새 비밀번호 DB에 저장.
+	@PostMapping("/MemberPwdChange")
+	public String memberPwdChangePost(String mid, String newPwd) {
+		newPwd = passwordEncode.encode(newPwd);
+		int res = memberService.setMemberTempPwd(mid, newPwd);
+		if(res != 0) return "redirect:/Message/pwdChangeOk";
+		else return "redirect:/Message/pwdChangeNo";
 	}
 	
 	// 로그아웃.

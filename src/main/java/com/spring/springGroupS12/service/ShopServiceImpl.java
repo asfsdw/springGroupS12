@@ -133,4 +133,9 @@ public class ShopServiceImpl implements ShopService {
 	public ShopVO getProduct(int idx) {
 		return shopDAO.getProduct(idx);
 	}
+
+	@Override
+	public List<ShopVO> getProductSubList(String mid) {
+		return shopDAO.getProductSubList(mid);
+	}
 }

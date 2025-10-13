@@ -70,4 +70,19 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.getSubScriptList(mid);
 	}
 
+	@Override
+	public int getSubScript(SubScriptVO vo) {
+		return memberDAO.getSubScript(vo);
+	}
+
+	@Override
+	public List<MemberVO> getMemberList(int startIndexNo, int pageSize, int level) {
+		return memberDAO.getMemberList(startIndexNo, pageSize, level);
+	}
+
+	@Override
+	public int setMemberUpdate(MemberVO vo) {
+		return memberDAO.setMemberUpdate(vo);
+	}
+
 }

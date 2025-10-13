@@ -7,6 +7,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
+	<script src="${ctp}/js/shop.js"></script>
 	<title></title>
 	<script>
 		$(() => {
@@ -16,6 +17,19 @@
 		});
 	</script>
 	<style>
+		h6 {
+			position: fixed;
+			right: 1rem;
+			bottom: -50px;
+			transition: 0.7s ease;
+			z-index: 2;
+		}
+		.on {
+			opacity: 0.8;
+			cursor: pointer;
+			bottom: 0;
+		}
+		
 		#content img {
 			max-width: 100%;
 			height: auto;
@@ -35,7 +49,7 @@
 			<hr/>
 			<div><h4>판매자: ${vo.nickName}</h4></div>
 			<hr/>
-			<form name="producForm" method="post">
+			<form name="productForm" method="post">
 				<div class="input-group">
 					<input type="number" value="1" min="1" max="10" id="orderQuantity" name="orderQuantity" />
 					<div class="input-group-text">개</div>
@@ -46,10 +60,16 @@
 					<input type="button" value="구매" onclick="soldCheck()" class="btn btn-success" />
 				</div>
 			</form>
+			<p></p>
+			<c:if test="${sLevel < 5}">
+				<input type="button" value="장바구니에 담기" onclick="addShoppingBag('${vo.idx}','${sMid}','${sNickName}')" class="btn btn-info me-2" />
+			</c:if>
+			<input type="button" value="돌아가기" onclick="location.href='${ctp}/shop/Goods'" class="btn btn-warning" />
 		</div>
 	</div>
 	<div><h2>상품설명</h2></div>
 	<div id="content">${vo.content}</div>
 	</div>
+	<h6 id="topBtn" class="text-end me-3"><img src="${ctp}/images/arrowTop.gif" title="위로이동" /></h6>
 </body>
 </html>

@@ -14,5 +14,10 @@ public class SubScriptVO {
 	private String subDate;
 	private String subProgress;
 	
+	private String levelUp;
 	private String subEtc;
+	
+	private String title;
+	private String shopDate;
+	private String openSW;
 }

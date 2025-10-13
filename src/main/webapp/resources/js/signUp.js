@@ -1,3 +1,12 @@
+$(window).scroll(function(){
+	if($(this).scrollTop() > 100) $("#topBtn").addClass("on");
+	else $("#topBtn").removeClass("on");
+	
+	$("#topBtn").click(function(){
+		window.scrollTo({top:0, behavior: "smooth"});
+	});
+});
+
 // 정규식을 이용한 유효성검사처리.
 const regMid = /^[a-zA-Z0-9_]{4,20}$/;	// 아이디는 4~20의 영문 대/소문자와 숫자와 밑줄 가능
 const regNickName = /^[a-zA-Z가-힣0-9_]{2,20}$/;	// 닉네임은 영문, 한글, 숫자, 밑줄만 가능
@@ -245,6 +254,7 @@ function fCheck(year) {
 	let name = $("#name").val().replace(" ","");
 	let ageYear = $("#birthday").val().replace(" ","").split("-");
 	let age = year-ageYear[0];
+	if($("#age").val() != '') age = $("#age").val();
 	let email1 = $("#email1").val().replace(" ","");
 	let email2 = $("#email2").val();
 	let email = email1+"@"+email2;
@@ -304,6 +314,67 @@ function fCheck(year) {
 	}
 	else {
 		$("#age").val(age);
+		$("#email").val(email);
+		$("#address").val(address);
+		myform.submit();
+	}
+}
+
+// 회원정보 수정 전 체크.
+function updateCheck() {
+	let name = $("#name").val().replace(" ","");
+	let age = $("#age").val();
+	let email1 = $("#email1").val().replace(" ","");
+	let email2 = $("#email2").val();
+	let email = email1+"@"+email2;
+	let postcode = myform.postcode.value + " ";
+	let roadAddress = myform.roadAddress.value + " ";
+	let detailAddress = myform.detailAddress.value + " ";
+	let extraAddress = myform.extraAddress.value + " ";
+	let address = postcode + "/" + roadAddress + "/" + detailAddress + "/" + extraAddress;
+	let submitFlag = 0; // 체크완료를 위한 변수.
+	
+	if(!regName.test(name)) {
+		alert("성명은 한글과 영문대소문자만 사용가능합니다.");
+		$("#name").focus();
+		return false;
+	}
+	else if(age < 20) {
+		alert("미성년자는 가입하실 수 없습니다.");
+		$("#age").focus();
+		return false;
+	}
+	else if(!regEmail.test(email)) {
+		alert("이메일 주소를 확인해주세요.");
+		$("#email1").focus();
+		return false;
+	}
+	else submitFlag = 1;
+	
+	// 올린 파일이 이미지인지 확인.
+	let fName = $("#file").val();
+	let maxSize = 1024 * 1024 * 10;
+	let ext = fName.substring(fName.lastIndexOf(".")+1).toLowerCase();
+	
+	if(fName != "") {
+		let fileSize = $("#file")[0].files[0].size;
+		if(fileSize > maxSize) {
+			alert("프로필 사진의 파일 크기는 10MB까지입니다.")
+			return false;
+		}
+	}
+	// 프로필 사진은 안 올려도 상관 없기 때문에 이미지가 맞는지만 체크. 업로드 하지 않을 경우 공백이기 때문에 공백도 허용.
+	if(ext != "jpg" && ext != "jpeg" && ext != "gif" && ext != "png" && ext != "") {
+		alert("프로필 사진입니다. 그림파일만 선택해주세요.");
+		return false;
+	}
+	else submitFlag = 1;
+	
+	if(submitFlag != 1) {
+		alert("체크하지 않은 항목이 있습니다.");
+		return false;
+	}
+	else {
 		$("#email").val(email);
 		$("#address").val(address);
 		myform.submit();

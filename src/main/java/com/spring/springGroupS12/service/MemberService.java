@@ -29,4 +29,10 @@ public interface MemberService {
 
 	List<SubScriptVO> getSubScriptList(String mid);
 
+	int getSubScript(SubScriptVO vo);
+
+	List<MemberVO> getMemberList(int startIndexNo, int pageSize, int level);
+
+	int setMemberUpdate(MemberVO vo);
+
 }

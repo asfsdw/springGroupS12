@@ -1,5 +1,7 @@
 package com.spring.springGroupS12.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +14,7 @@ import com.spring.springGroupS12.vo.PageVO;
 @Controller
 public class MessageController {
 	@RequestMapping(value = "/Message/{msgFlag}", method = RequestMethod.GET)
-	public String MessageGet(Model model, PageVO pVO,
+	public String MessageGet(HttpSession session, Model model, PageVO pVO,
 			@PathVariable String msgFlag,
 			@RequestParam(name="mid", defaultValue = "", required = false) String mid,
 			@RequestParam(name="idx", defaultValue = "0", required = false) int idx) {
@@ -60,6 +62,30 @@ public class MessageController {
 			model.addAttribute("message", mid+"님 로그아웃 되셨습니다.");
 			model.addAttribute("url", "member/Login");
 		}
+		else if(msgFlag.equals("memberUpdateOk")) {
+			model.addAttribute("message", "정보가 수정되었습니다.");
+			model.addAttribute("url", "/member/Main");
+		}
+		else if(msgFlag.equals("memberUpdateNo")) {
+			model.addAttribute("message", "정보 수정에 실패했습니다.");
+			model.addAttribute("url", "/member/MemberUpdate?mid="+mid);
+		}
+		else if(msgFlag.equals("pwdChangeOk")) {
+			session.removeAttribute("sMid");
+			session.removeAttribute("sNickName");
+			session.removeAttribute("sLevel");
+			session.removeAttribute("sStrLevel");
+			session.removeAttribute("sLastDate");
+			session.removeAttribute("sEmailKey");
+			session.removeAttribute("sAccessToken");
+			
+			model.addAttribute("message", "비밀번호가 변경되었습니다.");
+			model.addAttribute("url", "/member/Login");
+		}
+		else if(msgFlag.equals("pwdChangeNo")) {
+			model.addAttribute("message", "비밀번호가 변경되지 않았습니다.\\n다시 시도해주세요.");
+			model.addAttribute("url", "/member/MemberPwdCheck");
+		}
 		else if(msgFlag.equals("boardInputOk")) {
 			model.addAttribute("message", "게시글이 등록되었습니다.");
 			model.addAttribute("url", "board/BoardList");
@@ -100,6 +126,10 @@ public class MessageController {
 			model.addAttribute("message", "상품이 등록되었습니다.");
 			model.addAttribute("url", "shop/Goods");
 		}
+		else if(msgFlag.equals("productSubOk")) {
+			model.addAttribute("message", "상품 등록이 신청되었습니다.\\n관리자가 승인할 때까지 기다려주세요.");
+			model.addAttribute("url", "shop/Goods");
+		}
 		else if(msgFlag.equals("productNo")) {
 			model.addAttribute("message", "상품등록에 실패했습니다.");
 			model.addAttribute("url", "shop/ProductAdd");
@@ -110,6 +140,10 @@ public class MessageController {
 		}
 		else if(msgFlag.equals("subScriptNo")) {
 			model.addAttribute("message", "신청에 실패했습니다.");
+			model.addAttribute("url", "member/SubScript");
+		}
+		else if(msgFlag.equals("subScriptDup")) {
+			model.addAttribute("message", "이미 신청하셨습니다.\\n관리자의 승인을 기다려주세요");
 			model.addAttribute("url", "member/SubScript");
 		}
 		return "include/message";

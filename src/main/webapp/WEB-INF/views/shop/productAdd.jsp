@@ -10,24 +10,13 @@
 	<script src="${ctp}/resources/ckeditor/ckeditor.js"></script>
 	<script src="${ctp}/js/shop.js"></script>
 	<title></title>
-	<script>
-		'use strict';
-		
-		$(window).scroll(function(){
-			if($(this).scrollTop() > 100) $("#topBtn").addClass("on");
-			else $("#topBtn").removeClass("on");
-			
-			$("#topBtn").click(function(){
-				window.scrollTo({top:0, behavior: "smooth"});
-			});
-		});
-	</script>
 	<style>
 		h6 {
 			position: fixed;
 			right: 1rem;
 			bottom: -50px;
 			transition: 0.7s ease;
+			z-index: 2;
 		}
 		.on {
 			opacity: 0.8;
@@ -57,6 +46,7 @@
 						<select id="kategorie" name="kategorie" class="form-control">
 							<option>선택</option>
 							<option>누이</option>
+							<option>퍼펫</option>
 						</select>
 					</td>
 					<th>상품가격</th>
@@ -84,9 +74,15 @@
 			</table>
 			<input type="hidden" value="${sMid}" id="mid" name="mid" />
 		</form>
-		<input type="button" value="상품등록" onclick="fCheck()" class="btn btn-success btn-sm" />
+		<c:if test="${sLevel == 1}">
+			<input type="button" value="상품등록" onclick="fCheck()" class="btn btn-success btn-sm me-1" />
+		</c:if>
+		<c:if test="${sLevel == 2}">
+			<input type="button" value="상품등록신청" onclick="subCheck('${ctp}')" class="btn btn-success btn-sm me-1" />
+		</c:if>
+		<input type="button" value="돌아가기" onclick="location.href='${ctp}/shop/Goods'" class="btn btn-warning btn-sm" />
 		<p><br/></p>
 	</div>
-	<h6 id="topBtn" class="text-end me-3"><img src="${ctp}/images/arrowTop.gif" title="위로이동"/></h6>
+	<h6 id="topBtn" class="text-end me-3"><img src="${ctp}/images/arrowTop.gif" title="위로이동" /></h6>
 </body>
 </html>

@@ -11,6 +11,18 @@
 		<script src="${ctp}/js/board.js"></script>
 		<title>게시글 작성</title>
 		<style>
+			h6 {
+				position: fixed;
+				right: 1rem;
+				bottom: -50px;
+				transition: 0.7s ease;
+				z-index: 2;
+			}
+			.on {
+				opacity: 0.8;
+				cursor: pointer;
+				bottom: 0;
+			}
 			th {width:74px;}
 		</style>
 	</head>
@@ -68,6 +80,6 @@
 			<input type="hidden" name="fName" id="fName" value="" />
 		</form>
 	</div>
-	<p><br/></p>
+	<h6 id="topBtn" class="text-end me-3"><img src="${ctp}/images/arrowTop.gif" title="위로이동" /></h6>
 </body>
 </html>

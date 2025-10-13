@@ -5,6 +5,9 @@
 		SELECT count(idx) FROM member 
 		<if test="flag == 'new'">WHERE startDate >= date_add(now(), interval -7 day)</if>;
 	</select>
+	<select id="getMemberList" resultType="com.spring.springGroupS12.vo.MemberVO">
+		SELECT * FROM member WHERE userDelete = '활동' AND level != 99<if test="level != 100"> AND level = #{level}</if> ORDER BY mid LIMIT #{startIndexNo}, #{pageSize};
+	</select>
 	<select id="getMemberMid" resultType="com.spring.springGroupS12.vo.MemberVO">
 		SELECT * FROM member WHERE mid = #{mid};
 	</select>
@@ -16,7 +19,10 @@
 	</select>
 	
 	<select id="getSubScriptList" resultType="com.spring.springGroupS12.vo.SubScriptVO">
-		SELECT * FROM sub_script WHERE mid = #{mid};
+		SELECT subContent, subDate, subProgress FROM sub_script WHERE mid = #{mid};
+	</select>
+	<select id="getSubScript" resultType="int">
+		SELECT count(subContent) FROM sub_script WHERE subContent LIKE concat(#{vo.subContent}"%");
 	</select>
 	
 	
@@ -42,5 +48,10 @@
 	</update>
 	<update id="setMemberDelete">
 		UPDATE member SET userDelete = '삭제', lastDate = now() WHERE mid = #{mid};
+	</update>
+	<update id="setMemberUpdate">
+		UPDATE member SET nickName = #{vo.nickName}, name = #{vo.name}, age = #{vo.age}, 
+		email = #{vo.email}, address = #{vo.address}, content = #{vo.content}, userInfo = #{vo.userInfo}, myImage = #{vo.myImage}
+			where mid = #{vo.mid};
 	</update>
 </mapper>

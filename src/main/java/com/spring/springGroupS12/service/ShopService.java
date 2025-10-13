@@ -17,4 +17,6 @@ public interface ShopService {
 
 	ShopVO getProduct(int idx);
 
+	List<ShopVO> getProductSubList(String mid);
+
 }

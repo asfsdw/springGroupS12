@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.springGroupS12.dao.DeliveryDAO">
+	<select id="getShoppingBagList" resultType="com.spring.springGroupS12.vo.DeliveryVO">
+		SELECT * FROM delivery WHERE mid = #{mid} ORDER BY idx;
+	</select>
+	<select id="getShoppingBag" resultType="com.spring.springGroupS12.vo.DeliveryVO">
+		SELECT * FROM delivery WHERE mid = #{mid} AND title = #{title};
+	</select>
+	
+	
+	<insert id="setShoppingBag">
+		INSERT INTO delivery(idx,mid,nickName,title,orderQuantity,price,address) VALUES(DEFAULT,#{mid},#{nickName},#{title},#{orderQuantity},#{price},"");
+	</insert>
+	
+	
+	
+	<update id="setShoppingBagUpdate">
+		UPDATE delivery SET orderQuantity = orderQuantity + #{orderQuantity} WHERE idx = #{idx};
+	</update>
+</mapper>

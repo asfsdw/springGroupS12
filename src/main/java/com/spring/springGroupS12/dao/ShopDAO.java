@@ -16,4 +16,6 @@ public interface ShopDAO {
 
 	ShopVO getProduct(@Param("idx") int idx);
 
+	List<ShopVO> getProductSubList(@Param("mid") String mid);
+
 }

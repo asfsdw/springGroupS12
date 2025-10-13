@@ -12,6 +12,19 @@
 	<script src="${ctp}/js/signUp.js"></script>
 	<title>Sign Up</title>
 	<style>
+		h6 {
+			position: fixed;
+			right: 1rem;
+			bottom: -50px;
+			transition: 0.7s ease;
+			z-index: 2;
+		}
+		.on {
+			opacity: 0.8;
+			cursor: pointer;
+			bottom: 0;
+		}
+		
 		label {width:100px;}
 	</style>
 </head>
@@ -56,19 +69,6 @@
 			</div>
 			<div id="demoSpin"></div>
 			<div id="addContent" style="display:none">
-				<div class="input-group mb-3 border ">
-					<span class="input-group-text boxWidth">성 별</span> &nbsp; &nbsp;
-					<div class="form-check-inline mt-2">
-						<label class="form-check-label">
-							<input type="radio" class="form-check-input" name="gender" value="남자"> 남자 &nbsp;
-						</label>
-					</div>
-					<div class="form-check-inline mt-2">
-						<label class="form-check-label">
-							<input type="radio" class="form-check-input" name="gender" value="여자" checked> 여자
-						</label>
-					</div>
-				</div>
 				<div class="input-group mb-3 col" >
 		     	<label for="address" class="input-group-text boxWidth">주 소</label>
 					<input type="text" name="postcode" id="sample6_postcode" placeholder="우편번호" class="form-control">
@@ -115,5 +115,6 @@
 		</form>
 	</div>
 	<br/>
+	<h6 id="topBtn" class="text-end me-3"><img src="${ctp}/images/arrowTop.gif" title="위로이동" /></h6>
 </body>
 </html>

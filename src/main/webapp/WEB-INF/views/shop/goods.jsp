@@ -27,6 +27,7 @@
 			right: 1rem;
 			bottom: -50px;
 			transition: 0.7s ease;
+			z-index: 2;
 		}
 		.on {
 			opacity: 0.8;
@@ -39,7 +40,12 @@
 	<div class="container text-center">
 		<h2></h2>
 		<div class="text-start">
-			<input type="button" value="상품등록" onclick="location.href='${ctp}/shop/ProductAdd'" class="btn btn-success btn-sm" />
+			<c:if test="${sLevel == 1}">
+				<input type="button" value="상품등록" onclick="location.href='${ctp}/shop/ProductAdd'" class="btn btn-success btn-sm" />
+			</c:if>
+			<c:if test="${sLevel == 2}">
+				<input type="button" value="상품등록신청" onclick="location.href='${ctp}/shop/ProductAddSub'" class="btn btn-success btn-sm" />
+			</c:if>
 		</div>
 		<hr/>
 		<div class="row">
@@ -58,6 +64,6 @@
 		</div>
 		<p><br/></p>
 	</div>
-	<h6 id="topBtn" class="text-end me-3"><img src="${ctp}/images/arrowTop.gif" title="위로이동"/></h6>
+	<h6 id="topBtn" class="text-end me-3"><img src="${ctp}/images/arrowTop.gif" title="위로이동" /></h6>
 </body>
 </html>

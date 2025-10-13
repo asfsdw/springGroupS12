@@ -8,7 +8,9 @@ public class DeliveryVO {
 	private String mid;
 	private String nickName;
 	private String title;
+	private int orderQuantity;
 	private int price;
+	private String address;
 	private String deliverySW;
 	private String orderDate;
 }

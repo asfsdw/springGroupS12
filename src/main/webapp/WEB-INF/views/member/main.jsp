@@ -80,6 +80,32 @@
 			}
 		}
   </script>
+  <script>
+		'use strict';
+		
+		$(window).scroll(function(){
+			if($(this).scrollTop() > 100) $("#topBtn").addClass("on");
+			else $("#topBtn").removeClass("on");
+			
+			$("#topBtn").click(function(){
+				window.scrollTo({top:0, behavior: "smooth"});
+			});
+		});
+	</script>
+	<style>
+		h6 {
+			position: fixed;
+			right: 1rem;
+			bottom: -50px;
+			transition: 0.7s ease;
+			z-index: 2;
+		}
+		.on {
+			opacity: 0.8;
+			cursor: pointer;
+			bottom: 0;
+		}
+	</style>
 </head>
 <body>
 	<div class="container text-center">
@@ -134,5 +160,6 @@
 		<hr/>
 		<p><br/></p>
 	</div>
+	<h6 id="topBtn" class="text-end me-3"><img src="${ctp}/images/arrowTop.gif" title="위로이동" /></h6>
 </body>
 </html>

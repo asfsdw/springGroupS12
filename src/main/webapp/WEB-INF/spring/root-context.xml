@@ -18,7 +18,11 @@
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="mapperLocations" value="classpath:mappers/**/*Mapper.xml" />
-		<!-- <property name="typeAliasesPackage" value="com.spring.springGroupS12.vo" /> -->
+	</bean>
+	
+	<!-- 트랜잭션 처리를 위해 DB와 연결해준다. -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
 	</bean>
 	
 	<!-- sqlSessionTemplate 설정 -->

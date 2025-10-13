@@ -26,6 +26,20 @@
 			});
 		}
   </script>
+	<style>
+		h6 {
+			position: fixed;
+			right: 1rem;
+			bottom: -50px;
+			transition: 0.7s ease;
+			z-index: 2;
+		}
+		.on {
+			opacity: 0.8;
+			cursor: pointer;
+			bottom: 0;
+		}
+	</style>
 </head>
 <body>
 	<p><br/></p>
@@ -84,5 +98,6 @@
 			</div>
 		</div>
 	</div>
+	<h6 id="topBtn" class="text-end me-3"><img src="${ctp}/images/arrowTop.gif" title="위로이동" /></h6>
 </body>
 </html>

@@ -31,4 +31,10 @@ public interface MemberDAO {
 
 	List<SubScriptVO> getSubScriptList(@Param("mid") String mid);
 
+	int getSubScript(@Param("vo") SubScriptVO vo);
+
+	List<MemberVO> getMemberList(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("level") int level);
+
+	int setMemberUpdate(@Param("vo") MemberVO vo);
+
 }

@@ -1,3 +1,12 @@
+$(window).scroll(function(){
+	if($(this).scrollTop() > 100) $("#topBtn").addClass("on");
+	else $("#topBtn").removeClass("on");
+	
+	$("#topBtn").click(function(){
+		window.scrollTo({top:0, behavior: "smooth"});
+	});
+});
+
 // 공개, 비공개 체크.
 $(() => {
 	$("#openNO").on("click", () => {
