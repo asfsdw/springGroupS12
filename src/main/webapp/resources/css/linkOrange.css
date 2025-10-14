@@ -1,8 +1,8 @@
 @charset "utf-8";
-	a {
-		text-decoration: none;
-	}
-	a:hover {
-		color:orange;
-		text-decoration: underline;
-	}
+a {
+	text-decoration: none;
+}
+a:hover {
+	color:orange;
+	text-decoration: underline;
+}

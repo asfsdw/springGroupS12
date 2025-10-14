@@ -40,7 +40,7 @@ public class ShopController {
 	
 	// 상품 리스트.
 	@GetMapping("/Goods")
-	public String GoodsGet(Model model, PageVO pVO) {
+	public String goodsGet(Model model, PageVO pVO) {
 		pVO.setSection("shop");
 		pVO = pagination.pagination(pVO);
 		List<ShopVO> vos = shopService.getProductList();
@@ -52,12 +52,12 @@ public class ShopController {
 	
 	// 상품 등록 관련.
 	@GetMapping("/ProductAdd")
-	public String ProductAddGet() {
+	public String productAddGet() {
 		return "shop/productAdd";
 	}
 	// 상품 등록.
 	@PostMapping("/ProductAdd")
-	public String ProductAddPost(MultipartFile fName, ShopVO vo, FileVO fVO) {
+	public String productAddPost(MultipartFile fName, ShopVO vo, FileVO fVO) {
 		// 백엔드 검사.
 		if(vo.getMid().length() > 20 || vo.getMid() == null) return "redirect:/Message/wrongAccess";
 		if(vo.getNickName().length() > 20 || vo.getNickName() == null) return "redirect:/Message/wrongAccess";
@@ -79,12 +79,12 @@ public class ShopController {
 	}
 	// 상품 등록 신청 폼.
 	@GetMapping("/ProductAddSub")
-	public String ProductAddSubGet() {
+	public String productAddSubGet() {
 		return "shop/productAdd";
 	}
 	//상품 등록 신청.
 	@PostMapping("/ProductAddSub")
-	public String ProductAddSubPost(MultipartFile fName, ShopVO vo, FileVO fVO) {
+	public String productAddSubPost(MultipartFile fName, ShopVO vo, FileVO fVO) {
 		// 백엔드 검사.
 		if(vo.getMid().length() > 20 || vo.getMid() == null) return "redirect:/Message/wrongAccess";
 		if(vo.getNickName().length() > 20 || vo.getNickName() == null) return "redirect:/Message/wrongAccess";
@@ -114,16 +114,20 @@ public class ShopController {
 		return "shop/product";
 	}
 	
+	// 장바구니 관련.
 	@GetMapping("/ShoppingBag")
-	public String ShoppingBagGet(HttpSession session, Model model) {
+	public String shoppingBagGet(HttpSession session, Model model) {
 		List<DeliveryVO> vos = deliveryService.getShoppingBagList(session.getAttribute("sMid").toString());
+		
+		if(vos.size() == 0) return "redirect:/Message/cartEmpty";
 		
 		model.addAttribute("vos", vos);
 		return "shop/shoppingBag";
 	}
+	// 장바구니 등록.
 	@ResponseBody
 	@PostMapping("/ShoppingBag")
-	public int ShoppingBagPost(@RequestParam(name = "mid", defaultValue = "", required = false)String mid,
+	public int shoppingBagPost(@RequestParam(name = "mid", defaultValue = "", required = false)String mid,
 			@RequestParam(name = "nickName", defaultValue = "", required = false)String nickName,
 			@RequestParam(name = "idx", defaultValue = "", required = false)int idx,
 			@RequestParam(name = "orderQuantity", defaultValue = "", required = false) int orderQuantity) {
@@ -135,6 +139,12 @@ public class ShopController {
 			return deliveryService.setShoppingBagUpdate(orderQuantity, dVO.getIdx());
 		}
 		
-		return deliveryService.setShoppingBag(mid, nickName,sVO.getTitle(), orderQuantity, sVO.getPrice());
+		return deliveryService.setShoppingBag(mid, nickName,sVO.getTitle(), orderQuantity, sVO.getPrice(), sVO.getProductImage());
+	}
+	// 장바구니 상품 삭제.
+	@ResponseBody
+	@PostMapping("/ShoppingBagDelete")
+	public int shoppingBagDeletePost(int idx) {
+		return deliveryService.setShoppingBagDelete(idx);
 	}
 }

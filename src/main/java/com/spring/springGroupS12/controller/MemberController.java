@@ -227,7 +227,7 @@ public class MemberController {
 	}
 	// 카카오 로그인.
 	@GetMapping("/KakaoLogin")
-	public String kakaoLoginPost(HttpSession session, 
+	public String kakaoLoginGet(HttpSession session, 
 			String nickName, String email, String ageRange, String accessToken) throws MessagingException {
 		// 카카오에서는 연령대(30~39...) 처리.
 		if(ageRange.length()>1) ageRange = ageRange.substring(0,1)+"0";
@@ -291,8 +291,14 @@ public class MemberController {
 	@GetMapping("/Main")
 	public String mainGet(HttpSession session, Model model) {
 		String mid = session.getAttribute("sMid").toString();
+		
 		MemberVO mVO = memberService.getMemberMid(mid);
+		List<ShopVO> shopVOS = shopService.getProductSubList(mid);
+		List<SubScriptVO> subVOS = memberService.getSubScriptList(mid);
+		
 		model.addAttribute("mVO", mVO);
+		model.addAttribute("shopVOS", shopVOS);
+		model.addAttribute("subVOS", subVOS);
 		return "member/main";
 	}
 	

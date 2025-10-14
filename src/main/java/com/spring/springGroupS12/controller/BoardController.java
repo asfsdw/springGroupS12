@@ -256,7 +256,7 @@ public class BoardController {
 	
 	// 게시글 검색.
 	@GetMapping("/BoardSearchList")
-	public String boardSearchListPost(Model model, PageVO pVO) {
+	public String boardSearchListGet(Model model, PageVO pVO) {
 		pVO.setSection("board");
 		pVO = pagination.pagination(pVO);
 		

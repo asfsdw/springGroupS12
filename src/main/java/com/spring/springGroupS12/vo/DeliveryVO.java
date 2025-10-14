@@ -11,6 +11,7 @@ public class DeliveryVO {
 	private int orderQuantity;
 	private int price;
 	private String address;
+	private String productImage;
 	private String deliverySW;
 	private String orderDate;
 }

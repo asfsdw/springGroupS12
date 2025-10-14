@@ -143,8 +143,12 @@ public class MessageController {
 			model.addAttribute("url", "member/SubScript");
 		}
 		else if(msgFlag.equals("subScriptDup")) {
-			model.addAttribute("message", "이미 신청하셨습니다.\\n관리자의 승인을 기다려주세요");
+			model.addAttribute("message", "이미 신청하셨습니다.\\n관리자의 승인을 기다려주세요.");
 			model.addAttribute("url", "member/SubScript");
+		}
+		else if(msgFlag.equals("cartEmpty")) {
+			model.addAttribute("message", "장바구니가 비어있습니다.\\n상품을 추가해주세요.");
+			model.addAttribute("url", "shop/Goods");
 		}
 		return "include/message";
 	}

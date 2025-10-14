@@ -53,7 +53,7 @@
 			<c:forEach var="vo" items="${vos}" varStatus="st">
 				<div class="col" style="width:200px">
 					<a href="${ctp}/shop/Product?idx=${vo.idx}" style="display:inline-block">
-						<div><img src=${ctp}/shop/${vo.productImage} style="width:200px" /></div>
+						<div><img src=${ctp}/data/shop/${vo.productImage} style="width:200px" /></div>
 						<div>${vo.title}</div>
 						<div>가격: ${vo.price}원 / 재고: ${vo.quantity}개</div>
 					</a>

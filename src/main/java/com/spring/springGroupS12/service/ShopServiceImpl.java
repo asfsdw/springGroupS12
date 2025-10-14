@@ -138,4 +138,5 @@ public class ShopServiceImpl implements ShopService {
 	public List<ShopVO> getProductSubList(String mid) {
 		return shopDAO.getProductSubList(mid);
 	}
+	
 }

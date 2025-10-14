@@ -13,26 +13,4 @@
 	<beans:bean id="level3Interceptor" class="com.spring.springGroupS12.interceptor.Level3Interceptor" />
 	<beans:bean id="level4Interceptor" class="com.spring.springGroupS12.interceptor.Level4Interceptor" />
 	
-	<interceptors>
-		<interceptor>
-			<mapping path="/shop/ShoppingBag"/>
-			<beans:ref bean="level4Interceptor" />
-		</interceptor>
-		<interceptor>
-			<mapping path="/shop/ProductAddSub"/>
-			<beans:ref bean="level2Interceptor" />
-		</interceptor>
-		<interceptor>
-			<mapping path="/shop/**"/>
-			<exclude-mapping path="/shop/Goods"/>
-			<exclude-mapping path="/shop/Product"/>
-			<exclude-mapping path="/shop/ProductAddSub"/>
-			<beans:ref bean="level1Interceptor" />
-		</interceptor>
-		<interceptor>
-			<mapping path="/admin/**"/>
-			<beans:ref bean="level0Interceptor" />
-		</interceptor>
-	</interceptors>
-	
 </beans:beans>

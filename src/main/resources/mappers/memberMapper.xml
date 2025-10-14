@@ -19,7 +19,7 @@
 	</select>
 	
 	<select id="getSubScriptList" resultType="com.spring.springGroupS12.vo.SubScriptVO">
-		SELECT subContent, subDate, subProgress FROM sub_script WHERE mid = #{mid};
+		SELECT * FROM sub_script <if test="mid != '전체'">WHERE mid = #{mid}</if>;
 	</select>
 	<select id="getSubScript" resultType="int">
 		SELECT count(subContent) FROM sub_script WHERE subContent LIKE concat(#{vo.subContent}"%");

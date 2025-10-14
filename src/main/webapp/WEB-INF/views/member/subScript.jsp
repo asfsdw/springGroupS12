@@ -76,14 +76,14 @@
 				<th>신청현황</th>
 			</tr>
 			<c:forEach var="vo" items="${shopVOS}">
-				<tr id="${vo.openSW=='신청'?'green':vo.openSW=='반려'?'red':''}">
+				<tr id="${vo.openSW=='신청접수'?'green':vo.openSW=='신청반려'?'red':''}">
 					<td>${vo.title}</td>
 					<td>${vo.shopDate}</td>
 					<td>${vo.openSW}</td>
 				</tr>
 			</c:forEach>
 			<c:forEach var="vo" items="${subVOS}">
-				<tr id="${vo.subProgress=='신청접수'?'green':vo.subProgress=='반려'?'red':''}">
+				<tr id="${vo.subProgress=='신청접수'?'green':vo.subProgress=='신청반려'?'red':''}">
 					<td>${vo.subContent}</td>
 					<td>${vo.subDate}</td>
 					<td>${vo.subProgress}</td>

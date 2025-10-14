@@ -43,13 +43,13 @@
 	
 		// chart 변경.
 		function chartView(flag) {
-			if (flag == 1) {
+			if(flag == 1) {
 				$("#chart1").hide();
 				$("#chart2").show();
 				
 				drawChart1();
 			}
-			if (flag == 2) {
+			if(flag == 2) {
 				$("#chart2").hide();
 				$("#chart1").show();
 				
@@ -105,6 +105,12 @@
 			cursor: pointer;
 			bottom: 0;
 		}
+		
+		#green td {background-color: #6F6 !important;}
+		#red td {
+			background-color: #F66 !important;
+			color: #FFF !important;
+		}
 	</style>
 </head>
 <body>
@@ -140,6 +146,29 @@
 					</c:forEach>
 				</table>
 				<div class="text-center"><a href="${ctp}/schedule/Schedule" class="btn btn-info btn-sm">전체 일정 보기</a></div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<div><h2>신청내역</h2></div>
+				<table class="table table-bordered">
+					<tr class="table-secondary">
+						<th>신청내용</th>
+						<th>신청현황</th>
+					</tr>
+					<c:forEach var="vo" items="${shopVOS}">
+						<tr id="${vo.openSW=='신청접수'?'green':vo.openSW=='신청반려'?'red':''}">
+							<td>${vo.title}</td>
+							<td>${vo.openSW}</td>
+						</tr>
+					</c:forEach>
+					<c:forEach var="vo" items="${subVOS}">
+						<tr id="${vo.subProgress=='신청접수'?'green':vo.subProgress=='신청반려'?'red':''}">
+							<td>${vo.subContent}</td>
+							<td>${vo.subProgress}</td>
+						</tr>
+					</c:forEach>
+				</table>
 			</div>
 		</div>
 		<!-- 관리자일 경우에만 chart 표시. -->

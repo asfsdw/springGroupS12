@@ -161,10 +161,96 @@ function addShoppingBag(idx, mid, nickName) {
 			if(res != 0) {
 				let ans = confirm("쇼핑을 계속하시겠습니까?");
 				if(ans) location.href = "Goods";
-				else location.href = "Delivery";
+				else location.href = "ShoppingBag";
 			}
 			else alert("장바구니에 넣지 못했습니다.\n다시 시도해주시요.");
 		},
 		error : () => alert("전송오류")
 	});
+}
+
+// 초기 구매 가격들 설정.
+$(() => {
+	let totPrice = 0;
+	let price = 0;
+	
+	for(let i=1; i<=$("[name=orderQuantity]").length; i++) {
+		price = Number.parseInt($("#price"+i).text()) * $("#orderQuantity"+i).val();
+		$("#price"+i).html(price+"원");
+		
+		totPrice += Number.parseInt($("#price"+i).text());
+	}
+	$("#totPrice").html(totPrice+"원");
+});
+
+// 테이블의 체크박스 클릭시.
+function tableCheckChange() {
+	let length = 1;
+	if($("[name=bagCheck]").length-1 >= 2) length = $("[name=bagCheck]").length-1;
+	
+	if(document.getElementById("bagCheck").checked == true) {
+		for(let i=1; i<=length; i++) {
+			document.getElementById("bagCheck"+i).checked = true;
+			priceChange(i, i);
+		}
+	}
+	else {
+		for(let i=1; i<=length; i++) {
+			document.getElementById("bagCheck"+i).checked = false;
+			priceChange(i, i);
+		}
+	}
+}
+// 상품의 체크박스 클릭시.
+function checkChange(count, price) {
+	let cnt = 0;
+	let length = 1;
+	if($("[name=bagCheck]").length-1 >= 2) length = $("[name=bagCheck]").length-1;
+	
+	for(let i=1; i<=length; i++) {
+		if(document.getElementById("bagCheck"+i).checked == true) cnt++;
+	}
+	if(length == cnt) document.getElementById("bagCheck").checked = true;
+	else document.getElementById("bagCheck").checked = false;
+	priceChange(count, price);
+}
+
+// 구매가격 변경.
+function priceChange(count, price) {
+	let length = 1;
+	if($("[name=bagCheck]").length-1 >= 2) length = $("[name=bagCheck]").length-1;
+	
+	// 체크박스로 불러왔을 때.
+	if(price == count) price = Number.parseInt($("#price"+count).text())/$("#orderQuantity"+count).val();
+	
+	let totPrice = 0;
+	
+	$("#price"+count).html(price*$("#orderQuantity"+count).val()+"원");
+	
+	for(let i=1; i<=length; i++) {
+		if(document.getElementById("bagCheck"+i).checked == true) {
+			totPrice += Number.parseInt($("#price"+i).text());
+		}
+	}
+	$("#totPrice").html(totPrice+"원");
+}
+
+// 장바구니 상품 삭제.
+function shoppingBagDelete(idx) {
+	let ans = confirm("장바구니에서 물품을 삭제하시겠습니까?");
+	if(ans) {
+		$.ajax({
+			url : "ShoppingBagDelete",
+			type: "post",
+			data: {"idx" : idx},
+			success : (res) => {
+				if(res != 0) {
+					alert("장바구니에서 상품이 삭제되었습니다.");
+					location.reload();
+				}
+				else alert("오류가 발생했습니다.\n잠시 후, 다시 시도해주세요.");
+			},
+			error : () => alert("전송오류")
+		});
+	}
 }

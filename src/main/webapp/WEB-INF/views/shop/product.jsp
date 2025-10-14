@@ -40,7 +40,7 @@
 	<div class="container text-center">
 	<p></p>
 	<div class="row">
-		<div class="col"><img src="${ctp}/shop/${vo.productImage}" style="width:500px" /></div>
+		<div class="col"><img src="${ctp}/data/shop/${vo.productImage}" style="width:500px" /></div>
 		<div class="col text-start">
 			<div><h2>${vo.title}</h2></div>
 			<div><h3>가격: ${vo.price}원</h3></div>

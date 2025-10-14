@@ -19,8 +19,8 @@ public class DeliveryServiceImpl implements DeliveryService {
 	}
 
 	@Override
-	public int setShoppingBag(String mid, String nickName, String title, int orderQuantity, int price) {
-		return deliveryDAO.setShoppingBag(mid, nickName, title, orderQuantity, price);
+	public int setShoppingBag(String mid, String nickName, String title, int orderQuantity, int price, String productImage) {
+		return deliveryDAO.setShoppingBag(mid, nickName, title, orderQuantity, price, productImage);
 	}
 
 	@Override
@@ -31,5 +31,10 @@ public class DeliveryServiceImpl implements DeliveryService {
 	@Override
 	public int setShoppingBagUpdate(int orderQuantity, int idx) {
 		return deliveryDAO.setShoppingBagUpdate(orderQuantity, idx);
+	}
+
+	@Override
+	public int setShoppingBagDelete(int idx) {
+		return deliveryDAO.setShoppingBagDelete(idx);
 	}
 }

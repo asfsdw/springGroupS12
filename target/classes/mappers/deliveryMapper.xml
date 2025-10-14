@@ -10,7 +10,7 @@
 	
 	
 	<insert id="setShoppingBag">
-		INSERT INTO delivery(idx,mid,nickName,title,orderQuantity,price,address) VALUES(DEFAULT,#{mid},#{nickName},#{title},#{orderQuantity},#{price},"");
+		INSERT INTO delivery(idx,mid,nickName,title,orderQuantity,price,address,productImage) VALUES(DEFAULT,#{mid},#{nickName},#{title},#{orderQuantity},#{price},"",#{productImage});
 	</insert>
 	
 	
@@ -18,4 +18,10 @@
 	<update id="setShoppingBagUpdate">
 		UPDATE delivery SET orderQuantity = orderQuantity + #{orderQuantity} WHERE idx = #{idx};
 	</update>
+	
+	
+	
+	<delete id="setShoppingBagDelete">
+		DELETE FROM delivery WHERE idx = #{idx};
+	</delete>
 </mapper>
