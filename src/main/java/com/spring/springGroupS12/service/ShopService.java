@@ -19,4 +19,6 @@ public interface ShopService {
 
 	List<ShopVO> getProductSubList(String mid);
 
+	ShopVO getProductProductImage(String productImage);
+
 }

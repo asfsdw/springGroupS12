@@ -37,7 +37,7 @@
 			<div class="w3-dropdown-content w3-bar-block w3-card-4">
 				<a href="${ctp}/shop/Goods" class="w3-bar-item w3-button">굿즈</a>
 				<c:if test="${sLevel < 5}">
-					<a href="${ctp}/shop/ShoppingBag" class="w3-bar-item w3-button">장바구니</a>
+					<a href="${ctp}/shop/ShoppingBag?mid=${sMid}" class="w3-bar-item w3-button">장바구니</a>
 				</c:if>
 			</div>
 		</div>

@@ -138,5 +138,10 @@ public class ShopServiceImpl implements ShopService {
 	public List<ShopVO> getProductSubList(String mid) {
 		return shopDAO.getProductSubList(mid);
 	}
+
+	@Override
+	public ShopVO getProductProductImage(String productImage) {
+		return shopDAO.getProductProductImage(productImage);
+	}
 	
 }

@@ -232,7 +232,6 @@ function replyClose(idx) {
 
 // 대댓글 창 열기.
 function reReplyForm(ctp, replyIdx, parentIdx, mid, nickName, hostIP) {
-	console.log(mid);
 	$("[id^=demo]").html("");
 	
 	let str = "";

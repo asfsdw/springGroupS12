@@ -13,6 +13,9 @@
 	<select id="getProductSubList" resultType="com.spring.springGroupS12.vo.ShopVO">
 		SELECT * FROM shop WHERE <if test="mid != '전체'">mid = #{mid} AND</if> (openSW = '신청접수' OR openSW = '신청반려');
 	</select>
+	<select id="getProductProductImage" resultType="com.spring.springGroupS12.vo.ShopVO">
+		SELECT * FROM shop WHERE productImage = #{productImage};
+	</select>
 	
 	
 	

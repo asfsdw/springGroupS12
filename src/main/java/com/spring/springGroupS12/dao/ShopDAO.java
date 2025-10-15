@@ -18,4 +18,6 @@ public interface ShopDAO {
 
 	List<ShopVO> getProductSubList(@Param("mid") String mid);
 
+	ShopVO getProductProductImage(@Param("productImage") String productImage);
+
 }

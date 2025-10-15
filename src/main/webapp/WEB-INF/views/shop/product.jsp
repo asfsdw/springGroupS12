@@ -8,6 +8,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
 	<script src="${ctp}/js/shop.js"></script>
+	<link type="text/css" rel="stylesheet" href="${ctp}/css/shop.css" />
 	<title></title>
 	<script>
 		$(() => {
@@ -16,25 +17,6 @@
 			});
 		});
 	</script>
-	<style>
-		h6 {
-			position: fixed;
-			right: 1rem;
-			bottom: -50px;
-			transition: 0.7s ease;
-			z-index: 2;
-		}
-		.on {
-			opacity: 0.8;
-			cursor: pointer;
-			bottom: 0;
-		}
-		
-		#content img {
-			max-width: 100%;
-			height: auto;
-		}
-	</style>
 </head>
 <body>
 	<div class="container text-center">
@@ -59,6 +41,7 @@
 					<div id="demo" class="input-group-text">${vo.price*1}원</div>
 					<input type="button" value="구매" onclick="soldCheck()" class="btn btn-success" />
 				</div>
+				<input type="hidden" id="price" name="price" value="" />
 			</form>
 			<p></p>
 			<c:if test="${sLevel < 5}">
@@ -67,8 +50,10 @@
 			<input type="button" value="돌아가기" onclick="location.href='${ctp}/shop/Goods'" class="btn btn-warning" />
 		</div>
 	</div>
-	<div><h2>상품설명</h2></div>
-	<div id="content">${vo.content}</div>
+	<hr/>
+	<div class="text-start"><h2>상품설명</h2></div>
+	<p></p>
+	<div id="content" class="text-start">${vo.content}</div>
 	</div>
 	<h6 id="topBtn" class="text-end me-3"><img src="${ctp}/images/arrowTop.gif" title="위로이동" /></h6>
 </body>

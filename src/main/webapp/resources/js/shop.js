@@ -7,6 +7,7 @@ $(window).scroll(function(){
 	});
 });
 
+// 상품 등록.
 function fCheck() {
 	let mid = $("#mid").val().trim();
 	let nickName = '${sNickName}';
@@ -37,12 +38,12 @@ function fCheck() {
 		alert("상품설명를 입력해주세요.");
 		return false;
 	}
-	if(Number.isNaN(price) || price < 0) {
+	if(isNaN(price) || price < 0) {
 		if(price < 0) alert("상품의 가격은 음수가 될 수 없습니다.");
 		alert("상품의 가격을 숫자로 입력해주세요.");
 		return false;
 	}
-	if(Number.isNaN(quantity) || quantity < 0) {
+	if(isNaN(quantity) || quantity < 0) {
 		if(quantity < 0) alser("재고의 개수는 음수가 될 수 없습니다.");
 		alert("재고 개수를 숫자로 입력해주세요.");
 		return false;
@@ -68,6 +69,7 @@ function fCheck() {
 	productAddForm.submit();
 }
 
+// 상품 등록 신청.
 function subCheck(ctp) {
 	let mid = $("#mid").val().trim();
 	let nickName = '${sNickName}';
@@ -98,12 +100,12 @@ function subCheck(ctp) {
 		alert("상품설명를 입력해주세요.");
 		return false;
 	}
-	if(Number.isNaN(price) || price < 0) {
+	if(isNaN(price) || price < 0) {
 		if(price < 0) alert("상품의 가격은 음수가 될 수 없습니다.");
 		alert("상품의 가격을 숫자로 입력해주세요.");
 		return false;
 	}
-	if(Number.isNaN(quantity) || quantity < 0) {
+	if(isNaN(quantity) || quantity < 0) {
 		if(quantity < 0) alser("재고의 개수는 음수가 될 수 없습니다.");
 		alert("재고 개수를 숫자로 입력해주세요.");
 		return false;
@@ -130,6 +132,7 @@ function subCheck(ctp) {
 	productAddForm.submit();
 }
 
+// 상품 바로 구매.
 function soldCheck() {
 	let orderQuantity = $("#orderQuantity").val();
 	if(orderQuantity <= 0 || orderQuantity == null) {
@@ -137,12 +140,15 @@ function soldCheck() {
 		return false;
 	}
 	
+	$("#price").val($("#demo").text().replace("원",""));
+	
 	productForm.submit();
 }
 
+// 장바구니에 담기.
 function addShoppingBag(idx, mid, nickName) {
 	let orderQuantity = $("#orderQuantity").val();
-	if(Number.isNaN(orderQuantity) || orderQuantity < 1) {
+	if(isNaN(orderQuantity) || orderQuantity < 1) {
 		alert("주문 개수를 확인해주세요.");
 		return false;
 	}
@@ -161,7 +167,7 @@ function addShoppingBag(idx, mid, nickName) {
 			if(res != 0) {
 				let ans = confirm("쇼핑을 계속하시겠습니까?");
 				if(ans) location.href = "Goods";
-				else location.href = "ShoppingBag";
+				else location.href = "ShoppingBag?mid="+mid;
 			}
 			else alert("장바구니에 넣지 못했습니다.\n다시 시도해주시요.");
 		},
@@ -174,11 +180,11 @@ $(() => {
 	let totPrice = 0;
 	let price = 0;
 	
-	for(let i=1; i<=$("[name=orderQuantity]").length; i++) {
-		price = Number.parseInt($("#price"+i).text()) * $("#orderQuantity"+i).val();
+	for(let i=1; i<=$("[name=bagCheck]").length-1; i++) {
+		price = parseInt($("#price"+i).text()) * $("#orderQuantity"+i).val();
 		$("#price"+i).html(price+"원");
 		
-		totPrice += Number.parseInt($("#price"+i).text());
+		totPrice += parseInt($("#price"+i).text());
 	}
 	$("#totPrice").html(totPrice+"원");
 });
@@ -221,7 +227,7 @@ function priceChange(count, price) {
 	if($("[name=bagCheck]").length-1 >= 2) length = $("[name=bagCheck]").length-1;
 	
 	// 체크박스로 불러왔을 때.
-	if(price == count) price = Number.parseInt($("#price"+count).text())/$("#orderQuantity"+count).val();
+	if(price == count) price = parseInt($("#price"+count).text())/$("#orderQuantity"+count).val();
 	
 	let totPrice = 0;
 	
@@ -229,7 +235,7 @@ function priceChange(count, price) {
 	
 	for(let i=1; i<=length; i++) {
 		if(document.getElementById("bagCheck"+i).checked == true) {
-			totPrice += Number.parseInt($("#price"+i).text());
+			totPrice += parseInt($("#price"+i).text());
 		}
 	}
 	$("#totPrice").html(totPrice+"원");
@@ -253,4 +259,111 @@ function shoppingBagDelete(idx) {
 			error : () => alert("전송오류")
 		});
 	}
+}
+
+// 장바구니에서 구매.
+function buyCheck() {
+	let idx = [];
+	let orderQuantity = [];
+	let cnt = 0;
+	for(let i=1; i<=$("[name=bagCheck]").length-1; i++) {
+		if(document.getElementById("bagCheck"+i).checked == true) {
+			idx[cnt] = $("#idx"+i).val();
+			orderQuantity[cnt] = $("#orderQuantity"+i).val();
+			cnt++;
+		}
+	}
+	for(let i=0; i<idx.length; i++) {
+		if(isNaN(orderQuantity[i]) || orderQuantity[i] < 1) {
+			alert("구매하실 상품의 개수가 정상적이지 않습니다.\n다시 시도해주세요.");
+			return false;
+		}
+	}
+	
+	$("#idx").val(idx);
+	$("#orderQuantity").val(orderQuantity);
+	
+	buyForm.action = "Product";
+	buyForm.submit();
+}
+
+// 구매.
+function buy(address1, address2, address3, address4) {
+	$("#buyBtn").prop("disabled", true);
+	
+	let str = "";
+	if(address1 != undefined) {
+		str += '<table class="table table-bordered">';
+		str += '<tr class="table-secondary">';
+		str += '<th colspan="3">배송지</th>';
+		str += '</tr>';
+		str += '<tr>';
+		str += '<th>우편번호</th>';
+		str += '<td><input type="text" name="postcode" id="sample6_postcode" value="'+address1+'" placeholder="우편번호" class="form-control"></td>';
+		str += '<td><input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기" class="btn btn-secondary btn-sm"></td>';
+		str += '</tr>';
+		str += '<tr>';
+		str += '<th>주소</th>';
+		str += '<td colspan="2"><input type="text" name="roadAddress" id="sample6_address" size="50" value="'+address2+'" placeholder="주소" class="form-control mb-1"></td>';
+		str += '</tr>';
+		str += '<tr>';
+		str += '<th>상세주소</th>';
+		str += '<td><input type="text" name="detailAddress" id="sample6_detailAddress" value="'+address3+'" placeholder="상세주소" class="form-control me-2"></td>';
+		str += '<td colspan="2"><input type="text" name="extraAddress" id="sample6_extraAddress" value="'+address4+'" placeholder="참고항목" class="form-control"></td>';
+		str += '</tr>';
+		str += '</table>';
+	}
+	else{
+		str += '<table class="table table-bordered">';
+		str += '<tr class="table-secondary">';
+		str += '<th colspan="3">배송지</th>';
+		str += '</tr>';
+		str += '<tr>';
+		str += '<th>우편번호</th>';
+		str += '<td><input type="text" name="postcode" id="sample6_postcode" placeholder="우편번호" class="form-control"></td>';
+		str += '<td><input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기" class="btn btn-secondary btn-sm"></td>';
+		str += '</tr>';
+		str += '<tr>';
+		str += '<th>주소</th>';
+		str += '<td colspan="2"><input type="text" name="roadAddress" id="sample6_address" size="50" placeholder="주소" class="form-control mb-1"></td>';
+		str += '</tr>';
+		str += '<tr>';
+		str += '<th>상세주소</th>';
+		str += '<td><input type="text" name="detailAddress" id="sample6_detailAddress" placeholder="상세주소" class="form-control me-2"></td>';
+		str += '<td colspan="2"><input type="text" name="extraAddress" id="sample6_extraAddress" placeholder="참고항목" class="form-control"></td>';
+		str += '</tr>';
+		str += '<input type="hidden" id="address" name="address" value="" />';
+		str += '</table>';
+	}
+	str += '<div class="row">';
+	str += '<div class="col">';
+	str += '</div>';
+	str += '<div class="col text-start">';
+	str += '<input type="button" value="구매" onclick="addressCheck()" class="btn btn-success" />';
+	str += '</div>';
+	str += '<div class="col text-end">';
+	str += '<input type="button" value="돌아가기" onclick="history.back()" class="btn btn-warning" />';
+	str += '</div>';
+	str += '<div class="col">';
+	str += '</div>';
+	str += '</div>';
+	str += '</form>';
+	
+	$("#demo").html(str);
+}
+
+function addressCheck() {
+	let address1 = $("#sample6_postcode").val().trim();
+	let address2 = $("#sample6_address").val().trim();
+	let address3 = $("#sample6_detailAddress").val().trim();
+	let address4 = $("#sample6_extraAddress").val().trim();
+	if(address1 == "" || address2 == "" || address3 == "" || address4 == "") {
+		alert("주소를 입력해주세요.");
+		return false;
+	}
+	
+	let address = address1+"/"+address2+"/"+address3+"/"+address4;
+	$("#address").val(address);
+	
+	buyForm.submit();
 }

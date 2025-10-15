@@ -7,16 +7,26 @@
 	<select id="getShoppingBag" resultType="com.spring.springGroupS12.vo.DeliveryVO">
 		SELECT * FROM delivery WHERE mid = #{mid} AND title = #{title};
 	</select>
-	
+	<select id="getShoppingBagLastList" resultType="com.spring.springGroupS12.vo.DeliveryVO">
+		SELECT * FROM delivery WHERE idx = #{idx};
+	</select>
+
+
 	
 	<insert id="setShoppingBag">
-		INSERT INTO delivery(idx,mid,nickName,title,orderQuantity,price,address,productImage) VALUES(DEFAULT,#{mid},#{nickName},#{title},#{orderQuantity},#{price},"",#{productImage});
+		INSERT INTO delivery(idx,mid,nickName,email,title,orderQuantity,price,address,productImage) VALUES(DEFAULT,#{mid},#{nickName},#{email},#{title},#{orderQuantity},#{price},#{address},#{productImage});
 	</insert>
 	
 	
 	
 	<update id="setShoppingBagUpdate">
 		UPDATE delivery SET orderQuantity = orderQuantity + #{orderQuantity} WHERE idx = #{idx};
+	</update>
+	<update id="setShoppingBagLastUpdate">
+		UPDATE delivery SET orderQuantity = #{orderQuantity} WHERE idx = #{idx};
+	</update>
+	<update id="setDeliveryLastUpdate">
+		UPDATE delivery SET address = #{address}, deliverySW = #{deliverySW} WHERE idx = #{idx};
 	</update>
 	
 	

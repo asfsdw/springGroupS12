@@ -9,21 +9,8 @@
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
 	<script src="${ctp}/resources/ckeditor/ckeditor.js"></script>
 	<script src="${ctp}/js/shop.js"></script>
+	<link type="text/css" rel="stylesheet" href="${ctp}/css/shop.css" />
 	<title></title>
-	<style>
-		h6 {
-			position: fixed;
-			right: 1rem;
-			bottom: -50px;
-			transition: 0.7s ease;
-			z-index: 2;
-		}
-		.on {
-			opacity: 0.8;
-			cursor: pointer;
-			bottom: 0;
-		}
-	</style>
 </head>
 <body>
 	<div class="container text-center">

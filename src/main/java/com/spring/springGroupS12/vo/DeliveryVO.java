@@ -7,6 +7,7 @@ public class DeliveryVO {
 	private int idx;
 	private String mid;
 	private String nickName;
+	private String email;
 	private String title;
 	private int orderQuantity;
 	private int price;
@@ -14,4 +15,9 @@ public class DeliveryVO {
 	private String productImage;
 	private String deliverySW;
 	private String orderDate;
+	
+	private String imp_uid;				// 고유ID
+	private String merchant_uid;	// 상점 거래 ID
+	private String paid_amount;		// 결제 금액
+	private String apply_num;			// 카드 승인번호
 }
