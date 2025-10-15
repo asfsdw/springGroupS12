@@ -179,8 +179,7 @@ public class ShopController {
 		return deliveryService.setShoppingBagDelete(idx);
 	}
 	
-	// 구매.
-	@Transactional
+	// 결재.
 	@PostMapping("/Buy")
 	public String buyPost(Model model, DeliveryVO dVO,
 			@RequestParam(name = "idx", defaultValue = "", required = false)String idx) {
@@ -191,14 +190,16 @@ public class ShopController {
 			deliveryService.setDeliveryLastUpdate(idx, dVO.getAddress(), dVO.getDeliverySW());
 		}
 		*/
-		System.out.println(dVO.getNickName());
-		System.out.println(dVO.getEmail());
-		System.out.println(dVO.getAddress());
-		
 		model.addAttribute("dVO", dVO);
 		model.addAttribute("idx", idx);
 		
 		return "shop/paymentOk";
 	}
-	
+	// 결재완료.
+	@Transactional
+	@GetMapping("PaymentResult")
+	public String paymentResultGet(DeliveryVO dVO) {
+		System.out.println(dVO);
+		return "";
+	}
 }

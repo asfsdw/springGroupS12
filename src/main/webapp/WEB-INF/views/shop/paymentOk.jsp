@@ -41,16 +41,16 @@
 		    }
 		    else {
 					var temp = "";
-					temp += '?name=${dVO.title}';
-					temp += '&amount=${dVO.price}';
-					temp += '&buyer_name=${dVO.nickName}';
-					temp += '&buyer_addr=${dVO.address}';
+					temp += '?title=${dVO.title}';
+					temp += '&price=${dVO.price}';
+					temp += '&nickName=${dVO.nickName}';
+					temp += '&address=${dVO.address}';
 					temp += '&imp_uid=' + rsp.imp_uid;
 					temp += '&merchant_uid=' + rsp.merchant_uid;
 					temp += '&paid_amount=' + rsp.paid_amount;
 					temp += '&apply_num=' + rsp.apply_num;
 					
-					location.href='${ctp}/shop/paymentResult'+temp;
+					location.href='${ctp}/shop/PaymentResult'+temp;
 		    }
 		});
 	</script>
