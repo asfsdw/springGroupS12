@@ -60,17 +60,17 @@
 				<input type="text" name="email1" id="email1" placeholder="이메일을 입력하세요." required class="form-control" />
 				<span class="input-group-text">@</span>
 				<select name="email2" id="email2" class="form-select">
-	        <option>naver.com</option>
-	        <option selected>gmail.com</option>
-	        <option>daum.net</option>
-	      </select>
+					<option>naver.com</option>
+					<option selected>gmail.com</option>
+					<option>daum.net</option>
+				</select>
 				<input type="button" value="이메일중복확인" onclick="emailCheck()" id="emailCheckBtn" class="btn btn-success" />
 				<input type="button" value="인증번호받기" onclick="emailCertification(${year})" id="certificationBtn" class="btn btn-success" style="display:none" />
 			</div>
 			<div id="demoSpin"></div>
 			<div id="addContent" style="display:none">
 				<div class="input-group mb-3 col" >
-		     	<label for="address" class="input-group-text boxWidth">주 소</label>
+					<label for="address" class="input-group-text boxWidth">주 소</label>
 					<input type="text" name="postcode" id="sample6_postcode" placeholder="우편번호" class="form-control">
 					<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기" class="btn btn-secondary btn-sm">
 				</div>

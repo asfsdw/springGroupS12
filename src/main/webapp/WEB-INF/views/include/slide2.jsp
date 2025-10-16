@@ -6,21 +6,21 @@
 	<img src="${ctp}/images/la.jpg" style="width:100%; height:250px">
 	<div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32 w3-hide-small">
 		<h3>Los Angeles</h3>
-		<p><b>We had the best time playing at Venice Beach!</b></p>   
+		<p><b>We had the best time playing at Venice Beach!</b></p>
 	</div>
 </div>
 <div class="mySlides w3-display-container w3-center">
 	<img src="${ctp}/images/ny.jpg" style="width:100%; height:250px">
 	<div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32 w3-hide-small">
 		<h3>New York</h3>
-		<p><b>The atmosphere in New York is lorem ipsum.</b></p>    
+		<p><b>The atmosphere in New York is lorem ipsum.</b></p>
 	</div>
 </div>
 <div class="mySlides w3-display-container w3-center">
 	<img src="${ctp}/images/chicago.jpg" style="width:100%; height:250px">
 	<div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32 w3-hide-small">
 		<h3>Chicago</h3>
-		<p><b>Thank you, Chicago - A night we won't forget.</b></p>    
+		<p><b>Thank you, Chicago - A night we won't forget.</b></p>
 	</div>
 </div>
 <script>
@@ -32,12 +32,12 @@
 		var i;
 		var x = document.getElementsByClassName("mySlides");
 		for (i = 0; i < x.length; i++) {
-			x[i].style.display = "none";  
+			x[i].style.display = "none";
 		}
 		myIndex++;
-		if(myIndex > x.length) {myIndex = 1}    
-		x[myIndex-1].style.display = "block";  
-		setTimeout(carousel, 4000);    
+		if(myIndex > x.length) {myIndex = 1}
+		x[myIndex-1].style.display = "block";
+		setTimeout(carousel, 4000);
 	}
 	
 	// Used to toggle the menu on small screens when clicking on the menu button
@@ -45,7 +45,7 @@
 		var x = document.getElementById("navDemo");
 		if(x.className.indexOf("w3-show") == -1) {
 			x.className += " w3-show";
-		} else { 
+		} else {
 			x.className = x.className.replace(" w3-show", "");
 		}
 	}

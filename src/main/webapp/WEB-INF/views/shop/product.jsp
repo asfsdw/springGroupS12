@@ -41,7 +41,10 @@
 					<div id="demo" class="input-group-text">${vo.price*1}원</div>
 					<input type="button" value="구매" onclick="soldCheck()" class="btn btn-success" />
 				</div>
+				<input type="hidden" name="mid" value="${sMid}" />
+				<input type="hidden" name="title" value="${vo.title}" />
 				<input type="hidden" id="price" name="price" value="" />
+				<input type="hidden" name="productImage" value="${vo.productImage}" />
 			</form>
 			<p></p>
 			<c:if test="${sLevel < 5}">

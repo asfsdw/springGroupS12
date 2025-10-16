@@ -12,15 +12,15 @@ $(function() {
 	$(".sub").hide();
 	
 	$(".main").off("click").on("click", function(e) {
-	  e.preventDefault();
-	  e.stopPropagation();
-	
-	  let $target = $(this).next(".sub");
-	  if($target.is(":visible")) $target.slideUp(500);
-	  else{
-	    $(".sub").slideUp(500);
-	    $target.slideDown(500);
-	  }
+		e.preventDefault();
+		e.stopPropagation();
+		
+		let $target = $(this).next(".sub");
+		if($target.is(":visible")) $target.slideUp(500);
+		else{
+			$(".sub").slideUp(500);
+			$target.slideDown(500);
+		}
 	});
 });
 

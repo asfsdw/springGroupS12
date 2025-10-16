@@ -42,18 +42,19 @@
 			</tr>
 			<c:if test="${deliveryVOS == null}">
 				<tr>
-					<td>${mid}</td>
-					<td><img src="${ctp}/data/shop/${productImage}" style="width:150px"/></td>
-					<td>${title}</td>
-					<td>${orderQuantity}개</td>
-					<td id="price1">${price}원</td>
+					<td>${dVO.mid}</td>
+					<td><img src="${ctp}/data/shop/${dVO.productImage}" style="width:150px"/></td>
+					<td>${dVO.title}</td>
+					<td>${dVO.orderQuantity}개</td>
+					<td id="price1">${dVO.price}원</td>
 				</tr>
-				<input type="hidden" name="mid" value="${mid}" />
+				<input type="hidden" name="idx" value="${dVO.idx}" />
+				<input type="hidden" name="mid" value="${dVO.mid}" />
 				<input type="hidden" name="nickName" value="비회원" />
-				<input type="hidden" name="title" value="${title}" />
-				<input type="hidden" name="orderQuantity" value="${orderQuantity}" />
-				<input type="hidden" name="price" value="${price}" />
-				<input type="hidden" name="productImage" value="${productImage}" />
+				<input type="hidden" name="title" value="${dVO.title}" />
+				<input type="hidden" name="orderQuantity" value="${dVO.orderQuantity}" />
+				<input type="hidden" name="price" value="${dVO.price}" />
+				<input type="hidden" name="productImage" value="${dVO.productImage}" />
 			</c:if>
 			<c:set var="addresss" value="" />
 			<c:if test="${deliveryVOS != null}">
@@ -68,7 +69,8 @@
 						<td>${vo.orderQuantity}</td>
 						<td id="price${st.count}">${vo.price * vo.orderQuantity}원</td>
 					</tr>
-					<input type="hidden" name="idx" value="${vo.idx}" />
+					<input type="hidden" name="idxs" value="${vo.idx}" />
+					<input type="hidden" name="parentIdx" value="${vo.parentIdx}" />
 					<input type="hidden" name="mid" value="${vo.mid}" />
 					<input type="hidden" name="nickName" value="${vo.nickName}" />
 					<input type="hidden" name="email" value="${vo.email}" />

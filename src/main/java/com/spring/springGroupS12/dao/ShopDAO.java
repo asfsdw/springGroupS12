@@ -20,4 +20,6 @@ public interface ShopDAO {
 
 	ShopVO getProductProductImage(@Param("productImage") String productImage);
 
+	void setProductQuantityUpdate(@Param("idx") int idx, @Param("orderQuantity") int orderQuantity);
+
 }

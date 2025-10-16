@@ -1,6 +1,9 @@
 package com.spring.springGroupS12.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -119,26 +122,32 @@ public class ShopController {
 	
 	// 상품 구매.
 	@PostMapping("/Product")
-	public String ProductPost(Model model,
-			@RequestParam(name = "mid", defaultValue = "noMember", required = false)String mid,
-			@RequestParam(name = "idx", defaultValue = "", required = false)String idx,
-			@RequestParam(name = "orderQuantity", defaultValue = "", required = false)String orderQuantity,
-			@RequestParam(name = "price", defaultValue = "", required = false)String price) {
-		if(!mid.equals("noMember")) {
-			deliveryService.setShoppingBagLastUpdate(idx, orderQuantity);
-			
-			List<DeliveryVO> deliveryVOS = deliveryService.getShoppingBagLastList(idx);
-			
-			model.addAttribute("deliveryVOS", deliveryVOS);
+	public String ProductPost(Model model, DeliveryVO dVO,
+			@RequestParam(name = "idxs", defaultValue = "", required = false)String idxs,
+			@RequestParam(name = "orderQuantitys", defaultValue = "", required = false)String orderQuantitys) {
+		if(!dVO.getMid().equals("")) {
+			DeliveryVO searchdVO = deliveryService.getShoppingBag(dVO.getMid());
+			if(searchdVO != null) {
+				// 장바구니에서 변경한 구매개수 반영.
+				deliveryService.setShoppingBagLastUpdate(idxs, orderQuantitys);
+				
+				// 장바구니 안의 상품 리스트.
+				List<DeliveryVO> deliveryVOS = deliveryService.getShoppingBagLastList(idxs);
+				
+				model.addAttribute("deliveryVOS", deliveryVOS);
+			}
+			else {
+				MemberVO mVO = memberService.getMemberMid(dVO.getMid());
+				dVO.setNickName(mVO.getNickName());
+				dVO.setEmail(mVO.getEmail());
+				dVO.setAddress(mVO.getAddress());
+				
+				model.addAttribute("dVO", dVO);
+			}
 		}
 		else {
-			ShopVO vo = shopService.getProduct(Integer.parseInt(idx));
-			
-			model.addAttribute("mid", mid);
-			model.addAttribute("productImage", vo.getProductImage());
-			model.addAttribute("title", vo.getTitle());
-			model.addAttribute("orderQuantity", orderQuantity);
-			model.addAttribute("price", price);
+			dVO.setMid("noMember");
+			model.addAttribute("dVO", dVO);
 		}
 		return "shop/productBuy";
 	}
@@ -165,12 +174,10 @@ public class ShopController {
 		ShopVO sVO = shopService.getProduct(idx);
 		
 		// 장바구니에 같은 상품이 있으면 수량만 증가.
-		DeliveryVO dVO = deliveryService.getShoppingBag(mid, sVO.getTitle());
-		if(dVO != null) {
-			return deliveryService.setShoppingBagUpdate(orderQuantity, dVO.getIdx());
-		}
+		DeliveryVO dVO = deliveryService.getShoppingBagDuplicat(mid, sVO.getTitle());
+		if(dVO != null) return deliveryService.setShoppingBagUpdate(orderQuantity, dVO.getIdx());
 		
-		return deliveryService.setShoppingBag(mid, nickName, vo.getEmail(), sVO.getTitle(), orderQuantity, sVO.getPrice(), vo.getAddress(), sVO.getProductImage());
+		return deliveryService.setShoppingBag(idx, "", mid, vo.getNickName(), vo.getEmail(), sVO.getTitle(), orderQuantity, sVO.getPrice(), vo.getAddress(), sVO.getProductImage(), "대기중");
 	}
 	// 장바구니 상품 삭제.
 	@ResponseBody
@@ -182,24 +189,52 @@ public class ShopController {
 	// 결재.
 	@PostMapping("/Buy")
 	public String buyPost(Model model, DeliveryVO dVO,
-			@RequestParam(name = "idx", defaultValue = "", required = false)String idx) {
-		/*
-		dVO.setDeliverySW("준비중");
-		if(dVO.getIdx() == 0) deliveryService.setShoppingBag(dVO.getMid(), "비회원", "", dVO.getTitle(), dVO.getOrderQuantity(), dVO.getPrice(), dVO.getAddress(), dVO.getProductImage());
-		else {
-			deliveryService.setDeliveryLastUpdate(idx, dVO.getAddress(), dVO.getDeliverySW());
+			@RequestParam(name = "idxs", defaultValue = "", required = false)String idxs) {
+		if(dVO.getMid().contains(",")) {
+			dVO.setMid(dVO.getMid().substring(0,dVO.getMid().indexOf(",")));
+			dVO.setNickName(dVO.getNickName().substring(0,dVO.getNickName().indexOf(",")));
+			dVO.setEmail(dVO.getEmail().substring(0,dVO.getEmail().indexOf(",")));
 		}
-		*/
+		
 		model.addAttribute("dVO", dVO);
-		model.addAttribute("idx", idx);
+		model.addAttribute("idxs", idxs);
 		
 		return "shop/paymentOk";
 	}
 	// 결재완료.
 	@Transactional
-	@GetMapping("PaymentResult")
-	public String paymentResultGet(DeliveryVO dVO) {
-		System.out.println(dVO);
+	@GetMapping("/PaymentResult")
+	public String paymentResultGet(Model model, DeliveryVO dVO,
+			@RequestParam(name = "idxs", defaultValue = "", required = false)String idxs) {
+		int res = 0;
+		
+		if(dVO.getMid().equals("noMember")) {
+			Date today = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+			String deliveryIdx = sdf.format(today)+UUID.randomUUID().toString().substring(0, 8);
+			
+			deliveryService.setShoppingBag(dVO.getIdx(), deliveryIdx, dVO.getMid(), "비회원", "", dVO.getTitle(), dVO.getOrderQuantity(), dVO.getPrice(), dVO.getAddress(), dVO.getProductImage(), "준비중");
+			
+			shopService.setProductQuantityUpdate(dVO.getIdx(), dVO.getOrderQuantity());
+			
+			model.addAttribute("deliveryIdx", deliveryIdx);
+			res = 1;
+		}
+		else {
+			res = deliveryService.setDeliveryLastUpdate(idxs, dVO);
+			if(idxs.contains(",")) dVO = deliveryService.getShoppingBagDuplicat(dVO.getMid(), dVO.getTitle().substring(0,dVO.getTitle().indexOf(",")));
+			else dVO = deliveryService.getShoppingBagDuplicat(dVO.getMid(), dVO.getTitle());
+			
+			model.addAttribute("deliveryIdx", dVO.getDeliveryIdx());
+		}
+		
+		if(res != 0) return "redirect:/Message/deliveryOk";
+		else return "redirect:/Message/deliveryNo";
+	}
+	// 주문완료화면.
+	@GetMapping("/DeliveryOk")
+	public String deliveryOkGet(String deliveryIdx) {
+		System.out.println(deliveryIdx);
 		return "";
 	}
 }

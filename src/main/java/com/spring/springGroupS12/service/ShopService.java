@@ -21,4 +21,6 @@ public interface ShopService {
 
 	ShopVO getProductProductImage(String productImage);
 
+	void setProductQuantityUpdate(int idx, int orderQuantity);
+
 }

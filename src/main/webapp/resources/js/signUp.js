@@ -201,7 +201,7 @@ let interval;
 function timer() {
 	interval = setInterval(() => {
 	$("#accessTime").html("남은 시간: "+accessTime+"초");
-		  
+	
 	if(accessTime == 0) {
 		// 인증번호 확인용 div 초기화.
 		$("#demoSpin").html("");

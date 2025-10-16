@@ -17,7 +17,8 @@ public class MessageController {
 	public String MessageGet(HttpSession session, Model model, PageVO pVO,
 			@PathVariable String msgFlag,
 			@RequestParam(name="mid", defaultValue = "", required = false) String mid,
-			@RequestParam(name="idx", defaultValue = "0", required = false) int idx) {
+			@RequestParam(name="idx", defaultValue = "0", required = false) int idx,
+			@RequestParam(name="deliveryIdx", defaultValue = "", required = false) String deliveryIdx) {
 		if(msgFlag.equals("wrongAccess")) {
 			model.addAttribute("message", "잘못된 접근입니다.");
 			model.addAttribute("url", "/");
@@ -148,6 +149,14 @@ public class MessageController {
 		}
 		else if(msgFlag.equals("cartEmpty")) {
 			model.addAttribute("message", "장바구니가 비어있습니다.\\n상품을 추가해주세요.");
+			model.addAttribute("url", "shop/Goods");
+		}
+		else if(msgFlag.equals("deliveryOk")) {
+			model.addAttribute("message", "주문이 완료되었습니다.");
+			model.addAttribute("url", "shop/DeliveryOk?deliveryIdx="+deliveryIdx);
+		}
+		else if(msgFlag.equals("deliveryNo")) {
+			model.addAttribute("message", "주문에 실패했습니다.\\n잠시 후, 다시 시도해주세요.");
 			model.addAttribute("url", "shop/Goods");
 		}
 		return "include/message";

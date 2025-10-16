@@ -24,4 +24,10 @@
 			#{vo.title},#{vo.productImage},#{vo.content},#{vo.price},#{vo.quantity},#{vo.pwd}, #{vo.openSW}, 
 			DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT);
 	</insert>
+	
+	
+	
+	<update id="setProductQuantityUpdate">
+		UPDATE shop SET quantity = quantity - #{orderQuantity} WHERE idx = #{idx};
+	</update>
 </mapper>

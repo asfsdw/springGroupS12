@@ -280,8 +280,8 @@ function buyCheck() {
 		}
 	}
 	
-	$("#idx").val(idx);
-	$("#orderQuantity").val(orderQuantity);
+	$("#idxs").val(idx);
+	$("#orderQuantitys").val(orderQuantity);
 	
 	buyForm.action = "Product";
 	buyForm.submit();

@@ -60,7 +60,7 @@
 						</c:if>
 						<c:if test="${vo.openSW == '비공개' && vo.complaint != 'HI'}">
 							<font color="red">(비밀글) </font>
-							<a href="#" onclick="setModalHidden('${vo.idx}','${pVO.pag}','${pVO.pageSize}','${pVO.search}','${pVO.searchStr}')" data-bs-toggle="modal" data-bs-target="#myModal"  
+							<a href="#" onclick="setModalHidden('${vo.idx}','${pVO.pag}','${pVO.pageSize}','${pVO.search}','${pVO.searchStr}')" data-bs-toggle="modal" data-bs-target="#myModal" 
 								class="text-primary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover">${vo.title}</a>
 							<c:if test="${vo.replyCnt != 0}">(${vo.replyCnt})</c:if>
 						</c:if>

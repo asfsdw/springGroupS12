@@ -143,5 +143,10 @@ public class ShopServiceImpl implements ShopService {
 	public ShopVO getProductProductImage(String productImage) {
 		return shopDAO.getProductProductImage(productImage);
 	}
+
+	@Override
+	public void setProductQuantityUpdate(int idx, int orderQuantity) {
+		shopDAO.setProductQuantityUpdate(idx, orderQuantity);
+	}
 	
 }

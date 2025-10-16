@@ -8,9 +8,9 @@ public interface DeliveryService {
 	
 	List<DeliveryVO> getShoppingBagList(String mid);
 
-	int setShoppingBag(String mid, String nickName, String email, String title, int orderQuantity, int price, String address, String productImage);
+	int setShoppingBag(int parentIdx, String deliveryIdx, String mid, String nickName, String email, String title, int orderQuantity, int price, String address, String productImage, String deliverySW);
 
-	DeliveryVO getShoppingBag(String mid, String title);
+	DeliveryVO getShoppingBag(String mid);
 
 	int setShoppingBagUpdate(int orderQuantity, int idx);
 
@@ -20,6 +20,8 @@ public interface DeliveryService {
 
 	List<DeliveryVO> getShoppingBagLastList(String idx);
 
-	void setDeliveryLastUpdate(String idx, String address, String deliverySW);
+	int setDeliveryLastUpdate(String idx, DeliveryVO dVO);
+
+	DeliveryVO getShoppingBagDuplicat(String mid, String title);
 
 }

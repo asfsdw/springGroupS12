@@ -5,16 +5,19 @@
 		SELECT * FROM delivery WHERE mid = #{mid} ORDER BY idx;
 	</select>
 	<select id="getShoppingBag" resultType="com.spring.springGroupS12.vo.DeliveryVO">
-		SELECT * FROM delivery WHERE mid = #{mid} AND title = #{title};
+		SELECT * FROM delivery WHERE mid = #{mid} LIMIT 1;
 	</select>
 	<select id="getShoppingBagLastList" resultType="com.spring.springGroupS12.vo.DeliveryVO">
 		SELECT * FROM delivery WHERE idx = #{idx};
+	</select>
+	<select id="getShoppingBagDuplicat" resultType="com.spring.springGroupS12.vo.DeliveryVO">
+		SELECT * FROM delivery WHERE mid = #{mid} AND title = #{title};
 	</select>
 
 
 	
 	<insert id="setShoppingBag">
-		INSERT INTO delivery(idx,mid,nickName,email,title,orderQuantity,price,address,productImage) VALUES(DEFAULT,#{mid},#{nickName},#{email},#{title},#{orderQuantity},#{price},#{address},#{productImage});
+		INSERT INTO delivery VALUES(DEFAULT,#{parentIdx},#{deliveryIdx},#{mid},#{nickName},#{email},#{title},#{orderQuantity},#{price},#{address},#{productImage},#{deliverySW},DEFAULT);
 	</insert>
 	
 	
@@ -26,7 +29,7 @@
 		UPDATE delivery SET orderQuantity = #{orderQuantity} WHERE idx = #{idx};
 	</update>
 	<update id="setDeliveryLastUpdate">
-		UPDATE delivery SET address = #{address}, deliverySW = #{deliverySW} WHERE idx = #{idx};
+		UPDATE delivery SET deliveryIdx = #{dVO.deliveryIdx}, address = #{dVO.address}, deliverySW = #{dVO.deliverySW}, orderDate = now() WHERE idx = #{idx};
 	</update>
 	
 	

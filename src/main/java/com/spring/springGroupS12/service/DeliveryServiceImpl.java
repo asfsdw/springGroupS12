@@ -1,7 +1,10 @@
 package com.spring.springGroupS12.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,13 +23,13 @@ public class DeliveryServiceImpl implements DeliveryService {
 	}
 
 	@Override
-	public int setShoppingBag(String mid, String nickName, String email, String title, int orderQuantity, int price, String address, String productImage) {
-		return deliveryDAO.setShoppingBag(mid, nickName, email, title, orderQuantity, price, address, productImage);
+	public int setShoppingBag(int parentIdx, String deliveryIdx, String mid, String nickName, String email, String title, int orderQuantity, int price, String address, String productImage, String deliverySW) {
+		return deliveryDAO.setShoppingBag(parentIdx, deliveryIdx, mid, nickName, email, title, orderQuantity, price, address, productImage, deliverySW);
 	}
 
 	@Override
-	public DeliveryVO getShoppingBag(String mid, String title) {
-		return deliveryDAO.getShoppingBag(mid, title);
+	public DeliveryVO getShoppingBag(String mid) {
+		return deliveryDAO.getShoppingBag(mid);
 	}
 
 	@Override
@@ -44,7 +47,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 		if(idx.contains(",")) {
 			String[] idxs = idx.split(",");
 			String[] orderQuantitys = orderQuantity.split(",");
-			for(int i=0; i<idxs[0].length(); i++) {
+			for(int i=0; i<idxs.length; i++) {
 				deliveryDAO.setShoppingBagLastUpdate(idxs[i], orderQuantitys[i]);
 			}
 		}
@@ -56,7 +59,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 		List<DeliveryVO> deliveryVOS = new ArrayList<DeliveryVO>();
 		if(idx.contains(",")) {
 			String[] idxs = idx.split(",");
-			for(int i=0; i<idxs[0].length(); i++) {
+			for(int i=0; i<idxs.length; i++) {
 				deliveryVOS.addAll(deliveryDAO.getShoppingBagLastList(idxs[i]));
 			}
 			return deliveryVOS;
@@ -65,14 +68,40 @@ public class DeliveryServiceImpl implements DeliveryService {
 	}
 
 	@Override
-	public void setDeliveryLastUpdate(String idx, String address, String deliverySW) {
+	public int setDeliveryLastUpdate(String idx, DeliveryVO dVO) {
+		int res = 0;
+		String address = dVO.getAddress();
+		Date today = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		String deliveryIdx = sdf.format(today)+UUID.randomUUID().toString().substring(0, 8);
+		
 		if(idx.contains(",")) {
 			String[] idxs = idx.split(",");
-			for(int i=0; i<idxs[0].length(); i++) {
-				deliveryDAO.setDeliveryLastUpdate(idxs[i], address, deliverySW);
+			String[] titles = dVO.getTitle().split(",");
+			for(int i=0; i<idxs.length; i++) {
+				dVO = deliveryDAO.getShoppingBagDuplicat(dVO.getMid(), titles[i]);
+				dVO.setDeliveryIdx(deliveryIdx);
+				dVO.setAddress(address);
+				dVO.setDeliverySW("준비중");
+				
+				res = deliveryDAO.setDeliveryLastUpdate(idxs[i], dVO);
 			}
 		}
-		else deliveryDAO.setDeliveryLastUpdate(idx, address, deliverySW);
+		else {
+			dVO = deliveryDAO.getShoppingBagDuplicat(dVO.getMid(), dVO.getTitle());
+			dVO.setDeliveryIdx(deliveryIdx);
+			dVO.setAddress(address);
+			dVO.setDeliverySW("준비중");
+			
+			res = deliveryDAO.setDeliveryLastUpdate(idx, dVO);
+		}
+		
+		return res;
+	}
+
+	@Override
+	public DeliveryVO getShoppingBagDuplicat(String mid, String title) {
+		return deliveryDAO.getShoppingBagDuplicat(mid, title);
 	}
 
 }

@@ -39,11 +39,11 @@
 			</table>
 			<div class="row input-group ps-3">
 				<div id="totPrice" class="col input-group-text justify-content-center"></div>
-				<input type="button" value="구입" onclick="buyCheck()" class=" col btn btn-success" />
+				<input type="button" value="구매" onclick="buyCheck()" class=" col btn btn-success" />
 			</div>
 			<input type="hidden" id="mid" name="mid" value="${sMid}" />
-			<input type="hidden" id="idx" name="idx" value="" />
-			<input type="hidden" id="orderQuantity" name="orderQuantity" value="" />
+			<input type="hidden" id="idxs" name="idxs" value="" />
+			<input type="hidden" id="orderQuantitys" name="orderQuantitys" value="" />
 		</form>
 		<p><br/></p>
 	</div>

@@ -4,12 +4,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <jsp:include page="/WEB-INF/views/include/bs5.jsp" />
-  <script src="${ctp}/js/login.js"></script>
-  <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-  <title>memberLogin.jsp</title>
-  <script>
+	<meta charset="UTF-8">
+	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
+	<script src="${ctp}/js/login.js"></script>
+	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+	<title>memberLogin.jsp</title>
+	<script>
 		window.Kakao.init("6bf1408a4cfa868792077ab97ebbbff1");
 		function kakaoLogin() {
 			window.Kakao.Auth.login({
@@ -25,7 +25,7 @@
 				}
 			});
 		}
-  </script>
+	</script>
 	<style>
 		h6 {
 			position: fixed;
