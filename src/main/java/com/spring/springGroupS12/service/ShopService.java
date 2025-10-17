@@ -23,4 +23,6 @@ public interface ShopService {
 
 	void setProductQuantityUpdate(int idx, int orderQuantity);
 
+	void setProductQuantityRollback(int idx, int orderQuantity);
+
 }

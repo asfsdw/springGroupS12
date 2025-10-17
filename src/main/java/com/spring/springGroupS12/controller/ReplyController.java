@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.spring.springGroupS12.service.MemberService;
 import com.spring.springGroupS12.service.ReplyService;
 import com.spring.springGroupS12.vo.ReplyVO;
 
@@ -13,6 +14,8 @@ import com.spring.springGroupS12.vo.ReplyVO;
 public class ReplyController {
 	@Autowired
 	ReplyService replyService;
+	@Autowired
+	MemberService memberService;
 	
 	// 댓글 입력.
 	@ResponseBody
@@ -57,5 +60,20 @@ public class ReplyController {
 	@PostMapping("/ReplyDelete")
 	public int replyDeletePost(int idx) {
 		return replyService.setReplyDelete(idx);
+	}
+	
+	// 리뷰 입력.
+	@ResponseBody
+	@PostMapping("/ReviewInput")
+	public String reviewInputPost(ReplyVO vo) {
+		int res = 0;
+		vo.setPart("shop");
+		
+		ReplyVO searchVO = replyService.getReview(vo.getPart(), vo.getParentIdx());
+		if(searchVO != null) return "redirect:/Message/duplicationReview?idx="+vo.getParentIdx();
+		res = replyService.setReply(vo);
+		if(res != 0) res = memberService.setMemberPointUp(vo.getMid());
+		
+		return res+"";
 	}
 }

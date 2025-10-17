@@ -20,4 +20,6 @@ public interface ReplyService {
 
 	int setReplyDelete(int idx);
 
+	ReplyVO getReview(String part, int parentIdx);
+
 }

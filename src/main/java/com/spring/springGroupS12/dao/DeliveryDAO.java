@@ -14,6 +14,8 @@ public interface DeliveryDAO {
 
 	DeliveryVO getShoppingBag(@Param("mid") String mid);
 	
+	DeliveryVO getShoppingBagIdx(@Param("idx") int idx);
+	
 	int setShoppingBagUpdate(@Param("orderQuantity") int orderQuantity, @Param("idx") int idx);
 
 	int setShoppingBagDelete(@Param("idx") int idx);
@@ -24,6 +26,10 @@ public interface DeliveryDAO {
 
 	int setDeliveryLastUpdate(@Param("idx") String idx, @Param("dVO") DeliveryVO dVO);
 
-	DeliveryVO getShoppingBagDuplicat(@Param("mid") String mid, @Param("title") String title);
+	DeliveryVO getShoppingBagDuplicat(@Param("mid") String mid, @Param("title") String title, @Param("flag") String flag);
+
+	List<DeliveryVO> getDeliveryListDeliveryIdx(@Param("deliveryIdx") String deliveryIdx);
+
+	List<DeliveryVO> getDeliveryListDeliveryMid(@Param("mid") String mid);
 
 }

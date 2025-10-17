@@ -37,4 +37,6 @@ public interface MemberDAO {
 
 	int setMemberUpdate(@Param("vo") MemberVO vo);
 
+	int setMemberPointUp(@Param("mid") String mid);
+
 }

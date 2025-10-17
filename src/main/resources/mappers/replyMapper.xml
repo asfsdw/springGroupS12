@@ -10,17 +10,24 @@
 	<select id="getBoardParentReplyIdxCheck" resultType="com.spring.springGroupS12.vo.ReplyVO">
 		SELECT * FROM reply WHERE idx = #{idx} ORDER BY re_order DESC LIMIT 1;
 	</select>
+	<select id="getReview" resultType="com.spring.springGroupS12.vo.ReplyVO">
+		SELECT * FROM reply WHERE part = #{part} AND parentIdx = #{parentIdx} LIMIT 1;
+	</select>
 	
 	
 	<insert id="setReply">
 		INSERT INTO reply 
+			<if test="vo.star != 0">
+				VALUES(DEFAULT,#{vo.parentIdx},#{vo.part},#{vo.mid},#{vo.nickName},#{vo.content},DEFAULT,DEFAULT,
+				#{vo.star},#{vo.hostIP},DEFAULT)
+			</if>
 			<if test="vo.hostIP == null">
 				VALUES(DEFAULT,#{vo.parentIdx},#{vo.part},#{vo.mid},#{vo.nickName},#{vo.content},${vo.re_step},${vo.re_order},
-				DEFAULT,DEFAULT,DEFAULT,DEFAULT)
+				DEFAULT,DEFAULT,DEFAULT)
 			</if>
 			<if test="vo.hostIP != null">
 				VALUES(DEFAULT,#{vo.parentIdx},#{vo.part},#{vo.mid},#{vo.nickName},#{vo.content},${vo.re_step},${vo.re_order},
-				DEFAULT,DEFAULT,#{vo.hostIP},DEFAULT)
+				DEFAULT,#{vo.hostIP},DEFAULT)
 			</if>;
 	</insert>
 	

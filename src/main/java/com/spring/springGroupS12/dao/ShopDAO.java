@@ -22,4 +22,6 @@ public interface ShopDAO {
 
 	void setProductQuantityUpdate(@Param("idx") int idx, @Param("orderQuantity") int orderQuantity);
 
+	void setProductQuantityRollback(@Param("idx") int idx, @Param("orderQuantity") int orderQuantity);
+
 }

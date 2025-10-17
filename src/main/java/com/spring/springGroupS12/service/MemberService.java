@@ -35,4 +35,6 @@ public interface MemberService {
 
 	int setMemberUpdate(MemberVO vo);
 
+	int setMemberPointUp(String mid);
+
 }

@@ -2,16 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.springGroupS12.dao.DeliveryDAO">
 	<select id="getShoppingBagList" resultType="com.spring.springGroupS12.vo.DeliveryVO">
-		SELECT * FROM delivery WHERE mid = #{mid} ORDER BY idx;
+		SELECT * FROM delivery WHERE mid = #{mid} AND deliverySW = '대기중' ORDER BY idx;
 	</select>
 	<select id="getShoppingBag" resultType="com.spring.springGroupS12.vo.DeliveryVO">
-		SELECT * FROM delivery WHERE mid = #{mid} LIMIT 1;
+		SELECT * FROM delivery WHERE mid = #{mid} AND deliverySW = '대기중' LIMIT 1;
+	</select>
+	<select id="getShoppingBagIdx" resultType="com.spring.springGroupS12.vo.DeliveryVO">
+		SELECT * FROM delivery WHERE idx = #{idx};
 	</select>
 	<select id="getShoppingBagLastList" resultType="com.spring.springGroupS12.vo.DeliveryVO">
 		SELECT * FROM delivery WHERE idx = #{idx};
 	</select>
 	<select id="getShoppingBagDuplicat" resultType="com.spring.springGroupS12.vo.DeliveryVO">
-		SELECT * FROM delivery WHERE mid = #{mid} AND title = #{title};
+		SELECT * FROM delivery WHERE mid = #{mid} AND title = #{title} AND deliverySW = #{flag} ORDER BY idx DESC LIMIT 1;
+	</select>
+	<select id="getDeliveryListDeliveryIdx" resultType="com.spring.springGroupS12.vo.DeliveryVO">
+		SELECT * FROM delivery WHERE deliveryIdx = #{deliveryIdx} AND deliverySW = '준비중';
+	</select>
+	<select id="getDeliveryListDeliveryMid" resultType="com.spring.springGroupS12.vo.DeliveryVO">
+		SELECT * FROM delivery WHERE mid = #{mid} AND deliverySW = '준비중';
 	</select>
 
 
@@ -29,7 +38,7 @@
 		UPDATE delivery SET orderQuantity = #{orderQuantity} WHERE idx = #{idx};
 	</update>
 	<update id="setDeliveryLastUpdate">
-		UPDATE delivery SET deliveryIdx = #{dVO.deliveryIdx}, address = #{dVO.address}, deliverySW = #{dVO.deliverySW}, orderDate = now() WHERE idx = #{idx};
+		UPDATE delivery SET deliveryIdx = #{dVO.deliveryIdx}, price = ${dVO.price * dVO.orderQuantity}, address = #{dVO.address}, deliverySW = #{dVO.deliverySW}, orderDate = now() WHERE idx = #{idx};
 	</update>
 	
 	

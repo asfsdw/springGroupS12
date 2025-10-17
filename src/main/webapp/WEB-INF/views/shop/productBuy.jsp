@@ -50,7 +50,18 @@
 				</tr>
 				<input type="hidden" name="idx" value="${dVO.idx}" />
 				<input type="hidden" name="mid" value="${dVO.mid}" />
-				<input type="hidden" name="nickName" value="비회원" />
+				<c:if test="${dVO.nickName != null}">
+					<input type="hidden" name="nickName" value="${dVO.nickName}" />
+				</c:if>
+				<c:if test="${dVO.nickName == null}">
+					<input type="hidden" name="nickName" value="비회원" />
+				</c:if>
+				<c:if test="${dVO.email != null}">
+					<input type="hidden" name="email" value="${dVO.email}" />
+				</c:if>
+				<c:if test="${dVO.email == null}">
+					<input type="hidden" name="email" value="" />
+				</c:if>
 				<input type="hidden" name="title" value="${dVO.title}" />
 				<input type="hidden" name="orderQuantity" value="${dVO.orderQuantity}" />
 				<input type="hidden" name="price" value="${dVO.price}" />

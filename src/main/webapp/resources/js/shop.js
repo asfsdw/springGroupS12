@@ -289,7 +289,7 @@ function buyCheck() {
 
 // 구매.
 function buy(address1, address2, address3, address4) {
-	$("#buyBtn").prop("disabled", true);
+	$("#buyBtn").attr("disabled", true);
 	
 	let str = "";
 	if(address1 != undefined) {
@@ -332,7 +332,6 @@ function buy(address1, address2, address3, address4) {
 		str += '<td><input type="text" name="detailAddress" id="sample6_detailAddress" placeholder="상세주소" class="form-control me-2"></td>';
 		str += '<td colspan="2"><input type="text" name="extraAddress" id="sample6_extraAddress" placeholder="참고항목" class="form-control"></td>';
 		str += '</tr>';
-		str += '<input type="hidden" id="address" name="address" value="" />';
 		str += '</table>';
 	}
 	str += '<div class="row">';
@@ -347,11 +346,11 @@ function buy(address1, address2, address3, address4) {
 	str += '<div class="col">';
 	str += '</div>';
 	str += '</div>';
+	str += '<input type="hidden" id="address" name="address" value="" />';
 	str += '</form>';
 	
 	$("#demo").html(str);
 }
-
 function addressCheck() {
 	let address1 = $("#sample6_postcode").val().trim();
 	let address2 = $("#sample6_address").val().trim();
@@ -366,4 +365,69 @@ function addressCheck() {
 	$("#address").val(address);
 	
 	buyForm.submit();
+}
+
+// 주문취소.
+function deliveryCancel(idx) {
+	let ans = confirm("주문을 취소하시면 장바구니에서도 삭제됩니다.\n정말로 주문을 취소하시겠습니까?");
+	if(ans) {
+		$.ajax({
+			url : "DeliveryCancel",
+			type: "post",
+			data: {"idx" : idx},
+			success : (res) => {
+				if(res != 0) {
+					alert("주문이 취소되었습니다.");
+					location.reload();
+				}
+				else alert("주문 취소에 실패했습니다.\n잠시 후, 다시 시도해주세요.");
+			},
+			error : () => alert("전송오류")
+		});
+	}
+}
+
+// 주문검색.
+function deliverySearch() {
+	let deliveryIdx = $("#deliveryIdx").val().replace(" ","");
+	if(deliveryIdx == "") {
+		alert("주문번호를 입력해주세요.");
+		$("#deliveryIdx").focus();
+		return false;
+	}
+	
+	deliveryForm.submit();
+}
+
+// 리뷰 등록.
+function reviewCheck(ctp, idx, mid, nickName, hostIP) {
+	let star = reviewForm.star.value;
+	let review = $("#review").val();
+	
+	if(star == "") {
+		alert("별점을 부여해 주세요");
+		return false;
+	}
+	
+	let query = {
+		"parentIdx" : idx,
+		"mid" : mid,
+		"nickName" : nickName,
+		"content" : review,
+		"star" : star,
+		"hostIP" : hostIP
+	}
+	$.ajax({
+		url  : ctp+"/ReviewInput",
+		type : "post",
+		data : query,
+		success: (res) => {
+			if(res != "0") {
+				alert("리뷰가 등록되었습니다.");
+				location.reload();
+			}
+			else alert("리뷰 등록에 실패했습니다.\n잠시 후, 다시 시도해주세요.");
+		},
+		error : () =>	alert("전송오류!")
+	});
 }

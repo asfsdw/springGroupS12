@@ -39,6 +39,7 @@
 				<c:if test="${sLevel < 5}">
 					<a href="${ctp}/shop/ShoppingBag?mid=${sMid}" class="w3-bar-item w3-button">장바구니</a>
 				</c:if>
+				<a href="${ctp}/shop/DeliveryOk?mid=${sMid}" class="w3-bar-item w3-button">배송확인</a>
 			</div>
 		</div>
 		

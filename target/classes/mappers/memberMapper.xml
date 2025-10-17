@@ -54,4 +54,7 @@
 		email = #{vo.email}, address = #{vo.address}, content = #{vo.content}, userInfo = #{vo.userInfo}, myImage = #{vo.myImage}
 			where mid = #{vo.mid};
 	</update>
+	<update id="setMemberPointUp">
+		UPDATE member SET point = point + 100, WHERE mid = #{mid};
+	</update>
 </mapper>

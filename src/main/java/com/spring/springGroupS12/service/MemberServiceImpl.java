@@ -85,4 +85,9 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.setMemberUpdate(vo);
 	}
 
+	@Override
+	public int setMemberPointUp(String mid) {
+		return memberDAO.setMemberPointUp(mid);
+	}
+
 }

@@ -159,6 +159,10 @@ public class MessageController {
 			model.addAttribute("message", "주문에 실패했습니다.\\n잠시 후, 다시 시도해주세요.");
 			model.addAttribute("url", "shop/Goods");
 		}
+		else if(msgFlag.equals("duplicationReview")) {
+			model.addAttribute("message", "이미 후기를 입력하신 상품입니다.");
+			model.addAttribute("url", "shop/Product?idx="+idx);
+		}
 		return "include/message";
 	}
 }

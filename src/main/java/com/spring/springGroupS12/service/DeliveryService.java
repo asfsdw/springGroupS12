@@ -11,6 +11,8 @@ public interface DeliveryService {
 	int setShoppingBag(int parentIdx, String deliveryIdx, String mid, String nickName, String email, String title, int orderQuantity, int price, String address, String productImage, String deliverySW);
 
 	DeliveryVO getShoppingBag(String mid);
+	
+	DeliveryVO getShoppingBagIdx(int idx);
 
 	int setShoppingBagUpdate(int orderQuantity, int idx);
 
@@ -22,6 +24,10 @@ public interface DeliveryService {
 
 	int setDeliveryLastUpdate(String idx, DeliveryVO dVO);
 
-	DeliveryVO getShoppingBagDuplicat(String mid, String title);
+	DeliveryVO getShoppingBagDuplicat(String mid, String title, String flag);
+
+	List<DeliveryVO> getDeliveryListDeliveryIdx(String deliveryIdx);
+
+	List<DeliveryVO> getDeliveryListDeliveryMid(String mid);
 
 }

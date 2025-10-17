@@ -30,4 +30,7 @@
 	<update id="setProductQuantityUpdate">
 		UPDATE shop SET quantity = quantity - #{orderQuantity} WHERE idx = #{idx};
 	</update>
+	<update id="setProductQuantityRollback">
+		UPDATE shop SET quantity = quantity + #{orderQuantity} WHERE idx = #{idx};
+	</update>
 </mapper>

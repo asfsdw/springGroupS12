@@ -148,5 +148,10 @@ public class ShopServiceImpl implements ShopService {
 	public void setProductQuantityUpdate(int idx, int orderQuantity) {
 		shopDAO.setProductQuantityUpdate(idx, orderQuantity);
 	}
+
+	@Override
+	public void setProductQuantityRollback(int idx, int orderQuantity) {
+		shopDAO.setProductQuantityRollback(idx, orderQuantity);
+	}
 	
 }

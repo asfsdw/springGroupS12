@@ -22,4 +22,6 @@ public interface ReplyDAO {
 
 	int setReplyDelete(@Param("idx") int idx);
 
+	ReplyVO getReview(@Param("part") String part, @Param("parentIdx") int parentIdx);
+
 }
