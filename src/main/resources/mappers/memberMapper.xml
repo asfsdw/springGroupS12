@@ -55,6 +55,15 @@
 			where mid = #{vo.mid};
 	</update>
 	<update id="setMemberPointUp">
-		UPDATE member SET point = point + 100, WHERE mid = #{mid};
+		UPDATE member SET point = point + 100 WHERE mid = #{mid};
 	</update>
+	<update id="setProductProgressSWUpdate">
+		UPDATE sub_script SET subProgress = #{subProgress} WHERE idx = #{idx};
+	</update>
+	
+	
+	
+	<delete id="setSubScriptDelete">
+		DELETE FROM sub_script WHERE idx = #{idx};
+	</delete>
 </mapper>

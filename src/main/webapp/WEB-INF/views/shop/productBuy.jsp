@@ -40,7 +40,11 @@
 				<th>구매수량</th>
 				<th>구매가격</th>
 			</tr>
+			<c:set var="addresss" value="" />
 			<c:if test="${deliveryVOS == null}">
+				<c:if test="${vo.address != ' / / / '}">
+					<c:set var="addresss" value="${fn:split(dVO.address, '/')}" />
+				</c:if>
 				<tr>
 					<td>${dVO.mid}</td>
 					<td><img src="${ctp}/data/shop/${dVO.productImage}" style="width:150px"/></td>
@@ -67,7 +71,6 @@
 				<input type="hidden" name="price" value="${dVO.price}" />
 				<input type="hidden" name="productImage" value="${dVO.productImage}" />
 			</c:if>
-			<c:set var="addresss" value="" />
 			<c:if test="${deliveryVOS != null}">
 				<c:forEach var="vo" items="${deliveryVOS}" varStatus="st">
 					<c:if test="${vo.address != ' / / / '}">

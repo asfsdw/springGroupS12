@@ -24,4 +24,8 @@ public interface ShopDAO {
 
 	void setProductQuantityRollback(@Param("idx") int idx, @Param("orderQuantity") int orderQuantity);
 
+	int setProductOpenSWUpdate(@Param("idx") int idx, @Param("openSW") String openSW);
+
+	int setProductSubDelete(@Param("idx") int idx);
+
 }

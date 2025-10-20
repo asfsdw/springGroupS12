@@ -37,4 +37,8 @@ public interface MemberService {
 
 	int setMemberPointUp(String mid);
 
+	int setProductProgressSWUpdate(int idx, String subProgress);
+
+	int setSubScriptDelete(int idx);
+
 }

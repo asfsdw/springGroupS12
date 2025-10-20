@@ -13,6 +13,9 @@
 	<select id="getReview" resultType="com.spring.springGroupS12.vo.ReplyVO">
 		SELECT * FROM reply WHERE part = #{part} AND parentIdx = #{parentIdx} LIMIT 1;
 	</select>
+	<select id="getProductReplyList" resultType="com.spring.springGroupS12.vo.ReplyVO">
+		SELECT * FROM reply WHERE part = #{part} AND parentIdx = #{parentIdx};
+	</select>
 	
 	
 	<insert id="setReply">
@@ -21,11 +24,11 @@
 				VALUES(DEFAULT,#{vo.parentIdx},#{vo.part},#{vo.mid},#{vo.nickName},#{vo.content},DEFAULT,DEFAULT,
 				#{vo.star},#{vo.hostIP},DEFAULT)
 			</if>
-			<if test="vo.hostIP == null">
+			<if test="vo.star == 0 and vo.hostIP == null">
 				VALUES(DEFAULT,#{vo.parentIdx},#{vo.part},#{vo.mid},#{vo.nickName},#{vo.content},${vo.re_step},${vo.re_order},
 				DEFAULT,DEFAULT,DEFAULT)
 			</if>
-			<if test="vo.hostIP != null">
+			<if test="vo.star == 0 and vo.hostIP != null">
 				VALUES(DEFAULT,#{vo.parentIdx},#{vo.part},#{vo.mid},#{vo.nickName},#{vo.content},${vo.re_step},${vo.re_order},
 				DEFAULT,#{vo.hostIP},DEFAULT)
 			</if>;
@@ -39,8 +42,13 @@
 	<update id="setReplyUpdate">
 		UPDATE reply SET content = #{vo.content}, replyDate = now() WHERE idx = #{vo.idx};
 	</update>
-	
 	<update id="setReplyDelete">
 		UPDATE reply SET content = '삭제된 댓글입니다.' WHERE idx = #{idx};
 	</update>
+	
+	
+	
+	<delete id="setReviewDelete">
+		DELETE FROM reply WHERE idx = #{idx};
+	</delete>
 </mapper>

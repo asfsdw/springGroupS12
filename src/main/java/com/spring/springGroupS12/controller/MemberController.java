@@ -24,8 +24,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.springGroupS12.common.Pagination;
 import com.spring.springGroupS12.common.ProjectProvide;
+import com.spring.springGroupS12.service.DeliveryService;
 import com.spring.springGroupS12.service.MemberService;
 import com.spring.springGroupS12.service.ShopService;
+import com.spring.springGroupS12.vo.DeliveryVO;
 import com.spring.springGroupS12.vo.MemberVO;
 import com.spring.springGroupS12.vo.PageVO;
 import com.spring.springGroupS12.vo.ShopVO;
@@ -44,6 +46,8 @@ public class MemberController {
 	Pagination pagination;
 	@Autowired
 	ShopService shopService;
+	@Autowired
+	DeliveryService deliveryService;
 	
 	// 회원가입관련.
 	@GetMapping("/SignUp")
@@ -295,10 +299,12 @@ public class MemberController {
 		MemberVO mVO = memberService.getMemberMid(mid);
 		List<ShopVO> shopVOS = shopService.getProductSubList(mid);
 		List<SubScriptVO> subVOS = memberService.getSubScriptList(mid);
+		List<DeliveryVO> dVOS = deliveryService.getDeliveryListMain(mid);
 		
 		model.addAttribute("mVO", mVO);
 		model.addAttribute("shopVOS", shopVOS);
 		model.addAttribute("subVOS", subVOS);
+		model.addAttribute("dVOS", dVOS);
 		return "member/main";
 	}
 	

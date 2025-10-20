@@ -33,4 +33,13 @@
 	<update id="setProductQuantityRollback">
 		UPDATE shop SET quantity = quantity + #{orderQuantity} WHERE idx = #{idx};
 	</update>
+	<update id="setProductOpenSWUpdate">
+		UPDATE shop SET openSW = #{openSW} WHERE idx = #{idx};
+	</update>
+	
+	
+	
+	<delete id="setProductSubDelete">
+		DELETE FROM shop WHERE idx = #{idx};
+	</delete>
 </mapper>

@@ -33,9 +33,10 @@
 					<th>신청내용</th>
 					<th>신청일</th>
 					<th>신청현황</th>
+					<th>비고</th>
 				</tr>
 				<c:set var="cnt" value="0" />
-				<c:forEach var="vo" items="${shopVOS}">
+				<c:forEach var="vo" items="${shopVOS}" varStatus="st">
 					<tr>
 						<td><input type="checkbox" id="idxFlag${cnt}" name="idxFlag" /></td>
 						<td>상품</td>
@@ -43,7 +44,15 @@
 						<td>${vo.nickName}</td>
 						<td>${vo.title}</td>
 						<td>${vo.shopDate}</td>
-						<td>${vo.openSW}</td>
+						<td>
+							<select id="openSW${st.index}">
+								<option ${vo.openSW=='신청접수'?'selected':''}>신청접수</option>
+								<option ${vo.openSW=='신청반려'?'selected':''}>신청반려</option>
+								<option ${vo.openSW=='공개'?'selected':''}>공개</option>
+								<option>삭제</option>
+							</select>
+						</td>
+						<td><input type="button" value="변경" onclick="openSWChange('${st.index}','shop','${vo.idx}')" class="btn btn-success btn-sm" /></td>
 					</tr>
 					<c:set var="cnt" value="${cnt+1}" />
 				</c:forEach>
@@ -55,7 +64,15 @@
 						<td>${vo.nickName}</td>
 						<td>${vo.subContent}</td>
 						<td>${vo.subDate}</td>
-						<td>${vo.subProgress}</td>
+						<td>
+							<select id="openSW${st.index}">
+								<option ${vo.subProgress=='신청접수'?'selected':''}>신청접수</option>
+								<option ${vo.subProgress=='신청반려'?'selected':''}>신청반려</option>
+								<option ${vo.subProgress=='처리완료'?'selected':''}>처리완료</option>
+								<option>삭제</option>
+							</select>
+						</td>
+						<td><input type="button" value="변경" onclick="openSWChange('${st.index}','sub','${vo.idx}')" class="btn btn-success btn-sm" /></td>
 					</tr>
 					<c:set var="cnt" value="${cnt+1}" />
 				</c:forEach>

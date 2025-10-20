@@ -21,11 +21,13 @@ import com.spring.springGroupS12.common.Pagination;
 import com.spring.springGroupS12.service.DeliveryService;
 import com.spring.springGroupS12.service.FileService;
 import com.spring.springGroupS12.service.MemberService;
+import com.spring.springGroupS12.service.ReplyService;
 import com.spring.springGroupS12.service.ShopService;
 import com.spring.springGroupS12.vo.DeliveryVO;
 import com.spring.springGroupS12.vo.FileVO;
 import com.spring.springGroupS12.vo.MemberVO;
 import com.spring.springGroupS12.vo.PageVO;
+import com.spring.springGroupS12.vo.ReplyVO;
 import com.spring.springGroupS12.vo.ShopVO;
 
 @Controller
@@ -43,6 +45,8 @@ public class ShopController {
 	DeliveryService deliveryService;
 	@Autowired
 	MemberService memberService;
+	@Autowired
+	ReplyService replyService;
 	
 	// 상품 리스트.
 	@GetMapping("/Goods")
@@ -118,10 +122,23 @@ public class ShopController {
 		String mid = vo.getMid();
 		vo = shopService.getProduct(vo.getIdx());
 		// 구매한 상품이라면 리뷰 폼을 열어준다.
-		DeliveryVO searchdVO = deliveryService.getShoppingBagDuplicat(mid, vo.getTitle(), "판매완료");
+		DeliveryVO searchdVO = deliveryService.getShoppingBagDuplicat(mid, vo.getTitle(), "구매완료");
+		// 상품의 리뷰 리스트.
+		List<ReplyVO> rVOS = replyService.getProductReplyList("shop", vo.getIdx());
+		if(rVOS.size() > 0) {
+			double reviewAVG = 0.0;
+			for(ReplyVO rvo : rVOS) {
+				reviewAVG += rvo.getStar();
+			}
+			reviewAVG = reviewAVG / rVOS.size();
+			
+			model.addAttribute("reviewAVG", reviewAVG);
+		}
+		
 		
 		if(searchdVO != null) model.addAttribute("reviewSW", "on");
 		model.addAttribute("vo", vo);
+		model.addAttribute("rVOS", rVOS);
 		return "shop/product";
 	}
 	
@@ -130,18 +147,47 @@ public class ShopController {
 	public String ProductPost(Model model, DeliveryVO dVO,
 			@RequestParam(name = "idxs", defaultValue = "", required = false)String idxs,
 			@RequestParam(name = "orderQuantitys", defaultValue = "", required = false)String orderQuantitys) {
-		
+		// 회원이 구매.
 		if(!dVO.getMid().equals("")) {
-			DeliveryVO searchdVO = deliveryService.getShoppingBag(dVO.getMid());
-			if(searchdVO != null) {
-				// 장바구니에서 변경한 구매개수 반영.
-				deliveryService.setShoppingBagLastUpdate(idxs, orderQuantitys);
-				
-				// 장바구니 안의 상품 리스트.
-				List<DeliveryVO> deliveryVOS = deliveryService.getShoppingBagLastList(idxs);
-				
-				model.addAttribute("deliveryVOS", deliveryVOS);
+			List<DeliveryVO> searchdVOS = deliveryService.getShoppingBag(dVO.getMid());
+			// 장바구니에 상품이 존재함.
+			if(searchdVOS.size() > 0) {
+				// 장바구니에서 구매할 경우.
+				if(!idxs.equals("")) {
+					// 장바구니에서 변경한 구매개수 반영.
+					deliveryService.setShoppingBagLastUpdate(idxs, orderQuantitys);
+					
+					// 장바구니 안의 구매할 상품 리스트.
+					List<DeliveryVO> deliveryVOS = deliveryService.getShoppingBagLastList(idxs);
+					
+					model.addAttribute("deliveryVOS", deliveryVOS);
+				}
+				// 상품화면에서 바로 구매할 경우.
+				else {
+					for(DeliveryVO searchdVO : searchdVOS) {
+						// 상품화면에서 바로 구매눌렀는데 이미 장바구니에 있는 경우.
+						if(dVO.getTitle().equals(searchdVO.getTitle())) {
+							// 구매할 때의 구매개수 반영.
+							deliveryService.setShoppingBagLastUpdate(searchdVO.getIdx()+"", dVO.getOrderQuantity()+"");
+							
+							// 장바구니 안의 구매할 상품 리스트.
+							List<DeliveryVO> deliveryVOS = deliveryService.getShoppingBagLastList(searchdVO.getIdx()+"");
+							
+							model.addAttribute("deliveryVOS", deliveryVOS);
+						}
+						// 상품화면에서 바로 구매눌렀는데 장바구니에 없는 경우.
+						else {
+							MemberVO mVO = memberService.getMemberMid(dVO.getMid());
+							dVO.setNickName(mVO.getNickName());
+							dVO.setEmail(mVO.getEmail());
+							dVO.setAddress(mVO.getAddress());
+							
+							model.addAttribute("dVO", dVO);
+						}
+					}
+				}
 			}
+			// 장바구니가 비어있음.
 			else {
 				MemberVO mVO = memberService.getMemberMid(dVO.getMid());
 				dVO.setNickName(mVO.getNickName());
@@ -151,6 +197,7 @@ public class ShopController {
 				model.addAttribute("dVO", dVO);
 			}
 		}
+		// 비회원 구매.
 		else {
 			dVO.setMid("noMember");
 			model.addAttribute("dVO", dVO);
@@ -211,7 +258,6 @@ public class ShopController {
 		}
 		else totPrice = dVO.getPrice();
 		
-		System.out.println(totPrice);
 		model.addAttribute("dVO", dVO);
 		model.addAttribute("idxs", idxs);
 		model.addAttribute("totPrice", totPrice);
@@ -267,9 +313,18 @@ public class ShopController {
 	@Transactional
 	@ResponseBody
 	@PostMapping("/DeliveryCancel")
-	public int deliveryCancelPost(int idx) {
-		DeliveryVO vo = deliveryService.getShoppingBagIdx(idx);
-		shopService.setProductQuantityRollback(vo.getParentIdx(), vo.getOrderQuantity());
-		return deliveryService.setShoppingBagDelete(idx);
+	public int deliveryCancelPost(String deliveryIdx) {
+		List<DeliveryVO> vos = deliveryService.getShoppingBagIdx(deliveryIdx);
+		for(DeliveryVO vo : vos) {
+			shopService.setProductQuantityRollback(vo.getParentIdx(), vo.getOrderQuantity());
+		}
+		return deliveryService.setShoppingBagDeleteDeliveryIdx(deliveryIdx);
+	}
+	// 구매완료.
+	@Transactional
+	@ResponseBody
+	@PostMapping("/DeliveryComp")
+	public int deliveryCompPost(String deliveryIdx) {
+		return deliveryService.setDeliverySWUpdate(deliveryIdx, "구매완료");
 	}
 }

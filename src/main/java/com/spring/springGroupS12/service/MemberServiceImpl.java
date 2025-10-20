@@ -14,7 +14,6 @@ public class MemberServiceImpl implements MemberService {
 	@Autowired
 	MemberDAO memberDAO;
 
-
 	@Override
 	public int getTotRecCnt(String flag) {
 		return memberDAO.getTotRecCnt(flag);
@@ -88,6 +87,16 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int setMemberPointUp(String mid) {
 		return memberDAO.setMemberPointUp(mid);
+	}
+
+	@Override
+	public int setProductProgressSWUpdate(int idx, String subProgress) {
+		return memberDAO.setProductProgressSWUpdate(idx, subProgress);
+	}
+
+	@Override
+	public int setSubScriptDelete(int idx) {
+		return memberDAO.setSubScriptDelete(idx);
 	}
 
 }

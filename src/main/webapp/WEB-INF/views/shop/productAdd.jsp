@@ -68,7 +68,7 @@
 		<c:if test="${sLevel == 2}">
 			<input type="button" value="상품등록신청" onclick="subCheck('${ctp}')" class="btn btn-success btn-sm me-1" />
 		</c:if>
-		<input type="button" value="돌아가기" onclick="location.href='${ctp}/shop/Goods'" class="btn btn-warning btn-sm" />
+		<input type="button" value="돌아가기" onclick="location.href = '${ctp}/shop/Goods'" class="btn btn-warning btn-sm" />
 		<p><br/></p>
 	</div>
 	<h6 id="topBtn" class="text-end me-3"><img src="${ctp}/images/arrowTop.gif" title="위로이동" /></h6>

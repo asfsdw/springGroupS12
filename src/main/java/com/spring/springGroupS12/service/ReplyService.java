@@ -22,4 +22,8 @@ public interface ReplyService {
 
 	ReplyVO getReview(String part, int parentIdx);
 
+	List<ReplyVO> getProductReplyList(String part, int parentIdx);
+
+	int setReviewDelete(int idx);
+
 }

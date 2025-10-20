@@ -85,15 +85,15 @@
 			<tr>
 				<td class="text-start">
 					<c:if test="${empty pVO.search}">
-						<input type="button" value="돌아가기" onclick="location.href='${ctp}/board/BoardList?pag=${pVO.pag}&pageSize=${pVO.pageSize}';" class="btn btn-info" />
+						<input type="button" value="돌아가기" onclick="location.href = '${ctp}/board/BoardList?pag=${pVO.pag}&pageSize=${pVO.pageSize}';" class="btn btn-info" />
 					</c:if>
 					<c:if test="${!empty pVO.search}">
-						<input type="button" value="돌아가기" onclick="location.href='${ctp}/board/BoardSearchList?pag=${pVO.pag}&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}';" class="btn btn-info" />
+						<input type="button" value="돌아가기" onclick="location.href = '${ctp}/board/BoardSearchList?pag=${pVO.pag}&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}';" class="btn btn-info" />
 					</c:if>
 				</td>
 				<td class="text-end">
 					<c:if test="${vo.mid == sMid && vo.complaint != 'OK'}">
-						<input type="button" value="수정" onclick="location.href='${ctp}/board/BoardUpdate?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}';" class="btn btn-warning" />
+						<input type="button" value="수정" onclick="location.href = '${ctp}/board/BoardUpdate?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}';" class="btn btn-warning" />
 					</c:if>
 					<c:if test="${vo.mid == sMid || sLevel == 0 && vo.complaint != 'OK'}">
 						<input type="button" value="삭제" onclick="deleteCheck(${vo.idx})" class="btn btn-danger" />

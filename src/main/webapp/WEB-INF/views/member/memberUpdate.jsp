@@ -107,7 +107,7 @@
 			<div class="text-center">
 				<button type="button" class="btn btn-success" onclick="updateCheck()">회원정보수정</button>&nbsp;
 				<button type="button" class="btn btn-warning" onclick="location.reload()">다시작성</button>&nbsp;
-				<button type="button" class="btn btn-info" onclick="location.href='${ctp}/memberMain'">돌아가기</button>&nbsp;
+				<button type="button" class="btn btn-info" onclick="location.href = '${ctp}/memberMain'">돌아가기</button>&nbsp;
 			</div>
 			<input type="hidden" name="email" id="email" value="" />
 			<input type="hidden" name="address" id="address" value="" />

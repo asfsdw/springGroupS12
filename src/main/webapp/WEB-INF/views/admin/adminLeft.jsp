@@ -20,10 +20,11 @@
 			<div class="main ms-3 mb-2"><b>신청처리</b></div>
 			<div class="sub">
 				<p><a href="${ctp}/admin/SubScriptList">신청보기</a></p>
+				<p><a href="${ctp}/admin/MemberList">멤버관리</a></p>
 			</div>
-			<div class="main ms-3 mb-2"><b>더미</b></div>
+			<div class="main ms-3 mb-2"><b>상품관리</b></div>
 			<div class="sub">
-				<p><a href="${ctp}/admin/#">더미</a></p>
+				<p><a href="${ctp}/admin/DeliveryList">배송관련</a></p>
 			</div>
 		</div>
 	</div>

@@ -32,13 +32,13 @@ public class DeliveryServiceImpl implements DeliveryService {
 	}
 
 	@Override
-	public DeliveryVO getShoppingBag(String mid) {
+	public List<DeliveryVO> getShoppingBag(String mid) {
 		return deliveryDAO.getShoppingBag(mid);
 	}
 	
 	@Override
-	public DeliveryVO getShoppingBagIdx(int idx) {
-		return deliveryDAO.getShoppingBagIdx(idx);
+	public List<DeliveryVO> getShoppingBagIdx(String deliveryIdx) {
+		return deliveryDAO.getShoppingBagIdx(deliveryIdx);
 	}
 
 	@Override
@@ -49,6 +49,11 @@ public class DeliveryServiceImpl implements DeliveryService {
 	@Override
 	public int setShoppingBagDelete(int idx) {
 		return deliveryDAO.setShoppingBagDelete(idx);
+	}
+	
+	@Override
+	public int setShoppingBagDeleteDeliveryIdx(String deliveryIdx) {
+		return deliveryDAO.setShoppingBagDeleteDeliveryIdx(deliveryIdx);
 	}
 
 	@Override
@@ -135,6 +140,21 @@ public class DeliveryServiceImpl implements DeliveryService {
 	@Override
 	public List<DeliveryVO> getDeliveryListDeliveryMid(String mid) {
 		return deliveryDAO.getDeliveryListDeliveryMid(mid);
+	}
+
+	@Override
+	public List<DeliveryVO> getDeliveryListDeliveryDelivery(String deliverySW) {
+		return deliveryDAO.getDeliveryListDeliveryDelivery(deliverySW);
+	}
+
+	@Override
+	public int setDeliverySWUpdate(String deliveryIdx, String deliverySW) {
+		return deliveryDAO.setDeliverySWUpdate(deliveryIdx, deliverySW);
+	}
+
+	@Override
+	public List<DeliveryVO> getDeliveryListMain(String mid) {
+		return deliveryDAO.getDeliveryListMain(mid);
 	}
 
 }

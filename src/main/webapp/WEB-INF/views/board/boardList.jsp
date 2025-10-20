@@ -28,7 +28,7 @@
 					let pageSize = $("#viewPageCnt").val();
 					// 페이지 도중에 바꿨을 때, 가장 위에 글이 포함된 페이지로 이동.
 					let pag = Math.floor(startIndexNo / pageSize) + 1;
-					location.href="${ctp}/board/BoardList?pag="+pag+"&pageSize="+pageSize;
+					location.href = "${ctp}/board/BoardList?pag="+pag+"&pageSize="+pageSize;
 				});
 			});
 		</script>

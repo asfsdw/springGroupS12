@@ -2,6 +2,8 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%pageContext.setAttribute("CRLF","\r\n");%>
+<%pageContext.setAttribute("LF","\n");%>
 <c:set var="ctp" value="${pageContext.request.contextPath}"></c:set>
 <!DOCTYPE html>
 <html>
@@ -59,7 +61,7 @@
 			<hr/>
 			<div><h4>판매자: ${vo.nickName}</h4></div>
 			<hr/>
-			<form name="productForm" method="post">
+			<form name="productForm" method="post" action="${ctp}/shop/Product">
 				<div class="input-group">
 					<input type="number" value="1" min="1" max="10" id="orderQuantity" name="orderQuantity" />
 					<div class="input-group-text">개</div>
@@ -70,6 +72,7 @@
 					<input type="button" value="구매" onclick="soldCheck()" class="btn btn-success" />
 				</div>
 				<input type="hidden" name="mid" value="${sMid}" />
+				<input type="hidden" name="idx" value="${vo.idx}" />
 				<input type="hidden" name="title" value="${vo.title}" />
 				<input type="hidden" id="price" name="price" value="" />
 				<input type="hidden" name="productImage" value="${vo.productImage}" />
@@ -78,7 +81,7 @@
 			<c:if test="${sLevel < 5}">
 				<input type="button" value="장바구니에 담기" onclick="addShoppingBag('${vo.idx}','${sMid}','${sNickName}')" class="btn btn-info me-2" />
 			</c:if>
-			<input type="button" value="돌아가기" onclick="location.href='${ctp}/shop/Goods'" class="btn btn-warning" />
+			<input type="button" value="돌아가기" onclick="location.href = '${ctp}/shop/Goods'" class="btn btn-warning" />
 		</div>
 	</div>
 	<hr/>
@@ -87,76 +90,71 @@
 	<div id="content" class="text-start">${vo.content}</div>
 	</div>
 	<p></p>
-	<!-- 별점 및 후기 -->
+	<!-- 별점 및 리뷰 -->
 	<c:if test="${reviewSW == 'on'}">
 	<div class="ps-5" style="width:94%">
 		<form name="reviewForm" id="reviewForm">
 			<fieldset style="border:0px;">
 				<div class="text-start m-0 b-0">
-				<input type="radio" name="star" value="5" id="star1"><label for="star1">★</label>
-				<input type="radio" name="star" value="4" id="star2"><label for="star2">★</label>
-				<input type="radio" name="star" value="3" id="star3"><label for="star3">★</label>
-				<input type="radio" name="star" value="2" id="star4"><label for="star4">★</label>
-				<input type="radio" name="star" value="1" id="star5"><label for="star5">★</label>
-				: 별점을 선택해 주세요 ■
+					<input type="radio" name="star" value="5" id="star1"><label for="star1">★</label>
+					<input type="radio" name="star" value="4" id="star2"><label for="star2">★</label>
+					<input type="radio" name="star" value="3" id="star3"><label for="star3">★</label>
+					<input type="radio" name="star" value="2" id="star4"><label for="star4">★</label>
+					<input type="radio" name="star" value="1" id="star5"><label for="star5">★</label>
+					: 별점을 선택해 주세요 ■
 				</div>
 			</fieldset>
 			<div class="m-0 p-0">
-				<textarea rows="3" name="review" id="review" class="form-control mb-1" placeholder="별점 후기를 남겨주시면 100포인트를 지급합니다."></textarea>
+				<textarea rows="3" name="review" id="review" class="form-control mb-1" placeholder="리뷰를 남겨주시면 100포인트를 지급합니다."></textarea>
 			</div>
 			<div>
-				<input type="button" value="별점/리뷰등록" onclick="reviewCheck('${ctp}','${vo.idx}','${sMid}','${sNickName}','${pageContext.request.remoteAddr}')" class="btn btn-primary btn-sm form-control"/>
+				<input type="button" value="별점/리뷰등록" onclick="reviewCheck('${ctp}','${vo.idx}','${sMid}','${sNickName}','${pageContext.request.remoteAddr}')" class="btn btn-primary btn-sm form-control" />
 			</div>
 		</form>
 	</div>
 	</c:if>
 	<p></p>
-	<div class="ps-5 row" style="width:94%">
+	<div class="row ps-5" style="width:94%">
 		<div class="col">
-			<input type="button" value="리뷰보이기" id="reviewShowBtn" onclick="reviewShow()" class="btn btn-success me-2"/>
+			<input type="button" value="리뷰보이기" id="reviewShowBtn" onclick="reviewShow()" class="btn btn-success me-2" style="display:none" />
 			<input type="button" value="리뷰가리기" id="reviewHideBtn" onclick="reviewHide()" class="btn btn-warning"/>
 		</div>
 		<div class="col text-end">
-			<b>리뷰평점 : <fmt:formatNumber value="${reviewAVG}" pattern="#,##0.0" /></b>
+			<c:if test="${!empty reviewAVG}">
+				<b>리뷰평점 : <fmt:formatNumber value="${reviewAVG}" pattern="#,##0.0" /></b>
+			</c:if>
+			<c:if test="${empty reviewAVG}">
+				<b>등록된 리뷰가 없습니다</b>
+			</c:if>
 		</div>
 	</div>
-	<div id="reviewBox">
+	<div class="ps-5" style="width:94%">
 		<hr/>
-		<c:set var="imsiIdx" value="0"/>
-		<c:forEach var="vo" items="${reviewVOS}" varStatus="st">
+	</div>
+	<div id="reviewBox" class="ps-5" style="width:94%">
+		<c:set var="imsiIdx" value="0" />
+		<c:forEach var="vo" items="${rVOS}">
 			<c:if test="${imsiIdx != vo.idx}">
-				<div class="row mt-3">
+				<div class="row mt-3" style="width:94%">
 					<div class="col ms-2 text-start">
 						<b>${vo.nickName}</b>
-						<span style="font-size:11px">${fn:substring(vo.RDate, 0, 10)}</span>
+						<span style="font-size:11px">${fn:substring(vo.replyDate, 0, 10)}</span>
 						<c:if test="${vo.mid == sMid || sLevel == 0}">
-							<a href="javascript:reviewDelete(${vo.idx})" title="리뷰삭제" class="badge bg-danger" style="font-size:8px">x</a>
+							<a href="javascript:reviewDelete('${ctp}','${vo.idx}')" title="리뷰삭제" class="text-decoration-none">🗑</a>
 						</c:if>
-						<a href="#" onclick="reviewReply('${vo.idx}','${vo.nickName}','${fn:replace(vo.content,newLine,'<br>')}')" title="댓글달기" 
-							data-bs-toggle="modal" data-bs-target="#myModal" class="badge bg-secondary" style="font-size:8px">▤</a>
 					</div>
 					<div class="col text-end me-2">
-						<c:forEach var="i" begin="1" end="${vo.star}" varStatus="iSt">
+						<c:forEach var="i" begin="1" end="${vo.star}">
 							<font color="gold">★</font>
 						</c:forEach>
-						<c:forEach var="i" begin="1" end="${5 - vo.star}" varStatus="iSt">☆</c:forEach>
+						<c:forEach var="i" begin="1" end="${5 - vo.star}">☆</c:forEach>
 					</div>
 				</div>
 				<div class="row border m-1 p-2" style="border-radius:5px">
-				${fn:replace(vo.content, newLine, '<br/>')}
+				${fn:replace(fn:replace(vo.content,CRLF,'<br/>'),LF,'<br/>')}
 				</div>
 			</c:if>
-			<c:set var="imsiIdx" value="${vo.idx}"/>
-			<c:if test="${!empty vo.replyContent}">
-				<div class="d-flex text-secondary">
-					<div class="mt-2 ms-3">└─▶ </div>
-					<div class="mt-2 ms-2 text-start">${vo.replyNickName}
-						<span style="font-size:11px">${fn:substring(vo.replyRDate,0,10)}</span>
-						<c:if test="${vo.replyMid == sMid || sLevel == 0}"><a href="javascript:reviewReplyDelete(${vo.replyIdx})" title="리뷰댓글삭제" class="badge bg-danger" style="font-size:8px">x</a></c:if>
-						<br/>${vo.replyContent}
-					</div>
-				</div>
-			</c:if>
+			<c:set var="imsiIdx" value="${vo.idx}" />
 		</c:forEach>
 	</div>
 	<h6 id="topBtn" class="text-end me-3"><img src="${ctp}/images/arrowTop.gif" title="위로이동" /></h6>

@@ -39,4 +39,8 @@ public interface MemberDAO {
 
 	int setMemberPointUp(@Param("mid") String mid);
 
+	int setProductProgressSWUpdate(@Param("idx") int idx, @Param("subProgress") String subProgress);
+
+	int setSubScriptDelete(@Param("idx") int idx);
+
 }

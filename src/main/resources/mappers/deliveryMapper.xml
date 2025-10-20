@@ -8,7 +8,7 @@
 		SELECT * FROM delivery WHERE mid = #{mid} AND deliverySW = '대기중' LIMIT 1;
 	</select>
 	<select id="getShoppingBagIdx" resultType="com.spring.springGroupS12.vo.DeliveryVO">
-		SELECT * FROM delivery WHERE idx = #{idx};
+		SELECT * FROM delivery WHERE deliveryIdx = #{deliveryIdx};
 	</select>
 	<select id="getShoppingBagLastList" resultType="com.spring.springGroupS12.vo.DeliveryVO">
 		SELECT * FROM delivery WHERE idx = #{idx};
@@ -20,7 +20,14 @@
 		SELECT * FROM delivery WHERE deliveryIdx = #{deliveryIdx} AND deliverySW = '준비중';
 	</select>
 	<select id="getDeliveryListDeliveryMid" resultType="com.spring.springGroupS12.vo.DeliveryVO">
-		SELECT * FROM delivery WHERE mid = #{mid} AND deliverySW = '준비중';
+		SELECT * FROM delivery WHERE mid = #{mid} AND deliverySW != '구매완료' ORDER BY deliveryIdx;
+	</select>
+	<select id="getDeliveryListDeliveryDelivery" resultType="com.spring.springGroupS12.vo.DeliveryVO">
+		SELECT *, to_days(now()) - to_days(orderDate) AS compDate FROM delivery <if test="deliverySW != '전체'">WHERE deliverySW = #{deliverySW}</if> ORDER BY deliveryIdx; 
+	</select>
+	<select id="getDeliveryListMain" resultType="com.spring.springGroupS12.vo.DeliveryVO">
+		SELECT parentIdx, deliveryIdx, title, deliverySW, (SELECT idx FROM reply WHERE delivery.parentIdx = reply.parentIdx AND reply.part = 'shop' AND reply.mid = #{mid}) AS replyIdx 
+		FROM delivery WHERE mid = #{mid} ORDER BY deliveryIdx LIMIT 5;
 	</select>
 
 
@@ -40,10 +47,16 @@
 	<update id="setDeliveryLastUpdate">
 		UPDATE delivery SET deliveryIdx = #{dVO.deliveryIdx}, price = ${dVO.price * dVO.orderQuantity}, address = #{dVO.address}, deliverySW = #{dVO.deliverySW}, orderDate = now() WHERE idx = #{idx};
 	</update>
+	<update id="setDeliverySWUpdate">
+		UPDATE delivery SET deliverySW = #{deliverySW}, orderDate = now() WHERE deliveryIdx = #{deliveryIdx};
+	</update>
 	
 	
 	
 	<delete id="setShoppingBagDelete">
 		DELETE FROM delivery WHERE idx = #{idx};
+	</delete>
+	<delete id="setShoppingBagDeleteDeliveryIdx">
+		DELETE FROM delivery WHERE deliveryIdx = #{deliveryIdx};
 	</delete>
 </mapper>

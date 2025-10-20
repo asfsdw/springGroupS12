@@ -170,6 +170,45 @@
 					</c:forEach>
 				</table>
 			</div>
+			<div class="col">
+				<div><h2>구매완료상품</h2></div>
+				<table class="table table-bordered">
+					<tr>
+						<th>구매상품</th>
+						<th>리뷰작성</th>
+					</tr>
+					<c:forEach var="vo" items="${dVOS}">
+						<c:if test="${deliveryIdx != vo.deliveryIdx}">
+							<c:set var="cnt" value="0" />
+							<c:forEach var="cntCalc" items="${dVOS}">
+								<c:if test="${vo.deliveryIdx == cntCalc.deliveryIdx}">
+									<c:set var="cnt" value="${cnt+1}" />
+								</c:if>
+							</c:forEach>
+						</c:if>
+						<tr>
+							<td>${vo.title}</td>
+							<c:if test="${vo.deliverySW == '구매완료'}">
+								<c:if test="${vo.replyIdx != 0}">
+									<td class="align-middle"><input type="button" value="리뷰작성완료" disabled class="btn btn-success btn-sm"></td>
+								</c:if>
+								<c:if test="${vo.replyIdx == 0}">
+									<td class="align-middle"><a href="${ctp}/shop/Product?mid=${sMid}&idx=${vo.parentIdx}" class="btn btn-primary btn-sm">리뷰작성하기</a></td>
+								</c:if>
+							</c:if>
+							<c:if test="${vo.deliverySW != '구매완료'}">
+								<c:if test="${vo.deliverySW == '배송완료'}">
+									<td class="align-middle"><a href="${ctp}/shop/DeliveryOk?mid=${sMid}" class="btn btn-info btn-sm">구매완료하기</a></td>
+								</c:if>
+								<c:if test="${vo.deliverySW != '배송완료'}">
+									<td class="align-middle">${vo.deliverySW}</td>
+								</c:if>
+							</c:if>
+							<c:set var="deliveryIdx" value="${vo.deliveryIdx}" />
+						</tr>
+					</c:forEach>
+				</table>
+			</div>
 		</div>
 		<!-- 관리자일 경우에만 chart 표시. -->
 		<c:if test="${sLevel == 0}">

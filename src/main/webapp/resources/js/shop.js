@@ -368,16 +368,35 @@ function addressCheck() {
 }
 
 // 주문취소.
-function deliveryCancel(idx) {
+function deliveryCancel(deliveryIdx) {
 	let ans = confirm("주문을 취소하시면 장바구니에서도 삭제됩니다.\n정말로 주문을 취소하시겠습니까?");
 	if(ans) {
 		$.ajax({
 			url : "DeliveryCancel",
 			type: "post",
-			data: {"idx" : idx},
+			data: {"deliveryIdx" : deliveryIdx},
 			success : (res) => {
 				if(res != 0) {
 					alert("주문이 취소되었습니다.");
+					location.reload();
+				}
+				else alert("주문 취소에 실패했습니다.\n잠시 후, 다시 시도해주세요.");
+			},
+			error : () => alert("전송오류")
+		});
+	}
+}
+// 구매완료.
+function deliveryComp(deliveryIdx) {
+	let ans = confirm("구매하신 상품을 받으셨습니까?");
+	if(ans) {
+		$.ajax({
+			url : "DeliveryComp",
+			type: "post",
+			data: {"deliveryIdx" : deliveryIdx},
+			success : (res) => {
+				if(res != 0) {
+					alert("주문이 완료되었습니다.\n구매하신 상품의 리뷰를 작성하실 수 있으시며,\n리뷰를 작성하시면 100포인트가 증정됩니다.");
 					location.reload();
 				}
 				else alert("주문 취소에 실패했습니다.\n잠시 후, 다시 시도해주세요.");
@@ -399,6 +418,18 @@ function deliverySearch() {
 	deliveryForm.submit();
 }
 
+// 리뷰 보이기.
+function reviewShow() {
+	$("#reviewShowBtn").hide();
+	$("#reviewHideBtn").show();
+	$("#reviewBox").show();
+}
+// 리뷰 가리기.
+function reviewHide() {
+	$("#reviewShowBtn").show();
+	$("#reviewHideBtn").hide();
+	$("#reviewBox").hide();
+}
 // 리뷰 등록.
 function reviewCheck(ctp, idx, mid, nickName, hostIP) {
 	let star = reviewForm.star.value;
@@ -422,12 +453,42 @@ function reviewCheck(ctp, idx, mid, nickName, hostIP) {
 		type : "post",
 		data : query,
 		success: (res) => {
-			if(res != "0") {
+			if(res == "1") {
 				alert("리뷰가 등록되었습니다.");
+				location.reload();
+			}
+			else if(res == "-1") {
+				alert("이미 리뷰를 입력하신 상품입니다.");
+				location.reload();
+			}
+			else if(res == "-2") {
+				alert("리뷰가 등록되었습니다.\n이전에 리뷰를 입력하신 상품이기 때문에\n포인트는 지급되지 않습니다.");
 				location.reload();
 			}
 			else alert("리뷰 등록에 실패했습니다.\n잠시 후, 다시 시도해주세요.");
 		},
 		error : () =>	alert("전송오류!")
 	});
+}
+// 리뷰 삭제.
+function reviewDelete(ctp, idx, mid) {
+	let ans = confirm("리뷰를 삭제하시겠습니까?");
+	if(ans) {
+		$.ajax({
+			url : ctp+"/ReviewDelete",
+			type: "post",
+			data: {
+				"idx" : idx,
+				"mid" : mid
+			},
+			success : (res) => {
+				if(res != 0) {
+					alert("리뷰가 삭제되었습니다.");
+					location.reload();
+				}
+				else alert("리뷰 삭제에 실패했습니다.\n잠시 후, 다시 시도해주세요.");
+			},
+			error : () => alert("전송오류")
+		});
+	}
 }

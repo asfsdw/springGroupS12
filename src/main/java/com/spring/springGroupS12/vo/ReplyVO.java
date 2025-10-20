@@ -13,7 +13,6 @@ public class ReplyVO {
 	private int re_step;
 	private int re_order;
 	private int star;
-	private String flag;
 	private String hostIP;
 	private String replyDate;
 }

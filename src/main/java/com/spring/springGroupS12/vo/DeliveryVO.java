@@ -22,4 +22,7 @@ public class DeliveryVO {
 	private String merchant_uid;	// 상점 거래 ID
 	private int paid_amount;		// 결제 금액
 	private String apply_num;			// 카드 승인번호
+	
+	private int replyIdx;
+	private int compDate;
 }

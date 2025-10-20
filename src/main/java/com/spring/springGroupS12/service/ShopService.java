@@ -25,4 +25,8 @@ public interface ShopService {
 
 	void setProductQuantityRollback(int idx, int orderQuantity);
 
+	int setProductOpenSWUpdate(int idx, String openSW);
+
+	int setProductSubDelete(int idx);
+
 }

@@ -43,7 +43,7 @@
 					<th colspan="2">
 						<input type="button" value="비밀번호확인" onclick="pwdCheck('${ctp}')" class="btn btn-success me-2" />
 						<input type="reset" value="다시입력" class="btn btn-secondary me-2" />
-						<input type="button" value="돌아가기" onclick="location.href='${ctp}/member/Main'" class="btn btn-warning me-2" />
+						<input type="button" value="돌아가기" onclick="location.href = '${ctp}/member/Main'" class="btn btn-warning me-2" />
 					</th>
 				</tr>
 			</table>
@@ -68,7 +68,7 @@
 					<th colspan="2">
 						<input type="button" value="비밀번호변경" onclick="pwdChange('${ctp}')" class="btn btn-success me-2" />
 						<input type="reset" value="다시입력" class="btn btn-secondary me-2" />
-						<input type="button" value="돌아가기" onclick="location.href='${ctp}/member/Main'" class="btn btn-warning me-2" />
+						<input type="button" value="돌아가기" onclick="location.href = '${ctp}/member/Main'" class="btn btn-warning me-2" />
 					</th>
 				</tr>
 			</table>

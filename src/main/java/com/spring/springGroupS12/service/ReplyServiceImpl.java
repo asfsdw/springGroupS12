@@ -52,4 +52,14 @@ public class ReplyServiceImpl implements ReplyService {
 	public ReplyVO getReview(String part, int parentIdx) {
 		return replyDAO.getReview(part, parentIdx);
 	}
+
+	@Override
+	public List<ReplyVO> getProductReplyList(String part, int parentIdx) {
+		return replyDAO.getProductReplyList(part, parentIdx);
+	}
+
+	@Override
+	public int setReviewDelete(int idx) {
+		return replyDAO.setReviewDelete(idx);
+	}
 }

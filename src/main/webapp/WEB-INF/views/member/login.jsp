@@ -62,7 +62,7 @@
 					<div class="mb-2">
 						<input type="submit" value="로그인" class="btn btn-success me-2"/>
 						<input type="reset" value="다시입력" class="btn btn-warning me-2"/>
-						<input type="button" value="회원가입" onclick="location.href='${ctp}/member/SignUp';" class="btn btn-secondary me-2" />
+						<input type="button" value="회원가입" onclick="location.href = '${ctp}/member/SignUp';" class="btn btn-secondary me-2" />
 						<a href="javascript:kakaoLogin()"><img src="${ctp}/images/kakaoLogin.png" width="145px"/></a>
 					</div>
 					<div style="font-size:0.8em">

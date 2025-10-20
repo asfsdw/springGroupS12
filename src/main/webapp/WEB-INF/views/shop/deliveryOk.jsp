@@ -35,9 +35,6 @@
 					<th>배송상태</th>
 					<th>주문취소<br/>(상품이 준비중일때만 취소할 수 있습니다.)</th>
 				</tr>
-				<c:set var="deliveryIdx" value="" />
-				<c:set var="cnt" value="0" />
-				
 				<c:forEach var="vo" items="${vos}">
 					<c:if test="${deliveryIdx != vo.deliveryIdx}">
 						<c:set var="cnt" value="0" />
@@ -50,14 +47,24 @@
 					<tr>
 						<c:if test="${deliveryIdx != vo.deliveryIdx}">
 							<td rowspan="${cnt}">${vo.deliveryIdx}</td>
-							<c:set var="deliveryIdx" value="${vo.deliveryIdx}" />
 						</c:if>
 						<td><img src="${ctp}/data/shop/${vo.productImage}" style="width:150px" /></td>
 						<td>${vo.title}</td>
 						<td>${vo.orderQuantity}</td>
 						<td>${vo.price}</td>
-						<td>${vo.deliverySW}</td>
-						<td><input type="button" value="주문취소" onclick="deliveryCancel(${vo.idx})" class="btn btn-danger" /></td>
+						<c:if test="${deliveryIdx != vo.deliveryIdx}">
+							<td rowspan="${cnt}">${vo.deliverySW}</td>
+							<c:if test="${vo.deliverySW == '준비중'}">
+								<td rowspan="${cnt}"><input type="button" value="주문취소" onclick="deliveryCancel('${vo.deliveryIdx}')" class="btn btn-danger" /></td>
+							</c:if>
+							<c:if test="${vo.deliverySW == '배송완료'}">
+								<td rowspan="${cnt}"><input type="button" value="구매완료" onclick="deliveryComp('${vo.deliveryIdx}')" class="btn btn-success" /></td>
+							</c:if>
+							<c:if test="${vo.deliverySW != '준비중' && vo.deliverySW != '배송완료'}">
+								<td rowspan="${cnt}">${vo.deliverySW}</td>
+							</c:if>
+							<c:set var="deliveryIdx" value="${vo.deliveryIdx}" />
+						</c:if>
 					</tr>
 				</c:forEach>
 			</table>
