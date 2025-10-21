@@ -1,8 +1,8 @@
-$(window).scroll(function(){
+$(window).scroll(function() {
 	if($(this).scrollTop() > 100) $("#topBtn").addClass("on");
 	else $("#topBtn").removeClass("on");
 	
-	$("#topBtn").click(function(){
+	$("#topBtn").click(function() {
 		window.scrollTo({top:0, behavior: "smooth"});
 	});
 });
@@ -10,7 +10,6 @@ $(window).scroll(function(){
 $(() => {
 	$("#deliverySW").on("change", () => {
 		let deliverySW = $("#deliverySW").val();
-		console.log(deliverySW);
 		location.href = "DeliveryList?deliverySW="+deliverySW;
 	});
 });
@@ -175,3 +174,56 @@ function deliveryDelete(i, deliveryIdx) {
 		});
 	}
 }
+
+// 배송현황 한 번에 바꾸기.
+function deliverySWAllChange() {
+	let index = [];
+	let cnt = 0;
+	for(let i=0; i<myform.idxFlag.length; i++) {
+		if(myform.idxFlag[i].checked) {
+			index[cnt] = i;
+			cnt = cnt+1;
+		}
+	}
+
+	if(index.length == 0) {
+		alert("배송현황을 변경할 회원을 선택해주세요.");
+		return false;
+	}
+	
+	let deliveryIdx = "";
+	let deliverySW = $("#deliverySWChange").val();
+	
+	for(let i=0; i<index.length; i++) {
+		deliveryIdx += $("#deliveryIdx"+index[i]).val()+",";
+	}
+	
+	$.ajax({
+		url : "DeliverySWChange",
+		type: "post",
+		data: {
+			"deliveryIdx" : deliveryIdx,
+			"deliverySW" : $("#deliverySWChange").val()
+		},
+		success : (res) => {
+			if(res != 0) {
+				alert("선택한 주문들의 배송현황이 변경되었습니다.");
+				location.reload();
+			}
+			else alert("배송현황 변경에 실패했습니다.\n잠시 후, 다시 시도해주세요.");
+		},
+		error : () => alert("전송오류")
+	});
+}
+
+// 등급별로 보기.
+function levelPageCheck() {
+	let level = $("#levelPage").val();
+	location.href = "MemberList?level="+level;
+}
+// 한 페이지 최대 수 변경.
+function viewPageCheck() {
+	let pageSize = $("#viewPageCnt").val();
+	location.href = "MemberList?pageSize="+pageSize;
+}
+

@@ -99,4 +99,14 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.setSubScriptDelete(idx);
 	}
 
+	@Override
+	public List<MemberVO> getMemberListAdmin(int level) {
+		return memberDAO.getMemberListAdmin(level);
+	}
+
+	@Override
+	public List<MemberVO> getMemberSearch(String search, String searchStr) {
+		return memberDAO.getMemberSearch(search, searchStr);
+	}
+
 }

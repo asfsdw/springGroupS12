@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.spring.springGroupS12.common.Pagination;
 import com.spring.springGroupS12.service.DeliveryService;
 import com.spring.springGroupS12.service.MemberService;
 import com.spring.springGroupS12.service.ShopService;
 import com.spring.springGroupS12.vo.DeliveryVO;
+import com.spring.springGroupS12.vo.MemberVO;
 import com.spring.springGroupS12.vo.ShopVO;
 import com.spring.springGroupS12.vo.SubScriptVO;
 
@@ -27,6 +29,8 @@ public class AdminController {
 	ShopService shopService;
 	@Autowired
 	DeliveryService deliveryService;
+	@Autowired
+	Pagination pagination;
 	
 	// 관리자 메뉴.
 	@GetMapping("/AdminMain")
@@ -67,12 +71,22 @@ public class AdminController {
 		List<DeliveryVO> dVOS = deliveryService.getDeliveryListDeliveryDelivery(deliverySW);
 		
 		model.addAttribute("dVOS", dVOS);
+		model.addAttribute("deliverySW", deliverySW);
 		return "admin/shop/deliveryList";
 	}
 	// 배송현황 변경.
 	@ResponseBody
-	@PostMapping("DeliverySWChange")
+	@PostMapping("/DeliverySWChange")
 	public int deliverySWChangePost(String deliveryIdx, String deliverySW) {
+		if(deliveryIdx.contains(",")) {
+			String[] deliveryIdxs = deliveryIdx.split(",");
+			int res = 0;
+			for(int i=0; i<deliveryIdxs.length; i++) {
+				res = deliveryService.setDeliverySWUpdate(deliveryIdxs[i], deliverySW);
+				if(res == 0) return res;
+			}
+			return res;
+		}
 		return deliveryService.setDeliverySWUpdate(deliveryIdx, deliverySW);
 	}
 	// 배송내역 삭제.
@@ -83,8 +97,21 @@ public class AdminController {
 	}
 	
 	// 멤버 목록.
-	@GetMapping("MemberList")
-	public String memberListGet() {
+	@GetMapping("/MemberList")
+	public String memberListGet(Model model,
+			@RequestParam(name = "level", defaultValue = "100", required = false)int level) {
+		List<MemberVO> mVOS = memberService.getMemberListAdmin(level);
+		
+		model.addAttribute("mVOS", mVOS);
+		model.addAttribute("level", level);
 		return "admin/member/memberList";
+	}
+	// 멤버 검색.
+	@GetMapping("/MemberSearch")
+	public String memberSearchGet(Model model, String search, String searchStr) {
+		List<MemberVO> mVOS = memberService.getMemberSearch(search, searchStr);
+		
+		model.addAttribute("mVOS", mVOS);
+		return "admin/member/memberSearch";
 	}
 }

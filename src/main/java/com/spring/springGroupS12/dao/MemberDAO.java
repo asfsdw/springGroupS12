@@ -43,4 +43,8 @@ public interface MemberDAO {
 
 	int setSubScriptDelete(@Param("idx") int idx);
 
+	List<MemberVO> getMemberListAdmin(@Param("level") int level);
+
+	List<MemberVO> getMemberSearch(@Param("search") String search, @Param("searchStr") String searchStr);
+
 }

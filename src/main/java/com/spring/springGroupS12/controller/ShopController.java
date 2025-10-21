@@ -108,7 +108,7 @@ public class ShopController {
 		// 상품 등록 신청.
 		int res = 0;
 		vo.setPwd(pwd);
-		vo.setOpenSW("신청");
+		vo.setOpenSW("신청접수");
 		res = shopService.setProductImage(fName, vo, fVO);
 		
 		if(res != 0) return "redirect:/Message/productSubOk";
@@ -146,7 +146,32 @@ public class ShopController {
 	@PostMapping("/Product")
 	public String ProductPost(Model model, DeliveryVO dVO,
 			@RequestParam(name = "idxs", defaultValue = "", required = false)String idxs,
-			@RequestParam(name = "orderQuantitys", defaultValue = "", required = false)String orderQuantitys) {
+			@RequestParam(name = "orderQuantitys", defaultValue = "", required = false)String orderQuantitys,
+			@RequestParam(name = "titles", defaultValue = "", required = false)String titles) {
+		// 구매할 개수와 재고 비교.
+		// 상품 페이지에서 바로 구매할 때.
+		if(idxs.equals("")) {
+			ShopVO searchSVO = shopService.getProduct(dVO.getIdx());
+			if(searchSVO.getQuantity() < dVO.getOrderQuantity()) {
+				model.addAttribute("title", dVO.getTitle());
+				return "redirect:/Message/lackQuantity";
+			}
+		}
+		// 장바구니에서 구매할 때.
+		else {
+			String[] idx = idxs.split(",");
+			String[] orderQuantity = orderQuantitys.split(",");
+			String[] title = titles.split(",");
+			for(int i=0; i<idx.length; i++) {
+				dVO = deliveryService.getShoppingBagDuplicat(dVO.getMid(), title[i], "대기중");
+				ShopVO searchSVO = shopService.getProduct(dVO.getParentIdx());
+				if(searchSVO.getQuantity() < Integer.parseInt(orderQuantity[i])) {
+					model.addAttribute("title", title[i]);
+					return "redirect:/Message/lackQuantity";
+				}
+			}
+		}
+		
 		// 회원이 구매.
 		if(!dVO.getMid().equals("")) {
 			List<DeliveryVO> searchdVOS = deliveryService.getShoppingBag(dVO.getMid());

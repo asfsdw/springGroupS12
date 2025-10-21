@@ -8,18 +8,11 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
+		<script src="${ctp}/js/board.js"></script>
+		<link type="text/css" rel="stylesheet" href="${ctp}/css/board.css" />
 		<title>게시판</title>
 		<script>
 			'use strict';
-			
-			$(window).scroll(function(){
-				if($(this).scrollTop() > 100) $("#topBtn").addClass("on");
-				else $("#topBtn").removeClass("on");
-				
-				$("#topBtn").click(function(){
-					window.scrollTo({top:0, behavior: "smooth"});
-				});
-			});
 			
 			$(() => {
 				// 게시글 x개 표시하기.
@@ -32,20 +25,6 @@
 				});
 			});
 		</script>
-		<style>
-			h6 {
-				position: fixed;
-				right: 1rem;
-				bottom: -50px;
-				transition: 0.7s ease;
-				z-index: 2;
-			}
-			.on {
-				opacity: 0.8;
-				cursor: pointer;
-				bottom: 0;
-			}
-		</style>
 	</head>
 <body>
 	<p><br/></p>
@@ -73,9 +52,11 @@
 			<tr class="table-secondary">
 				<th>번호</th>
 				<th>글제목</th>
+				<th>댓글</th>
 				<th>글쓴이</th>
 				<th>올린날짜</th>
-				<th>조회수(👍)</th>
+				<th>조회수</th>
+				<th>추천</th>
 			</tr>
 			<c:forEach var="vo" items="${vos}" varStatus="st">
 				<tr>
@@ -88,28 +69,25 @@
 							<font color="red">(신고글) </font>
 							<a href="${ctp}/board/BoardContent?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}"
 									class="text-primary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover">${vo.title}</a>
-							<c:if test="${vo.replyCnt != 0}">(${vo.replyCnt})</c:if>
 						</c:if>
 						<c:if test="${vo.openSW == '비공개' && vo.complaint != 'HI'}">
 							<font color="red">(비밀글) </font>
 							<a href="#" data-bs-toggle="modal" data-bs-target="#myModal" onclick="$('#idx').val(${vo.idx})"
 								class="text-primary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover">${vo.title}</a>
-							<c:if test="${vo.replyCnt != 0}">(${vo.replyCnt})</c:if>
 						</c:if>
 						<c:if test="${vo.openSW != '비공개' && vo.complaint != 'HI'}">
 							<a href="${ctp}/board/BoardContent?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}"
 								class="text-primary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover">${vo.title}</a>
-							<c:if test="${vo.replyCnt != 0}">(${vo.replyCnt})</c:if>
 						</c:if>
 						<c:if test="${vo.hourDiff <= 24}"><img src="${ctp}/images/new.gif" /></c:if>
 					</td>
+					<td>${vo.replyCnt}</td>
 					<td>${vo.nickName}</td>
 					<td>
 						${vo.dateDiff == 0 ? fn:substring(vo.boardDate,11,19) : vo.dateDiff == 1 ? fn:substring(vo.boardDate,5,19) : fn:substring(vo.boardDate,0,10)}
 					</td>
-					<td>
-						${vo.views}<c:if test="${vo.good != 0}">(${vo.good})</c:if>
-					</td>
+					<td>${vo.views}</td>
+					<td>${vo.good}</td>
 				</tr>
 			</c:forEach>
 		</table>
@@ -148,7 +126,7 @@
 					<option value="content">글내용</option>
 				</select>
 				<input type="text" name="searchStr" id="searchStr" required />
-				<input type="submit" value="검색버튼" class="btn btn-info btn-sm" />
+				<input type="submit" value="검색" class="btn btn-info btn-sm mb-1" />
 			</form>
 		</div>
 		<!-- 검색기 끝 -->

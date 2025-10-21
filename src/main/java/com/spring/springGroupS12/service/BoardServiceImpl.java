@@ -247,4 +247,9 @@ public class BoardServiceImpl implements BoardService {
 	public int setBoardDelete(int idx) {
 		return boardDAO.setBoardDelete(idx);
 	}
+
+	@Override
+	public List<BoardVO> getBoardListHome() {
+		return boardDAO.getBoardListHome();
+	}
 }

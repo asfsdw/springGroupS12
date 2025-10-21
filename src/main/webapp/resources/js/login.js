@@ -1,8 +1,8 @@
-$(window).scroll(function(){
+$(window).scroll(function() {
 	if($(this).scrollTop() > 100) $("#topBtn").addClass("on");
 	else $("#topBtn").removeClass("on");
 	
-	$("#topBtn").click(function(){
+	$("#topBtn").click(function() {
 		window.scrollTo({top:0, behavior: "smooth"});
 	});
 });
@@ -47,7 +47,7 @@ const regEmail = /^[a-zA-Z0-9-_]+@[a-zA-Z.]+\.[a-zA-Z]{2,}$/;
 // 아이디 찾기.
 function memberIdFind() {
 	let email = $("#email").val().replace(" ","");
-	if(email == ""){
+	if(email == "") {
 		alert("이메일을 입력해주세요.");
 		$("#email").focus();
 		return false;

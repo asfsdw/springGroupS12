@@ -41,4 +41,8 @@ public interface MemberService {
 
 	int setSubScriptDelete(int idx);
 
+	List<MemberVO> getMemberListAdmin(int level);
+
+	List<MemberVO> getMemberSearch(String search, String searchStr);
+
 }

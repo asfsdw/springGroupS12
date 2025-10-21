@@ -163,5 +163,10 @@ public class ShopServiceImpl implements ShopService {
 	public int setProductSubDelete(int idx) {
 		return shopDAO.setProductSubDelete(idx);
 	}
+
+	@Override
+	public List<ShopVO> getProductListHome() {
+		return shopDAO.getProductListHome();
+	}
 	
 }

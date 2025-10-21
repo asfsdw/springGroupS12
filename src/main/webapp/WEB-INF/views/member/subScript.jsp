@@ -24,6 +24,7 @@
 		}
 		
 		#green td {background-color: #6F6 !important;}
+		#yellow td {background-color: #FF6 !important;}
 		#red td {
 			background-color: #F66 !important;
 			color: #FFF !important;
@@ -76,14 +77,14 @@
 				<th>신청현황</th>
 			</tr>
 			<c:forEach var="vo" items="${shopVOS}">
-				<tr id="${vo.openSW=='신청접수'?'green':vo.openSW=='신청반려'?'red':''}">
+				<tr id="${vo.openSW=='신청접수'?'yellow':vo.openSW=='신청반려'?'red':vo.openSW=='공개'?'green':''}">
 					<td>${vo.title}</td>
 					<td>${vo.shopDate}</td>
 					<td>${vo.openSW}</td>
 				</tr>
 			</c:forEach>
 			<c:forEach var="vo" items="${subVOS}">
-				<tr id="${vo.subProgress=='신청접수'?'green':vo.subProgress=='신청반려'?'red':''}">
+				<tr id="${vo.subProgress=='신청접수'?'yellow':vo.subProgress=='신청반려'?'red':vo.subProgress=='처리완료'?'green':''}">
 					<td>${vo.subContent}</td>
 					<td>${vo.subDate}</td>
 					<td>${vo.subProgress}</td>

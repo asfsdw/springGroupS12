@@ -35,6 +35,9 @@
 							<option>누이</option>
 							<option>퍼펫</option>
 							<option>아크릴스탠드</option>
+							<option>의류</option>
+							<option>기타</option>
+							<option>통합</option>
 						</select>
 					</td>
 					<th>상품가격</th>

@@ -1,8 +1,8 @@
-$(window).scroll(function(){
+$(window).scroll(function() {
 	if($(this).scrollTop() > 100) $("#topBtn").addClass("on");
 	else $("#topBtn").removeClass("on");
 	
-	$("#topBtn").click(function(){
+	$("#topBtn").click(function() {
 		window.scrollTo({top:0, behavior: "smooth"});
 	});
 });
@@ -140,8 +140,6 @@ function soldCheck() {
 		return false;
 	}
 	
-	$("#price").val($("#demo").text().replace("원",""));
-	
 	productForm.submit();
 }
 
@@ -265,11 +263,13 @@ function shoppingBagDelete(idx) {
 function buyCheck() {
 	let idx = [];
 	let orderQuantity = [];
+	let title = [];
 	let cnt = 0;
 	for(let i=1; i<=$("[name=bagCheck]").length-1; i++) {
 		if(document.getElementById("bagCheck"+i).checked == true) {
 			idx[cnt] = $("#idx"+i).val();
 			orderQuantity[cnt] = $("#orderQuantity"+i).val();
+			title[cnt] = $("#title"+i).val();
 			cnt++;
 		}
 	}
@@ -282,6 +282,7 @@ function buyCheck() {
 	
 	$("#idxs").val(idx);
 	$("#orderQuantitys").val(orderQuantity);
+	$("#titles").val(title)
 	
 	buyForm.action = "Product";
 	buyForm.submit();

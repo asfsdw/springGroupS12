@@ -29,4 +29,6 @@ public interface ShopService {
 
 	int setProductSubDelete(int idx);
 
+	List<ShopVO> getProductListHome();
+
 }

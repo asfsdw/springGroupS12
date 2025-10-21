@@ -1,6 +1,7 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <c:set var="ctp" value="${pageContext.request.contextPath}"></c:set>
 <!DOCTYPE html>
 <html>
@@ -18,6 +19,7 @@
 		
 		// 초기 구매 가격들 설정.
 		$(() => {
+			let price
 			let totPrice = 0;
 			
 			for(let i=1; i<=$("[id^=price]").length; i++) {
@@ -50,7 +52,7 @@
 					<td><img src="${ctp}/data/shop/${dVO.productImage}" style="width:150px"/></td>
 					<td>${dVO.title}</td>
 					<td>${dVO.orderQuantity}개</td>
-					<td id="price1">${dVO.price}원</td>
+					<td id="price1"><fmt:formatNumber value="${dVO.price}" />원</td>
 				</tr>
 				<input type="hidden" name="idx" value="${dVO.idx}" />
 				<input type="hidden" name="mid" value="${dVO.mid}" />

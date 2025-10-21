@@ -31,4 +31,6 @@ public interface BoardService {
 
 	int setBoardDelete(int idx);
 
+	List<BoardVO> getBoardListHome();
+
 }

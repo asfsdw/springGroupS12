@@ -18,7 +18,8 @@ public class MessageController {
 			@PathVariable String msgFlag,
 			@RequestParam(name="mid", defaultValue = "", required = false) String mid,
 			@RequestParam(name="idx", defaultValue = "0", required = false) int idx,
-			@RequestParam(name="deliveryIdx", defaultValue = "", required = false) String deliveryIdx) {
+			@RequestParam(name="deliveryIdx", defaultValue = "", required = false) String deliveryIdx,
+			@RequestParam(name="title", defaultValue = "", required = false) String title) {
 		if(msgFlag.equals("wrongAccess")) {
 			model.addAttribute("message", "잘못된 접근입니다.");
 			model.addAttribute("url", "/");
@@ -157,6 +158,10 @@ public class MessageController {
 		}
 		else if(msgFlag.equals("deliveryNo")) {
 			model.addAttribute("message", "주문에 실패했습니다.\\n잠시 후, 다시 시도해주세요.");
+			model.addAttribute("url", "shop/Goods");
+		}
+		else if(msgFlag.equals("lackQuantity")) {
+			model.addAttribute("message", title+"\\n상품의 재고가 부족합니다.\\n재고를 확인 후, 다시 주문해주세요.");
 			model.addAttribute("url", "shop/Goods");
 		}
 		return "include/message";

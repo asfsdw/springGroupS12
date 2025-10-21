@@ -16,6 +16,9 @@
 	<select id="getProductProductImage" resultType="com.spring.springGroupS12.vo.ShopVO">
 		SELECT * FROM shop WHERE productImage = #{productImage};
 	</select>
+	<select id="getProductListHome" resultType="com.spring.springGroupS12.vo.ShopVO">
+		SELECT idx, title, productImage, price, quantity FROM shop WHERE openSW = '공개' ORDER BY idx DESC LIMIT 8;
+	</select>
 	
 	
 	
@@ -28,10 +31,10 @@
 	
 	
 	<update id="setProductQuantityUpdate">
-		UPDATE shop SET quantity = quantity - #{orderQuantity} WHERE idx = #{idx};
+		UPDATE shop SET quantity = quantity - #{orderQuantity}, sold = sold + 1 WHERE idx = #{idx};
 	</update>
 	<update id="setProductQuantityRollback">
-		UPDATE shop SET quantity = quantity + #{orderQuantity} WHERE idx = #{idx};
+		UPDATE shop SET quantity = quantity + #{orderQuantity}, sold = sold - 1 WHERE idx = #{idx};
 	</update>
 	<update id="setProductOpenSWUpdate">
 		UPDATE shop SET openSW = #{openSW} WHERE idx = #{idx};

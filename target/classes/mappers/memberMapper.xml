@@ -17,12 +17,18 @@
 	<select id="getMemberEmail" resultType="com.spring.springGroupS12.vo.MemberVO">
 		SELECT * FROM member WHERE email = #{email};
 	</select>
+	<select id="getMemberListAdmin" resultType="com.spring.springGroupS12.vo.MemberVO">
+		SELECT * FROM member WHERE level != 99<if test="level != 100"> AND level = #{level}</if> ORDER BY mid;
+	</select>
+	<select id="getMemberSearch" resultType="com.spring.springGroupS12.vo.MemberVO">
+		SELECT * FROM member WHERE ${search} LIKE concat("%"#{searchStr}"%");
+	</select>
 	
 	<select id="getSubScriptList" resultType="com.spring.springGroupS12.vo.SubScriptVO">
 		SELECT * FROM sub_script <if test="mid != '전체'">WHERE mid = #{mid}</if>;
 	</select>
 	<select id="getSubScript" resultType="int">
-		SELECT count(subContent) FROM sub_script WHERE subContent LIKE concat(#{vo.subContent}"%");
+		SELECT count(subContent) FROM sub_script WHERE subContent LIKE concat(#{vo.subContent}"%") AND mid = #{vo.mid};
 	</select>
 	
 	
@@ -47,7 +53,7 @@
 		UPDATE member SET lastDate = now() WHERE mid = #{mid};
 	</update>
 	<update id="setMemberDelete">
-		UPDATE member SET userDelete = '삭제', lastDate = now() WHERE mid = #{mid};
+		UPDATE member SET level = 999, userDelete = '삭제', lastDate = now() WHERE mid = #{mid};
 	</update>
 	<update id="setMemberUpdate">
 		UPDATE member SET nickName = #{vo.nickName}, name = #{vo.name}, age = #{vo.age}, 

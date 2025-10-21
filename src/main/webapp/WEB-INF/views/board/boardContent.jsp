@@ -10,25 +10,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
 		<script src="${ctp}/js/board.js"></script>
+		<link type="text/css" rel="stylesheet" href="${ctp}/css/board.css" />
 		<title>${vo.title}</title>
-		<style>
-			h6 {
-				position: fixed;
-				right: 1rem;
-				bottom: -50px;
-				transition: 0.7s ease;
-				z-index: 2;
-			}
-			.on {
-				opacity: 0.8;
-				cursor: pointer;
-				bottom: 0;
-			}
-			th {
-					background-color: #eee !important;
-					text-align: center;
-			}
-		</style>
 	</head>
 <body>
 	<p><br/></p>

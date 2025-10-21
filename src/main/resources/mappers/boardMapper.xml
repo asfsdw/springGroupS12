@@ -27,6 +27,9 @@
 			<if test="search != ''">AND ${search} LIKE concat("%"#{searchStr}"%")</if> 
 			ORDER BY idx DESC LIMIT #{startIndexNo}, #{pageSize};
 	</select>
+	<select id="getBoardListHome"  resultType="com.spring.springGroupS12.vo.BoardVO">
+		SELECT *, (SELECT count(*) FROM reply WHERE parentIdx = board.idx) AS replyCnt FROM board ORDER BY idx DESC limit 5;
+	</select>
 	
 	
 	

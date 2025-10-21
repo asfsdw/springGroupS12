@@ -5,16 +5,16 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
+import java.util.List;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,25 +23,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
-import lombok.extern.slf4j.Slf4j;
+import com.spring.springGroupS12.common.Pagination;
+import com.spring.springGroupS12.service.BoardService;
+import com.spring.springGroupS12.service.ShopService;
+import com.spring.springGroupS12.vo.BoardVO;
+import com.spring.springGroupS12.vo.ShopVO;
 
-@Slf4j
 @Controller
 public class HomeController {
+	@Autowired
+	Pagination pagination;
+	@Autowired
+	ShopService shopService;
+	@Autowired
+	BoardService boardService;
 	
 	@RequestMapping(value = {"/","/h","/index","main"}, method = RequestMethod.GET)
-	public String home(Locale locale, Model model, HttpSession session) {
-		log.info("Welcome home! The client locale is {}.", locale);
-		
+	public String home(HttpSession session, Model model) {
 		if(session.getAttribute("sEmailKey") != null) session.removeAttribute("sEmailKey");
+		List<ShopVO> sVOS = shopService.getProductListHome();
+		List<BoardVO> bVOS = boardService.getBoardListHome();
 		
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		
-		String formattedDate = dateFormat.format(date);
-		
-		model.addAttribute("serverTime", formattedDate );
-		
+		model.addAttribute("sVOS", sVOS);
+		model.addAttribute("bVOS", bVOS);
 		return "home";
 	}
 	

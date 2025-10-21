@@ -28,4 +28,6 @@ public interface BoardDAO {
 
 	int setBoardDelete(@Param("idx") int idx);
 
+	List<BoardVO> getBoardListHome();
+
 }

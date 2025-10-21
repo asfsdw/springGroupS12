@@ -9,22 +9,8 @@
 		<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
 		<script src="${ctp}/resources/ckeditor/ckeditor.js"></script>
 		<script src="${ctp}/js/board.js"></script>
+		<link type="text/css" rel="stylesheet" href="${ctp}/css/board.css" />
 		<title>게시글 작성</title>
-		<style>
-			h6 {
-				position: fixed;
-				right: 1rem;
-				bottom: -50px;
-				transition: 0.7s ease;
-				z-index: 2;
-			}
-			.on {
-				opacity: 0.8;
-				cursor: pointer;
-				bottom: 0;
-			}
-			th {width:74px;}
-		</style>
 	</head>
 <body>
 	<p><br/></p>

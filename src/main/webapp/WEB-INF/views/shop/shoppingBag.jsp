@@ -1,5 +1,6 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <c:set var="ctp" value="${pageContext.request.contextPath}"></c:set>
 <!DOCTYPE html>
 <html>
@@ -31,10 +32,11 @@
 						<td><img src="${ctp}/data/shop/${vo.productImage}" style="width:150px" /></td>
 						<td>${vo.title}</td>
 						<td><input type="number" value="${vo.orderQuantity}" id="orderQuantity${st.count}" min="1" max="10" onchange="priceChange(${st.count}, ${vo.price})" class="form-control" /></td>
-						<td id="price${st.count}">${vo.price}원</td>
+						<td id="price${st.count}"><fmt:formatNumber value="${vo.price}" />원</td>
 						<td><input type="button" value="삭제" onclick="shoppingBagDelete(${vo.idx})" class="btn btn-danger" /></td>
 					</tr>
 					<input type="hidden" id="idx${st.count}" value="${vo.idx}" />
+					<input type="hidden" id="title${st.count}" value="${vo.title}" />
 				</c:forEach>
 			</table>
 			<div class="row input-group ps-3">
@@ -43,6 +45,7 @@
 			</div>
 			<input type="hidden" id="mid" name="mid" value="${sMid}" />
 			<input type="hidden" id="idxs" name="idxs" value="" />
+			<input type="hidden" id="titles" name="titles" value="" />
 			<input type="hidden" id="orderQuantitys" name="orderQuantitys" value="" />
 		</form>
 		<p><br/></p>

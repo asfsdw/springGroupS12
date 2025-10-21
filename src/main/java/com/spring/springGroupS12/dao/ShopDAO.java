@@ -28,4 +28,6 @@ public interface ShopDAO {
 
 	int setProductSubDelete(@Param("idx") int idx);
 
+	List<ShopVO> getProductListHome();
+
 }

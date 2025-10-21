@@ -15,21 +15,32 @@
 <body>
 	<div class="container text-center">
 		<h2></h2>
-		<div class="row">
+		<div class="row mb-2">
 			<div class="col text-start">
 				<select id="deliverySW">
-					<option>전체</option>
-					<option>준비중</option>
-					<option>준비완료</option>
-					<option>배송중</option>
-					<option>배송완료</option>
-					<option>구매완료</option>
+					<option ${deliverySW=='전체'?'selected':''}>전체</option>
+					<option ${deliverySW=='준비중'?'selected':''}>준비중</option>
+					<option ${deliverySW=='준비완료'?'selected':''}>준비완료</option>
+					<option ${deliverySW=='배송중'?'selected':''}>배송중</option>
+					<option ${deliverySW=='배송완료'?'selected':''}>배송완료</option>
+					<option ${deliverySW=='구매완료'?'selected':''}>구매완료</option>
 				</select>
 			</div>
 			<div class="col text-end">
 				<input type="button" value="전체선택" onclick="allCheck()" class="btn btn-success btn-sm me-1"/>
 				<input type="button" value="전체취소" onclick="allReset()" class="btn btn-primary btn-sm me-1"/>
 				<input type="button" value="선택반전" onclick="reverseCheck()" class="btn btn-info btn-sm me-1"/>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col text-end">
+				<select id="deliverySWChange">
+					<option>준비중</option>
+					<option>준비완료</option>
+					<option>배송중</option>
+					<option>배송완료</option>
+				</select>
+				<input type="button" value="변경" onclick="deliverySWAllChange()" class="btn btn-success btn-sm" />
 			</div>
 		</div>
 		<p></p>
@@ -83,8 +94,10 @@
 							<c:set var="deliveryIdx" value="${vo.deliveryIdx}" />
 						</c:if>
 					</tr>
+					<input type="hidden" id="deliveryIdx${st.index}" value="${vo.deliveryIdx}" />
 				</c:forEach>
 			</table>
+			<input type="hidden" id="deliveryIdx" name="deliveryIdx" value="" />
 		</form>
 		<p><br/></p>
 	</div>

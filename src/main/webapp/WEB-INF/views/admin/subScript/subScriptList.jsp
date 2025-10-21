@@ -1,5 +1,6 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <c:set var="ctp" value="${pageContext.request.contextPath}"></c:set>
 <!DOCTYPE html>
 <html>
@@ -56,13 +57,18 @@
 					</tr>
 					<c:set var="cnt" value="${cnt+1}" />
 				</c:forEach>
-				<c:forEach var="vo" items="${subVOS}">
+				<c:forEach var="vo" items="${subVOS}" varStatus="st">
 					<tr>
 						<td><input type="checkbox" id="idxFlag${cnt}" name="idxFlag" /></td>
 						<td>일반</td>
 						<td>${vo.mid}</td>
 						<td>${vo.nickName}</td>
-						<td>${vo.subContent}</td>
+						<c:if test="${fn:substring(vo.subContent, 0, 3).equals('등급업')}">
+							<td><a href="${ctp}/admin/MemberSearch?search=mid&searchStr=${vo.mid}" class="link-primary">${vo.subContent}</a></td>
+						</c:if>
+						<c:if test="${!fn:substring(vo.subContent, 0, 3).equals('등급업')}">
+							<td>${vo.subContent}</td>
+						</c:if>
 						<td>${vo.subDate}</td>
 						<td>
 							<select id="openSW${st.index}">

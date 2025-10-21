@@ -17,7 +17,11 @@
 	<script>
 		$(() => {
 			$("#orderQuantity").on("change", () => {
-				$("#demo").html(${vo.price}*$("#orderQuantity").val()+"원");
+				let price = ${vo.price};
+				let quantity = $("#orderQuantity").val();
+				let totPrice = price * quantity;
+				$("#tot").html(totPrice.toLocaleString()+"원");
+				$("#price").val(totPrice);
 			});
 		});
 	</script>
@@ -55,11 +59,12 @@
 		<div class="col"><img src="${ctp}/data/shop/${vo.productImage}" style="width:500px" /></div>
 		<div class="col text-start">
 			<div><h2>${vo.title}</h2></div>
-			<div><h3>가격: ${vo.price}원</h3></div>
+			<div><h3>가격: <fmt:formatNumber value="${vo.price}" />원</h3></div>
 			<div><h3>재고: ${vo.quantity}개</h3></div>
 			<div><h4>분류: ${vo.kategorie}</h4></div>
 			<hr/>
 			<div><h4>판매자: ${vo.nickName}</h4></div>
+			<div><h5>판매횟수: ${vo.sold}</h5></div>
 			<hr/>
 			<form name="productForm" method="post" action="${ctp}/shop/Product">
 				<div class="input-group">
@@ -68,7 +73,7 @@
 				</div>
 				<p></p>
 				<div class="input-group">
-					<div id="demo" class="input-group-text">${vo.price*1}원</div>
+					<div id="tot" class="input-group-text"><fmt:formatNumber value="${vo.price*1}" />원</div>
 					<input type="button" value="구매" onclick="soldCheck()" class="btn btn-success" />
 				</div>
 				<input type="hidden" name="mid" value="${sMid}" />
@@ -79,15 +84,19 @@
 			</form>
 			<p></p>
 			<c:if test="${sLevel < 5}">
-				<input type="button" value="장바구니에 담기" onclick="addShoppingBag('${vo.idx}','${sMid}','${sNickName}')" class="btn btn-info me-2" />
+				<input type="button" value="장바구니에 담기" onclick="addShoppingBag('${vo.idx}','${sMid}','${sNickName}')" class="btn btn-primary me-2" />
 			</c:if>
-			<input type="button" value="돌아가기" onclick="location.href = '${ctp}/shop/Goods'" class="btn btn-warning" />
+			<input type="button" value="굿즈일람" onclick="location.href = '${ctp}/shop/Goods'" class="btn btn-warning" />
 		</div>
 	</div>
 	<hr/>
 	<div class="text-start"><h2>상품설명</h2></div>
 	<p></p>
 	<div id="content" class="text-start">${vo.content}</div>
+	</div>
+	<p></p>
+	<div class="text-center">
+		<input type="button" value="굿즈일람" onclick="location.href = '${ctp}/shop/Goods'" class="btn btn-warning" />
 	</div>
 	<p></p>
 	<!-- 별점 및 리뷰 -->
@@ -116,8 +125,8 @@
 	<p></p>
 	<div class="row ps-5" style="width:94%">
 		<div class="col">
-			<input type="button" value="리뷰보이기" id="reviewShowBtn" onclick="reviewShow()" class="btn btn-success me-2" style="display:none" />
-			<input type="button" value="리뷰가리기" id="reviewHideBtn" onclick="reviewHide()" class="btn btn-warning"/>
+			<input type="button" value="리뷰보이기" id="reviewShowBtn" onclick="reviewShow()" class="btn btn-info" style="display:none" />
+			<input type="button" value="리뷰가리기" id="reviewHideBtn" onclick="reviewHide()" class="btn btn-secondary"/>
 		</div>
 		<div class="col text-end">
 			<c:if test="${!empty reviewAVG}">

@@ -100,7 +100,7 @@
 			<div class="input-group mb-3">
 				<label for="photo" class="input-group-text boxWidth">이전 프로필 사진</label>
 				<div class="d-flex" style="flex-grow: 1; justify-content: flex-end;">
-					<img src="${ctp}/member/${vo.myImage}" width="200px" />
+					<img src="${ctp}/member/${vo.myImage}" style="width:200px" />
 				</div>
 			</div>
 			<hr/>

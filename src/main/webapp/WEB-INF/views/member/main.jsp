@@ -83,11 +83,11 @@
   <script>
 		'use strict';
 		
-		$(window).scroll(function(){
+		$(window).scroll(function() {
 			if($(this).scrollTop() > 100) $("#topBtn").addClass("on");
 			else $("#topBtn").removeClass("on");
 			
-			$("#topBtn").click(function(){
+			$("#topBtn").click(function() {
 				window.scrollTo({top:0, behavior: "smooth"});
 			});
 		});
@@ -106,7 +106,7 @@
 			bottom: 0;
 		}
 		
-		#green td {background-color: #6F6 !important;}
+		#yellow td {background-color: #FF6 !important;}
 		#red td {
 			background-color: #F66 !important;
 			color: #FFF !important;
@@ -124,7 +124,7 @@
 				이전 방문일: ${sLastDate}<br/>
 			</div>
 			<div class="col">
-				<img src="${ctp}/member/${mVO.myImage}" width="200px" />
+				<img src="${ctp}/member/${mVO.myImage}" style="width:200px" />
 			</div>
 			<div class="col text-end">
 				<div class="text-center fs-5">${date} 오늘의 일정</div>
@@ -148,6 +148,7 @@
 				<div class="text-center"><a href="${ctp}/schedule/Schedule" class="btn btn-info btn-sm">전체 일정 보기</a></div>
 			</div>
 		</div>
+		<hr/>
 		<div class="row">
 			<div class="col">
 				<div><h2>신청내역</h2></div>
@@ -157,13 +158,13 @@
 						<th>신청현황</th>
 					</tr>
 					<c:forEach var="vo" items="${shopVOS}">
-						<tr id="${vo.openSW=='신청접수'?'green':vo.openSW=='신청반려'?'red':''}">
+						<tr id="${vo.openSW=='신청접수'?'yellow':vo.openSW=='신청반려'?'red':''}">
 							<td>${vo.title}</td>
 							<td>${vo.openSW}</td>
 						</tr>
 					</c:forEach>
 					<c:forEach var="vo" items="${subVOS}">
-						<tr id="${vo.subProgress=='신청접수'?'green':vo.subProgress=='신청반려'?'red':''}">
+						<tr id="${vo.subProgress=='신청접수'?'yellow':vo.subProgress=='신청반려'?'red':''}">
 							<td>${vo.subContent}</td>
 							<td>${vo.subProgress}</td>
 						</tr>
@@ -171,11 +172,11 @@
 				</table>
 			</div>
 			<div class="col">
-				<div><h2>구매완료상품</h2></div>
+				<div><h2>구매상품</h2></div>
 				<table class="table table-bordered">
 					<tr>
 						<th>구매상품</th>
-						<th>리뷰작성</th>
+						<th>배송상태</th>
 					</tr>
 					<c:forEach var="vo" items="${dVOS}">
 						<c:if test="${deliveryIdx != vo.deliveryIdx}">

@@ -9,7 +9,6 @@
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp"/>
 	<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 	<script>
-	/*
 		var IMP = window.IMP; 
 		IMP.init("imp68516704");
 		
@@ -19,7 +18,10 @@
 			merchant_uid : 'springGroupS12_' + new Date().getTime(),
 			name : '${dVO.title}',
 			amount : 10,
-			//amount : ${totPrice},
+			/*
+			실제 가격.
+			amount : ${totPrice},
+			*/
 			buyer_name : '${dVO.nickName}',
 			buyer_email : '${dVO.email}',
 			buyer_addr : '${dVO.address}',
@@ -56,7 +58,7 @@
 				location.href = '${ctp}/shop/PaymentResult'+temp;
 			}
 		});
-		*/
+		/*
 		$(() => {
 			var temp = "";
 			temp += '?idx=${dVO.idx}';
@@ -73,6 +75,7 @@
 			
 			location.href = '${ctp}/shop/PaymentResult'+temp;
 		});
+		*/
 	</script>
 </head>
 <body>
