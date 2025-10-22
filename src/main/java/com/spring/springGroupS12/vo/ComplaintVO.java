@@ -7,6 +7,7 @@ public class ComplaintVO {
 	private int idx;
 	private String part;
 	private int partIdx;
+	private String parentTitle;
 	private String cpMid;
 	private String cpContent;
 	private String cpDate;

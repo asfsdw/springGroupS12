@@ -151,16 +151,15 @@ function addShoppingBag(idx, mid, nickName) {
 		return false;
 	}
 	
-	let quary = {
-		"idx" : idx,
-		"mid" : mid,
-		"nickName" : nickName,
-		"orderQuantity" : orderQuantity
-	};
 	$.ajax({
 		url : "ShoppingBag",
 		type: "post",
-		data: quary,
+		data: {
+			"idx" : idx,
+		"mid" : mid,
+		"nickName" : nickName,
+		"orderQuantity" : orderQuantity
+		},
 		success : (res) => {
 			if(res != 0) {
 				let ans = confirm("쇼핑을 계속하시겠습니까?");

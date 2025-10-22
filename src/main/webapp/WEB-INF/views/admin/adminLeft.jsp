@@ -24,7 +24,13 @@
 			</div>
 			<div class="main ms-3 mb-2"><b>상품관리</b></div>
 			<div class="sub">
+				<p><a href="${ctp}/admin/ProductList">상품목록</a></p>
 				<p><a href="${ctp}/admin/DeliveryList">배송관련</a></p>
+			</div>
+			<div class="main ms-3 mb-2"><b>신고처리</b></div>
+			<div class="sub">
+				<p><a href="${ctp}/admin/ComplaintList">신고목록</a></p>
+				<p><a href="${ctp}/admin/ComplaintBoardList">신고된 게시글</a></p>
 			</div>
 		</div>
 	</div>

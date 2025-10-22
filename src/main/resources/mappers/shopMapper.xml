@@ -37,7 +37,9 @@
 		UPDATE shop SET quantity = quantity + #{orderQuantity}, sold = sold - 1 WHERE idx = #{idx};
 	</update>
 	<update id="setProductOpenSWUpdate">
-		UPDATE shop SET openSW = #{openSW} WHERE idx = #{idx};
+		UPDATE shop SET openSW = 
+		<if test="openSW != '공개/처리완료'">#{openSW}</if> 
+		<if test="openSW == '공개/처리완료'">'공개'</if> WHERE idx = #{idx};
 	</update>
 	
 	

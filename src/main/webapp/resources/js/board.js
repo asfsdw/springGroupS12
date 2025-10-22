@@ -301,7 +301,8 @@ $(() => {
 });
 
 // 게시글 신고 처리.
-function complaintCheck(idx, mid) {
+function complaintCheck(idx, mid, title) {
+	console.log(title);
 	if(!$("input[type='radio'][name='complaint']:checked").is(':checked')) {
 		alert("신고항목을 선택해주세요.");
 		return false;
@@ -314,17 +315,16 @@ function complaintCheck(idx, mid) {
 	let cpContent = modalForm.complaint.value;
 	if(cpContent == "기타") cpContent += "/"+$("#etcTxt").val();
 	
-	let query = {
-			"part" : "board",
-			"partIdx" : idx,
-			"cpMid" : mid,
-			"cpContent" : cpContent
-	}
-	
 	$.ajax({
 		url : "BoardComplaint",
 		type: "post",
-		data: query,
+		data: {
+			"part" : "board",
+			"partIdx" : idx,
+			"parentTitle" : title,
+			"cpMid" : mid,
+			"cpContent" : cpContent
+		},
 		success : (res) => {
 			if(res != 0) {
 				alert("신고되었습니다.");

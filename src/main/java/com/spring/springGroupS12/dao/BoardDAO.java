@@ -30,4 +30,10 @@ public interface BoardDAO {
 
 	List<BoardVO> getBoardListHome();
 
+	List<BoardVO> getComplaintBoardList(@Param("idx") int idx);
+
+	List<BoardVO> getComplaintBoard(@Param("search") String search, @Param("searchStr") String searchStr);
+
+	int setBoardOpenSWUpdate(@Param("idx") int idx, @Param("openSW") String openSW);
+
 }

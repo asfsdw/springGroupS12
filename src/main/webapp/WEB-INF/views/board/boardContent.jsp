@@ -197,7 +197,7 @@
 						<div><input type="radio" name="complaint" value="기타" onclick="etcShow()"/> 기타</div>
 						<div id="etc"><textarea rows="2" id="etcTxt" class="form-control" style="display:none"></textarea></div>
 						<hr class="border border-secondary">
-						<input type="button" value="신고하기" onclick="complaintCheck('${vo.idx}','${sMid}')" class="btn btn-success form-control" />
+						<input type="button" value="신고하기" onclick="complaintCheck('${vo.idx}','${sMid}','${vo.title}')" class="btn btn-success form-control" />
 					</form>
 				</div>
 				<!-- Modal footer -->

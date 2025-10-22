@@ -28,7 +28,10 @@
 		SELECT * FROM sub_script <if test="mid != '전체'">WHERE mid = #{mid}</if>;
 	</select>
 	<select id="getSubScript" resultType="int">
-		SELECT count(subContent) FROM sub_script WHERE subContent LIKE concat(#{vo.subContent}"%") AND mid = #{vo.mid};
+		SELECT count(subContent) FROM sub_script WHERE subContent 
+			LIKE <if test="vo.levelUp == ''">concat(#{vo.subContent}"%")</if>  
+			<if test="vo.levelUp != ''">concat(#{vo.subContent}"/"#{vo.levelUp}"%")</if> 
+			AND mid = #{vo.mid};
 	</select>
 	
 	
@@ -63,8 +66,16 @@
 	<update id="setMemberPointUp">
 		UPDATE member SET point = point + 100 WHERE mid = #{mid};
 	</update>
+	<update id="setMemberLevelUp">
+		UPDATE member SET level = #{level}, 
+			<if test="level == 999">userDelete = '삭제'</if> 
+			<if test="level != 999">userDelete = '활동'</if> WHERE idx = #{idx};
+	</update>
+	
 	<update id="setProductProgressSWUpdate">
-		UPDATE sub_script SET subProgress = #{subProgress} WHERE idx = #{idx};
+		UPDATE sub_script SET subProgress = 
+			<if test="subProgress != '공개/처리완료'">#{subProgress}</if> 
+			<if test="subProgress == '공개/처리완료'">'처리완료'</if> WHERE idx = #{idx};
 	</update>
 	
 	

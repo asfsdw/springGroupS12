@@ -109,4 +109,9 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.getMemberSearch(search, searchStr);
 	}
 
+	@Override
+	public int setMemberLevelUp(int idx, int level) {
+		return memberDAO.setMemberLevelUp(idx, level);
+	}
+
 }

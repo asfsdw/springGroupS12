@@ -322,8 +322,6 @@ public class MemberController {
 	// 신청.
 	@PostMapping("SubScript")
 	public String subScriptPost(SubScriptVO vo) {
-		System.out.println(vo.getSubContent());
-		System.out.println(vo.getLevelUp());
 		int res = memberService.getSubScript(vo);
 		// 검색 결과가 있으며 기타 신청도 아닐 경우 메시지 보여주고 끝.
 		if(res != 0 && !vo.getSubContent().equals("기타")) return "redirect:/Message/subScriptDup";

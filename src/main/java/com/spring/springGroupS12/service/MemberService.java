@@ -45,4 +45,6 @@ public interface MemberService {
 
 	List<MemberVO> getMemberSearch(String search, String searchStr);
 
+	int setMemberLevelUp(int idx, int level);
+
 }

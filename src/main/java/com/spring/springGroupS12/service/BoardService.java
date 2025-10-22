@@ -33,4 +33,10 @@ public interface BoardService {
 
 	List<BoardVO> getBoardListHome();
 
+	List<BoardVO> getComplaintBoardList(int idx);
+
+	List<BoardVO> getComplaintBoard(String search, String searchStr);
+
+	int setBoardOpenSWUpdate(int idx, String openSW);
+
 }

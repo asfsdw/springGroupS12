@@ -250,7 +250,7 @@ public class BoardController {
 	public int boardComplaintPost(ComplaintVO vo) {
 		int res = 0;
 		res = complaintService.setComplaintInput(vo);
-		if(res != 0) complaintService.setBoardComplaintOk(vo.getPartIdx());
+		if(res != 0) complaintService.setComplaintParentUpdate("board", vo.getPartIdx(), "OK");
 		return res;
 	}
 	

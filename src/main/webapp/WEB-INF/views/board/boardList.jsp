@@ -117,8 +117,8 @@
 		<p></p>
 		<!-- 블록페이지 끝 -->
 		<!-- 검색기 시작 -->
-		<div class="text-center">
-			<form name="searchForm" action="BoardSearchList">
+		<form name="searchForm" action="BoardSearchList">
+			<div class="text-center">
 				<b>검색:</b>
 				<select name="search" id="search">
 					<option value="title">글제목</option>
@@ -127,8 +127,8 @@
 				</select>
 				<input type="text" name="searchStr" id="searchStr" required />
 				<input type="submit" value="검색" class="btn btn-info btn-sm mb-1" />
-			</form>
-		</div>
+			</div>
+		</form>
 		<!-- 검색기 끝 -->
 	</div>
 	<p><br/></p>

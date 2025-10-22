@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.springGroupS12.dao.BoardDAO">
 	<select id="getTotRecCnt" resultType="int">
-		SELECT count(idx) FROM board WHERE complaint != 'DE' 
+		SELECT count(idx) FROM board WHERE openSW != '숨기기' 
 			<if test="flag == 'best'">AND good >= 5</if>
 			<if test="flag == 'new'">AND boardDate >= date_add(now(), interval -7 day)</if>
 			<if test="search != ''">AND ${search} LIKE concat("%"#{searchStr}"%")</if>;
@@ -10,7 +10,7 @@
 	<select id="getBoardList" resultType="com.spring.springGroupS12.vo.BoardVO">
 		SELECT *, timestampdiff(hour, boardDate, now()) AS hourDiff, datediff(now(), boardDate) AS dateDiff, 
 			(SELECT count(*) FROM reply WHERE parentIdx = board.idx) AS replyCnt 
-			FROM board WHERE complaint != 'DE' 
+			FROM board WHERE openSW != '숨기기' 
 			<if test="search != ''">AND ${search} LIKE concat("%"#{searchStr}"%")</if> 
 			ORDER BY idx DESC LIMIT #{startIndexNo}, #{pageSize};
 	</select>
@@ -23,12 +23,18 @@
 	<select id="getBoardBest" resultType="com.spring.springGroupS12.vo.BoardVO">
 		SELECT *, timestampdiff(hour, boardDate, now()) AS hourDiff, datediff(now(), boardDate) AS dateDiff, 
 			(SELECT count(*) FROM reply WHERE parentIdx = board.idx) AS replyCnt 
-			FROM board WHERE complaint != 'DE' AND good >= 5 
+			FROM board WHERE openSW != '숨기기' AND good >= 5 
 			<if test="search != ''">AND ${search} LIKE concat("%"#{searchStr}"%")</if> 
 			ORDER BY idx DESC LIMIT #{startIndexNo}, #{pageSize};
 	</select>
-	<select id="getBoardListHome"  resultType="com.spring.springGroupS12.vo.BoardVO">
+	<select id="getBoardListHome" resultType="com.spring.springGroupS12.vo.BoardVO">
 		SELECT *, (SELECT count(*) FROM reply WHERE parentIdx = board.idx) AS replyCnt FROM board ORDER BY idx DESC limit 5;
+	</select>
+	<select id="getComplaintBoardList" resultType="com.spring.springGroupS12.vo.BoardVO">
+		SELECT b.*, c.cpContent AS cpContent, c.cpDate AS cpDate FROM board b, complaint c WHERE b.idx = c.partIdx <if test="idx != 0">AND b.idx = #{idx} </if>ORDER BY c.cpDate DESC;
+	</select>
+	<select id="getComplaintBoard" resultType="com.spring.springGroupS12.vo.BoardVO">
+		SELECT b.*, c.cpContent AS cpContent, c.cpDate AS cpDate FROM board b, complaint c WHERE b.idx = c.partIdx AND b.${search} = #{searchStr} ORDER BY c.cpDate DESC;
 	</select>
 	
 	
@@ -47,6 +53,9 @@
 	</update>
 	<update id="setBoardUpdate">
 		UPDATE board SET title = #{vo.title}, content = #{vo.content} WHERE idx = #{vo.idx};
+	</update>
+	<update id="setBoardOpenSWUpdate">
+		UPDATE board SET openSW = #{openSW} WHERE idx = #{idx};
 	</update>
 	
 	

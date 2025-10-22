@@ -47,4 +47,6 @@ public interface MemberDAO {
 
 	List<MemberVO> getMemberSearch(@Param("search") String search, @Param("searchStr") String searchStr);
 
+	int setMemberLevelUp(@Param("idx") int idx, @Param("level") int level);
+
 }

@@ -252,4 +252,19 @@ public class BoardServiceImpl implements BoardService {
 	public List<BoardVO> getBoardListHome() {
 		return boardDAO.getBoardListHome();
 	}
+
+	@Override
+	public List<BoardVO> getComplaintBoardList(int idx) {
+		return boardDAO.getComplaintBoardList(idx);
+	}
+
+	@Override
+	public List<BoardVO> getComplaintBoard(String search, String searchStr) {
+		return boardDAO.getComplaintBoard(search, searchStr);
+	}
+
+	@Override
+	public int setBoardOpenSWUpdate(int idx, String openSW) {
+		return boardDAO.setBoardOpenSWUpdate(idx, openSW);
+	}
 }
