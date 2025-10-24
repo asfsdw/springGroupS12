@@ -30,4 +30,8 @@ public interface ShopDAO {
 
 	List<ShopVO> getProductListHome();
 
+	int setProductUpdate(@Param("vo") ShopVO vo);
+
+	List<ShopVO> getNewProductSub();
+
 }

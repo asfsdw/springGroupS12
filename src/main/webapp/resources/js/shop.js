@@ -9,14 +9,13 @@ $(window).scroll(function() {
 
 // 상품 등록.
 function fCheck() {
-	let mid = $("#mid").val().trim();
-	let nickName = '${sNickName}';
+	let mid = $("#mid").val().replace(" ","");
+	let nickName = $("#nickName").val().replace(" ","");
 	let kategorie = $("#kategorie").val();
 	let title = $("#title").val();
 	let content = CKEDITOR.instances.CKEDITOR.getData();
-	let price = $("#price").val().trim();
-	let quantity = $("#quantity").val().trim();
-	let pwd = $("#pwd").val().trim();
+	let price = $("#price").val().replace(" ","");
+	let quantity = $("#quantity").val().replace(" ","");
 	
 	if(mid == "") {
 		alert("로그인해주세요.");
@@ -46,10 +45,6 @@ function fCheck() {
 	if(isNaN(quantity) || quantity < 0) {
 		if(quantity < 0) alser("재고의 개수는 음수가 될 수 없습니다.");
 		alert("재고 개수를 숫자로 입력해주세요.");
-		return false;
-	}
-	if(pwd == "") {
-		alert("비밀번호를 입력해주세요.");
 		return false;
 	}
 	
@@ -71,14 +66,13 @@ function fCheck() {
 
 // 상품 등록 신청.
 function subCheck(ctp) {
-	let mid = $("#mid").val().trim();
-	let nickName = '${sNickName}';
+	let mid = $("#mid").val().replace(" ","");
+	let nickName = $("#nickName").val().replace(" ","");
 	let kategorie = $("#kategorie").val();
 	let title = $("#title").val();
 	let content = CKEDITOR.instances.CKEDITOR.getData();
-	let price = $("#price").val().trim();
-	let quantity = $("#quantity").val().trim();
-	let pwd = $("#pwd").val().trim();
+	let price = $("#price").val().replace(" ","");
+	let quantity = $("#quantity").val().replace(" ","");
 	
 	if(mid == "") {
 		alert("로그인해주세요.");
@@ -108,10 +102,6 @@ function subCheck(ctp) {
 	if(isNaN(quantity) || quantity < 0) {
 		if(quantity < 0) alser("재고의 개수는 음수가 될 수 없습니다.");
 		alert("재고 개수를 숫자로 입력해주세요.");
-		return false;
-	}
-	if(pwd == "") {
-		alert("비밀번호를 입력해주세요.");
 		return false;
 	}
 	
@@ -163,8 +153,8 @@ function addShoppingBag(idx, mid, nickName) {
 		success : (res) => {
 			if(res != 0) {
 				let ans = confirm("쇼핑을 계속하시겠습니까?");
-				if(ans) location.href = "Goods";
-				else location.href = "ShoppingBag?mid="+mid;
+				if(ans) location.href="Goods";
+				else location.href="ShoppingBag?mid="+mid;
 			}
 			else alert("장바구니에 넣지 못했습니다.\n다시 시도해주시요.");
 		},
@@ -174,68 +164,69 @@ function addShoppingBag(idx, mid, nickName) {
 
 // 초기 구매 가격들 설정.
 $(() => {
-	let totPrice = 0;
 	let price = 0;
+	let totPrice = 0;
 	
-	for(let i=1; i<=$("[name=bagCheck]").length-1; i++) {
-		price = parseInt($("#price"+i).text()) * $("#orderQuantity"+i).val();
-		$("#price"+i).html(price+"원");
+	for(let i=0; i<$("[name=bagCheck]").length-1; i++) {
+		price = parseInt($("#productPrice"+i).text().replace(",","").replace("원","")) * $("#orderQuantity"+i).val();
+		$("#price"+i).val(price);
+		$("#productPrice"+i).html(price.toLocaleString()+"원");
 		
-		totPrice += parseInt($("#price"+i).text());
+		totPrice += parseInt($("#productPrice"+i).text().replace(",","").replace("원",""));
 	}
-	$("#totPrice").html(totPrice+"원");
+	$("#totPrice").html(totPrice.toLocaleString()+"원");
 });
 
 // 테이블의 체크박스 클릭시.
 function tableCheckChange() {
 	let length = 1;
-	if($("[name=bagCheck]").length-1 >= 2) length = $("[name=bagCheck]").length-1;
+	if($("[name=bagCheck]").length-1 > 1) length = $("[name=bagCheck]").length-1;
 	
 	if(document.getElementById("bagCheck").checked == true) {
-		for(let i=1; i<=length; i++) {
+		for(let i=0; i<length; i++) {
 			document.getElementById("bagCheck"+i).checked = true;
 			priceChange(i, i);
 		}
 	}
 	else {
-		for(let i=1; i<=length; i++) {
+		for(let i=0; i<length; i++) {
 			document.getElementById("bagCheck"+i).checked = false;
 			priceChange(i, i);
 		}
 	}
 }
 // 상품의 체크박스 클릭시.
-function checkChange(count, price) {
+function checkChange(index, price) {
 	let cnt = 0;
 	let length = 1;
-	if($("[name=bagCheck]").length-1 >= 2) length = $("[name=bagCheck]").length-1;
+	if($("[name=bagCheck]").length-1 > 1) length = $("[name=bagCheck]").length-1;
 	
-	for(let i=1; i<=length; i++) {
+	for(let i=0; i<length; i++) {
 		if(document.getElementById("bagCheck"+i).checked == true) cnt++;
 	}
 	if(length == cnt) document.getElementById("bagCheck").checked = true;
 	else document.getElementById("bagCheck").checked = false;
-	priceChange(count, price);
+	priceChange(index, price);
 }
 
 // 구매가격 변경.
-function priceChange(count, price) {
+function priceChange(index, price) {
 	let length = 1;
-	if($("[name=bagCheck]").length-1 >= 2) length = $("[name=bagCheck]").length-1;
+	if($("[name=bagCheck]").length-1 > 1) length = $("[name=bagCheck]").length-1;
 	
 	// 체크박스로 불러왔을 때.
-	if(price == count) price = parseInt($("#price"+count).text())/$("#orderQuantity"+count).val();
+	if(price == index) price = parseInt($("#productPrice"+index).text().replace(",","").replace("원",""))/$("#orderQuantity"+index).val();
 	
 	let totPrice = 0;
 	
-	$("#price"+count).html(price*$("#orderQuantity"+count).val()+"원");
+	$("#productPrice"+index).html((price*$("#orderQuantity"+index).val()).toLocaleString()+"원");
 	
-	for(let i=1; i<=length; i++) {
+	for(let i=0; i<length; i++) {
 		if(document.getElementById("bagCheck"+i).checked == true) {
-			totPrice += parseInt($("#price"+i).text());
+			totPrice += parseInt($("#productPrice"+i).text().replace(",","").replace("원",""));
 		}
 	}
-	$("#totPrice").html(totPrice+"원");
+	$("#totPrice").html(totPrice.toLocaleString()+"원");
 }
 
 // 장바구니 상품 삭제.
@@ -261,14 +252,14 @@ function shoppingBagDelete(idx) {
 // 장바구니에서 구매.
 function buyCheck() {
 	let idx = [];
-	let orderQuantity = [];
 	let title = [];
+	let orderQuantity = [];
 	let cnt = 0;
-	for(let i=1; i<=$("[name=bagCheck]").length-1; i++) {
+	for(let i=0; i<$("[name=bagCheck]").length-1; i++) {
 		if(document.getElementById("bagCheck"+i).checked == true) {
 			idx[cnt] = $("#idx"+i).val();
-			orderQuantity[cnt] = $("#orderQuantity"+i).val();
 			title[cnt] = $("#title"+i).val();
+			orderQuantity[cnt] = $("#orderQuantity"+i).val();
 			cnt++;
 		}
 	}
@@ -280,11 +271,37 @@ function buyCheck() {
 	}
 	
 	$("#idxs").val(idx);
-	$("#orderQuantitys").val(orderQuantity);
 	$("#titles").val(title)
+	$("#orderQuantitys").val(orderQuantity);
 	
 	buyForm.action = "Product";
 	buyForm.submit();
+}
+
+// 포인트 사용.
+function pointUse(flag) {
+	let point = $("#point").val();
+	if(flag == 1) {
+		if(point == 0 || point%100 != 0) {
+			alert("포인트를 사용하시려면 포인트를 입력해주세요.");
+			return false;
+		}
+		
+		$("#point").attr("disabled", true);
+		
+		totPrice = Number($("#totPrice").text().replace(",","").replace("원",""));
+		totPrice = totPrice - (point/10);
+		$("#totPrice").text(totPrice.toLocaleString()+"원");
+	}
+	else if(flag == 2) {
+		$("#point").attr("disabled", false);
+		$("#point").val(0);
+		
+		totPrice = Number($("#totPrice").text().replace(",","").replace("원",""));
+		totPrice = totPrice + (point/10);
+		$("#totPrice").text(totPrice.toLocaleString()+"원");
+	}
+	$("#usedPoint").val(point);
 }
 
 // 구매.
@@ -368,13 +385,16 @@ function addressCheck() {
 }
 
 // 주문취소.
-function deliveryCancel(deliveryIdx) {
+function deliveryCancel(deliveryIdx, usedPoint) {
 	let ans = confirm("주문을 취소하시면 장바구니에서도 삭제됩니다.\n정말로 주문을 취소하시겠습니까?");
 	if(ans) {
 		$.ajax({
 			url : "DeliveryCancel",
 			type: "post",
-			data: {"deliveryIdx" : deliveryIdx},
+			data: {
+				"deliveryIdx" : deliveryIdx,
+				"usedPoint" : usedPoint
+			},
 			success : (res) => {
 				if(res != 0) {
 					alert("주문이 취소되었습니다.");
@@ -449,19 +469,23 @@ function reviewCheck(ctp, idx, mid, nickName, hostIP) {
 		"hostIP" : hostIP
 	}
 	$.ajax({
-		url  : ctp+"/ReviewInput",
-		type : "post",
-		data : query,
+		url : ctp+"/reply/ReviewInput",
+		type: "post",
+		data: query,
 		success: (res) => {
-			if(res == "1") {
+			if(res == 2) {
+				alert("리뷰가 등록되었습니다.\n첫 리뷰 보너스로 100포인트가 적립됩니다.");
+				location.reload();
+			}
+			else if(res == 1) {
 				alert("리뷰가 등록되었습니다.");
 				location.reload();
 			}
-			else if(res == "-1") {
+			else if(res == -1) {
 				alert("이미 리뷰를 입력하신 상품입니다.");
 				location.reload();
 			}
-			else if(res == "-2") {
+			else if(res == -2) {
 				alert("리뷰가 등록되었습니다.\n이전에 리뷰를 입력하신 상품이기 때문에\n포인트는 지급되지 않습니다.");
 				location.reload();
 			}
@@ -475,7 +499,7 @@ function reviewDelete(ctp, idx, mid) {
 	let ans = confirm("리뷰를 삭제하시겠습니까?");
 	if(ans) {
 		$.ajax({
-			url : ctp+"/ReviewDelete",
+			url : ctp+"/reply/ReviewDelete",
 			type: "post",
 			data: {
 				"idx" : idx,
@@ -491,4 +515,83 @@ function reviewDelete(ctp, idx, mid) {
 			error : () => alert("전송오류")
 		});
 	}
+}
+
+// 상품 신고 처리.
+function complaintCheck(idx, mid, title) {
+	if(!$("input[type='radio'][name='complaint']:checked").is(':checked')) {
+		alert("신고항목을 선택해주세요.");
+		return false;
+	}
+	if($("input[type='radio']:checked").val() == '기타' && $("#etcTxt").val() == "") {
+		alert("사유를 입력해주세요.");
+		return false;
+	}
+	
+	let cpContent = modalForm.complaint.value;
+	if(cpContent == "기타") cpContent += "/"+$("#etcTxt").val();
+	
+	$.ajax({
+		url : "ShopComplaint",
+		type: "post",
+		data: {
+			"part" : "shop",
+			"partIdx" : idx,
+			"parentTitle" : title,
+			"cpMid" : mid,
+			"cpContent" : cpContent
+		},
+		success : (res) => {
+			if(res != 0) {
+				alert("신고되었습니다.");
+				location.reload();
+			}
+			else alert("신고되지 않았습니다.");
+		},
+		error : () => alert("전송오류")
+	});
+}
+
+// 상품 수정전 확인.
+function ProductUpdateCheck() {
+	let mid = $("#mid").val().replace(" ","");
+	let nickName = $("#nickName").val().replace(" ","");
+	let kategorie = $("#kategorie").val();
+	let title = $("#title").val();
+	let content = CKEDITOR.instances.CKEDITOR.getData();
+	let price = $("#price").val().replace(" ","");
+	let quantity = $("#quantity").val().replace(" ","");
+	
+	if(mid == "") {
+		alert("로그인해주세요.");
+		return false;
+	}
+	if(nickName == "") {
+		alert("로그인해주세요.");
+		return false;
+	}
+	if(kategorie == "선택") {
+		alert("상품분류를 선택해주세요.");
+		return false;
+	}
+	if(title.trim() == "") {
+		alert("상품명을 입력해주세요.");
+		return false;
+	}
+	if(content.trim() == "") {
+		alert("상품설명를 입력해주세요.");
+		return false;
+	}
+	if(isNaN(price) || price < 0) {
+		if(price < 0) alert("상품의 가격은 음수가 될 수 없습니다.");
+		alert("상품의 가격을 숫자로 입력해주세요.");
+		return false;
+	}
+	if(isNaN(quantity) || quantity < 0) {
+		if(quantity < 0) alser("재고의 개수는 음수가 될 수 없습니다.");
+		alert("재고 개수를 숫자로 입력해주세요.");
+		return false;
+	}
+	
+	productUpdateForm.submit();
 }

@@ -16,6 +16,7 @@ public class DeliveryVO {
 	private String address;
 	private String productImage;
 	private String deliverySW;
+	private int usedPoint;
 	private String orderDate;
 	
 	private String imp_uid;				// 고유ID

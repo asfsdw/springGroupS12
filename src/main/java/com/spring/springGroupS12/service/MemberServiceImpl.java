@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.springGroupS12.dao.MemberDAO;
+import com.spring.springGroupS12.vo.MemberLoginStatVO;
 import com.spring.springGroupS12.vo.MemberVO;
 import com.spring.springGroupS12.vo.SubScriptVO;
 
@@ -75,8 +76,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<MemberVO> getMemberList(int startIndexNo, int pageSize, int level) {
-		return memberDAO.getMemberList(startIndexNo, pageSize, level);
+	public List<MemberVO> getMemberList(int startIndexNo, int pageSize, String search, String searchStr) {
+		return memberDAO.getMemberList(startIndexNo, pageSize, search, searchStr);
 	}
 
 	@Override
@@ -112,6 +113,31 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int setMemberLevelUp(int idx, int level) {
 		return memberDAO.setMemberLevelUp(idx, level);
+	}
+
+	@Override
+	public List<MemberLoginStatVO> getMemberStatList() {
+		return memberDAO.getMemberStatList();
+	}
+
+	@Override
+	public void setLoginCnt(String mid, int loginCnt) {
+		memberDAO.setLoginCnt(mid, loginCnt);
+	}
+
+	@Override
+	public void setMemberPointRollback(String mid, int point) {
+		memberDAO.setMemberPointRollback(mid, point);
+	}
+
+	@Override
+	public List<SubScriptVO> getNewSubScript() {
+		return memberDAO.getNewSubScript();
+	}
+
+	@Override
+	public List<MemberVO> getNewMember() {
+		return memberDAO.getNewMember();
 	}
 
 }

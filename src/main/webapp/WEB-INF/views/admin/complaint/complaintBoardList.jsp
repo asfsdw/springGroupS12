@@ -56,6 +56,7 @@
 				<div class="input-group-text"><b>검색:</b></div>
 				<select name="search" id="search" class="form-select" style="width:120px; flex:0 0 auto;">
 					<option value="idx">게시글 번호</option>
+					<option value="mid">올린이</option>
 				</select>
 				<input type="text" name="searchStr" id="searchStr" required class="form-control" />
 				<input type="button" value="검색" onclick="complaintBoardSearch()" class="btn btn-info" />

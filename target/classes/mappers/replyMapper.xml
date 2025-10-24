@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.springGroupS12.dao.ReplyDAO">
 	<select id="getReply" resultType="com.spring.springGroupS12.vo.ReplyVO">
-		SELECT * FROM reply WHERE parentIdx = #{parentIdx} ORDER BY re_order;
+		SELECT * FROM reply WHERE parentIdx = #{parentIdx} ORDER BY reOrder;
 	</select>
 	<select id="getBoardParentReplyCheck" resultType="com.spring.springGroupS12.vo.ReplyVO">
-		SELECT * FROM reply WHERE parentIdx = #{parentIdx} ORDER BY re_order DESC LIMIT 1;
+		SELECT * FROM reply WHERE parentIdx = #{parentIdx} ORDER BY reOrder DESC LIMIT 1;
 	</select>
 	<select id="getBoardParentReplyIdxCheck" resultType="com.spring.springGroupS12.vo.ReplyVO">
-		SELECT * FROM reply WHERE idx = #{idx} ORDER BY re_order DESC LIMIT 1;
+		SELECT * FROM reply WHERE idx = #{idx} ORDER BY reOrder DESC LIMIT 1;
 	</select>
 	<select id="getReview" resultType="com.spring.springGroupS12.vo.ReplyVO">
 		SELECT * FROM reply WHERE part = #{part} AND parentIdx = #{parentIdx} LIMIT 1;
@@ -25,11 +25,11 @@
 				#{vo.star},#{vo.hostIP},DEFAULT)
 			</if>
 			<if test="vo.star == 0 and vo.hostIP == null">
-				VALUES(DEFAULT,#{vo.parentIdx},#{vo.part},#{vo.mid},#{vo.nickName},#{vo.content},${vo.re_step},${vo.re_order},
+				VALUES(DEFAULT,#{vo.parentIdx},#{vo.part},#{vo.mid},#{vo.nickName},#{vo.content},${vo.reStep},${vo.reOrder},
 				DEFAULT,DEFAULT,DEFAULT)
 			</if>
 			<if test="vo.star == 0 and vo.hostIP != null">
-				VALUES(DEFAULT,#{vo.parentIdx},#{vo.part},#{vo.mid},#{vo.nickName},#{vo.content},${vo.re_step},${vo.re_order},
+				VALUES(DEFAULT,#{vo.parentIdx},#{vo.part},#{vo.mid},#{vo.nickName},#{vo.content},${vo.reStep},${vo.reOrder},
 				DEFAULT,#{vo.hostIP},DEFAULT)
 			</if>;
 	</insert>
@@ -37,7 +37,7 @@
 	
 	
 	<update id="setReplyOrderUp">
-		UPDATE reply SET re_order = re_order +1 WHERE parentIdx = #{parentIdx} and re_order > #{re_order};
+		UPDATE reply SET reOrder = reOrder + 1 WHERE parentIdx = #{parentIdx} and reOrder > #{reOrder};
 	</update>
 	<update id="setReplyUpdate">
 		UPDATE reply SET content = #{vo.content}, replyDate = now() WHERE idx = #{vo.idx};

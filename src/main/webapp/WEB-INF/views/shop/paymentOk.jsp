@@ -34,7 +34,7 @@
 			}
 			if(paySw == 'no') {
 				alert("다시 상품 리스트창으로 이동합니다.");
-				location.href = '${ctp}/shop/Goods';
+				location.href='${ctp}/shop/Goods';
 			}
 			else {
 				var temp = "";
@@ -52,9 +52,10 @@
 				temp += '&price=${dVO.price}';
 				temp += '&address=${dVO.address}';
 				temp += '&productImage=${dVO.productImage}';
+				temp += '&usedPoint=${dVO.usedPoint}';
 				temp += '&idxs=${idxs}';
 				
-				location.href = '${ctp}/shop/PaymentResult'+temp;
+				location.href='${ctp}/shop/PaymentResult'+temp;
 			}
 		});
 		*/
@@ -70,9 +71,10 @@
 			temp += '&price=${dVO.price}';
 			temp += '&address=${dVO.address}';
 			temp += '&productImage=${dVO.productImage}';
+			temp += '&usedPoint=${dVO.usedPoint}';
 			temp += '&idxs=${idxs}';
 			
-			location.href = '${ctp}/shop/PaymentResult'+temp;
+			location.href='${ctp}/shop/PaymentResult'+temp;
 		});
 	</script>
 </head>

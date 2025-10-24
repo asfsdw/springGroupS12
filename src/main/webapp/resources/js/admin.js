@@ -10,7 +10,7 @@ $(window).scroll(function() {
 $(() => {
 	$("#deliverySW").on("change", () => {
 		let deliverySW = $("#deliverySW").val();
-		location.href = "DeliveryList?deliverySW="+deliverySW;
+		location.href="DeliveryList?deliverySW="+deliverySW;
 	});
 });
 
@@ -141,8 +141,8 @@ function openSWAllChange() {
 	if(ans) {
 		let index = [];
 		let cnt = 0;
-		for(let i=0; i<myform.idxFlag.length; i++) {
-			if(myform.idxFlag[i].checked) {
+		for(let i=0; i<$("[name=idxFlag]").length; i++) {
+			if($("#idxFlag"+i).is(":checked") == true) {
 				index[cnt] = i;
 				cnt = cnt+1;
 			}
@@ -242,8 +242,8 @@ function deliverySWAllChange() {
 	if(ans) {
 		let index = [];
 		let cnt = 0;
-		for(let i=0; i<myform.idxFlag.length; i++) {
-			if(myform.idxFlag[i].checked) {
+		for(let i=0; i<$("[name=idxFlag]").length; i++) {
+			if($("#idxFlag"+i).is(":checked") == true) {
 				index[cnt] = i;
 				cnt = cnt+1;
 			}
@@ -287,12 +287,17 @@ function deliverySWAllChange() {
 // 등급별로 보기.
 function levelPageCheck() {
 	let level = $("#levelPage").val();
-	location.href = "MemberList?level="+level;
+	location.href="MemberList?level="+level;
+}
+// 신고상태별로 보기.
+function progressPageCheck() {
+	let progress = $("#progressPage").val();
+	location.href="ComplaintList?progress="+progress;
 }
 // 한 페이지 최대 수 변경.
 function viewPageCheck() {
 	let pageSize = $("#viewPageCnt").val();
-	location.href = "MemberList?pageSize="+pageSize;
+	location.href="MemberList?pageSize="+pageSize;
 }
 
 // 회원 등급변경.
@@ -319,17 +324,13 @@ function levelChange(i, idx) {
 }
 // 선택 등급 변경.
 function levelAllChange() {
-	if($("#levelSelect").val() == '선택') {
-		alert("변경하실 등급을 선택해주세요.");
-		return false;
-	}
 	let ans = confirm("선택한 회원의 등급을 변경하시겠습니까?");
 	if(ans) {
 		
 		let index = [];
 		let cnt = 0;
-		for(let i=0; i<myform.idxFlag.length; i++) {
-			if(myform.idxFlag[i].checked) {
+		for(let i=0; i<$("[name=idxFlag]").length; i++) {
+			if($("#idxFlag"+i).is(":checked") == true) {
 				index[cnt] = i;
 				cnt = cnt+1;
 			}
@@ -376,15 +377,16 @@ function complaintChange(ctp, i, idx, partIdx) {
 		let progress = $("#progress"+i).val();
 		if(progress == '처리하기') {
 			if(part == '게시판') {
-				location.href = ctp+"/admin/ComplaintBoardList?idx="+partIdx;
+				location.href=ctp+"/admin/ComplaintBoardList?idx="+partIdx;
 				return false;
 			}
 			else if(part == '굿즈') {
-				location.href = ctp+"/admin/ProductList?idx="+partIdx;
+				location.href=ctp+"/admin/ProductList?idx="+partIdx;
 				return false;
 			}
 		}
 		
+		alert("확인");
 		$.ajax({
 			url : "ComplaintChange",
 			type: "post",

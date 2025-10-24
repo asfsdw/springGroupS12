@@ -162,7 +162,11 @@ public class MessageController {
 		}
 		else if(msgFlag.equals("lackQuantity")) {
 			model.addAttribute("message", title+"\\n상품의 재고가 부족합니다.\\n재고를 확인 후, 다시 주문해주세요.");
-			model.addAttribute("url", "shop/Goods");
+			model.addAttribute("url", "shop/Product?idx="+idx);
+		}
+		else if(msgFlag.equals("productUpdateNo")) {
+			model.addAttribute("message", "상품 수정에 실패했습니다.//n다시 시도해주세요.");
+			model.addAttribute("url", "shop/Product?idx="+idx);
 		}
 		return "include/message";
 	}

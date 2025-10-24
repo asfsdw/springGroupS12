@@ -35,10 +35,10 @@ public class ProjectProvide {
 		String content = "";
 		// 메시지 보관함에 저장되는 content 변수 안에 발신자가 보여주고 싶은 정보를 추가한다.
 		content = content.replace("\n", "<br>");
-		content += "<br><hr><h3>springGroup에서 보냅니다.</h3><hr><br>";
+		content += "<br><hr><h3>켄모치 토야 팬클럽에서 보냅니다.</h3><hr><br>";
 		content += "<font color='red' size='6'><b>"+mailFlag+"</b></font><br>";
-		content += "<p><img src=\"cid:main.jpg\" width='500px'></p>";
-		content += "<p><a href='http://192.168.50.53:9090/springGroupS12/' class='btn btn-info'>방문하기</a></p>";
+		content += "<p><img src=\"cid:miniSlide1.jpg\" width='500px'></p>";
+		content += "<p><h3><a href='http://192.168.50.53:9090/springGroupS12/' class='btn btn-info'>방문하기</a></h3></p>";
 		content += "<hr>";
 		
 		messageHelper.setTo(toMail);
@@ -46,9 +46,9 @@ public class ProjectProvide {
 		// true: 예약처리 안 하고 바로 보내겠다.
 		messageHelper.setText(content, true);
 		
-		FileSystemResource file = new FileSystemResource(request.getSession().getServletContext().getRealPath("/resources/images/main.jpg"));
+		FileSystemResource file = new FileSystemResource(request.getSession().getServletContext().getRealPath("/resources/images/miniSlide1.jpg"));
 		// 이미지파일 이름, 경로
-		messageHelper.addInline("main.jpg", file);
+		messageHelper.addInline("miniSlide1.jpg", file);
 		
 		// 메일 전송.
 		mailSender.send(message);

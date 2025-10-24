@@ -34,8 +34,8 @@ public class ReplyServiceImpl implements ReplyService {
 	}
 
 	@Override
-	public void setReplyOrderUp(int parentIdx, int re_order) {
-		replyDAO.setReplyOrderUp(parentIdx, re_order);
+	public void setReplyOrderUp(int parentIdx, int reOrder) {
+		replyDAO.setReplyOrderUp(parentIdx, reOrder);
 	}
 
 	@Override

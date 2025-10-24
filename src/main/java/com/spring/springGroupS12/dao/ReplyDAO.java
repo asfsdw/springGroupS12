@@ -16,7 +16,7 @@ public interface ReplyDAO {
 
 	ReplyVO getBoardParentReplyIdxCheck(@Param("idx") int idx);
 
-	void setReplyOrderUp(@Param("parentIdx") int parentIdx, @Param("re_order") int re_order);
+	void setReplyOrderUp(@Param("parentIdx") int parentIdx, @Param("reOrder") int reOrder);
 
 	int setReplyUpdate(@Param("vo") ReplyVO vo);
 

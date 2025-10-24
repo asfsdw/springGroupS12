@@ -1,5 +1,6 @@
 package com.spring.springGroupS12.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -28,6 +29,7 @@ import com.spring.springGroupS12.service.DeliveryService;
 import com.spring.springGroupS12.service.MemberService;
 import com.spring.springGroupS12.service.ShopService;
 import com.spring.springGroupS12.vo.DeliveryVO;
+import com.spring.springGroupS12.vo.MemberLoginStatVO;
 import com.spring.springGroupS12.vo.MemberVO;
 import com.spring.springGroupS12.vo.PageVO;
 import com.spring.springGroupS12.vo.ShopVO;
@@ -53,7 +55,7 @@ public class MemberController {
 	@GetMapping("/SignUp")
 	public String signUpGet(Model model) {
 		// 나이 확인을 위해 현재 년도를 보낸다.
-		model.addAttribute("year",LocalDateTime.now().getYear());
+		model.addAttribute("year", LocalDateTime.now().getYear());
 		return "member/signUp";
 	}
 	// 아이디 체크.
@@ -118,12 +120,20 @@ public class MemberController {
 	// 회원등록.
 	@PostMapping("/SignUp")
 	public String signUpPost(MultipartFile fName, MemberVO vo, HttpSession session) {
+		// 백엔드 체크.
 		// 아이디, 닉네임 중복 확인.
 		if(memberService.getMemberMid(vo.getMid()) != null) return "redirect:/Message/idDuplication";
 		if(memberService.getMemberNickName(vo.getNickName()) != null) return "redirect:/Message/nickNameDuplication";
 		
+		if(vo.getMid().length() > 20) return "redirect:/Message/wrongAccess";
+		if(vo.getNickName().length() > 20) return "redirect:/Message/wrongAccess";
+		if(vo.getName().length() > 20) return "redirect:/Message/wrongAccess";
+		if(vo.getAge() > 19) return "redirect:/Message/wrongAccess";
+		if(vo.getEmail().length() > 50) return "redirect:/Message/wrongAccess";
+		
 		// 비밀번호 암호화.
 		vo.setPwd(passwordEncode.encode(vo.getPwd()));
+		if(vo.getPwd().length() > 256) return "redirect:/Message/wrongAccess";
 		
 		// 프로필 사진 처리.
 		if(fName.getOriginalFilename().equals("")) vo.setMyImage("noimage.jpg");
@@ -200,9 +210,22 @@ public class MemberController {
 			session.setAttribute("sLevel", vo.getLevel());
 			session.setAttribute("sStrLevel", strLevel);
 			
+			// 오늘 날짜 세션 없으면 생성.
+			if(session.getAttribute("sToday"+vo.getMid()) == null) session.setAttribute("sToday"+vo.getMid(), LocalDate.now().toString());
+			// 첫 방문시 총 방문 횟수+1.
+			if(vo.getLoginCnt() == 0) memberService.setLoginCnt(vo.getMid(), 1);
+
 			// 마지막 방문일 처리.
 			session.setAttribute("sLastDate", vo.getLastDate());
 			memberService.setLastDateUpdate(vo.getMid());
+			
+			// 오늘 날짜와 마지막 로그인 날짜가 다르면.
+			if(!session.getAttribute("sToday"+vo.getMid()).equals(session.getAttribute("sLastDate").toString().substring(0, 10))) {
+				// 오늘 처음 방문시 총 방문 횟수+1.
+				memberService.setLoginCnt(vo.getMid(), 1);
+				// 오늘 날짜 세션 업데이트.
+				session.setAttribute("sToday"+vo.getMid(), LocalDate.now().toString());
+			}
 			
 			// 아이디 저장 쿠키처리.
 			if(idSave.equals("on")) {
@@ -282,9 +305,22 @@ public class MemberController {
 		session.setAttribute("sLevel", vo.getLevel());
 		session.setAttribute("sStrLevel", strLevel);
 		
+		// 오늘 날짜 세션 없으면 생성.
+		if(session.getAttribute("sToday"+vo.getMid()) == null) session.setAttribute("sToday"+vo.getMid(), LocalDate.now().toString());
+		// 첫 방문시 총 방문 횟수+1.
+		if(vo.getLoginCnt() == 0) memberService.setLoginCnt(vo.getMid(), 1);
+		
 		// 마지막 방문일 처리.
 		session.setAttribute("sLastDate", vo.getLastDate());
 		memberService.setLastDateUpdate(vo.getMid());
+		
+		// 오늘 날짜와 마지막 로그인 날짜가 다르면.
+		if(!session.getAttribute("sToday"+vo.getMid()).equals(session.getAttribute("sLastDate").toString().substring(0, 10))) {
+			// 오늘 처음 방문시 총 방문 횟수+1.
+			memberService.setLoginCnt(vo.getMid(), 1);
+			// 오늘 날짜 세션 업데이트.
+			session.setAttribute("sToday"+vo.getMid(), LocalDate.now().toString());
+		}
 		
 		// 로그인 완료후 모든 처리가 끝나면 필요한 메세지처리후 memberMain으로 보낸다.
 		if(newMember.equals("NO")) return "redirect:/Message/loginOk?mid="+vo.getMid();
@@ -301,10 +337,29 @@ public class MemberController {
 		List<SubScriptVO> subVOS = memberService.getSubScriptList(mid);
 		List<DeliveryVO> dVOS = deliveryService.getDeliveryListMain(mid);
 		
+		// 1개월간 가장 많이 출석한 회원(최대 5명).
+		List<MemberLoginStatVO> statVOS = memberService.getMemberStatList();
+		String statNickName = "";
+		String statLoginCnt = "";
+		String statPoint = "";
+		
+		for(MemberLoginStatVO stat : statVOS) {
+			statNickName += stat.getNickName()+"/";
+			statLoginCnt += stat.getLoginCnt()+"/";
+			statPoint += stat.getPoint()+"/";
+		}
+		statNickName = statNickName.substring(0,statNickName.lastIndexOf("/"));
+		statLoginCnt = statLoginCnt.substring(0,statLoginCnt.lastIndexOf("/"));
+		statPoint = statPoint.substring(0,statPoint.lastIndexOf("/"));
+		
 		model.addAttribute("mVO", mVO);
 		model.addAttribute("shopVOS", shopVOS);
 		model.addAttribute("subVOS", subVOS);
 		model.addAttribute("dVOS", dVOS);
+		
+		model.addAttribute("statNickName", statNickName);
+		model.addAttribute("statLoginCnt", statLoginCnt);
+		model.addAttribute("statPoint", statPoint);
 		return "member/main";
 	}
 	
@@ -332,19 +387,31 @@ public class MemberController {
 		else return "redirect:/Message/subScriptNo";
 	}
 	
-	//회원 리스트.
+	// 회원 리스트.
 	@GetMapping("/MemberList")
-	public String memberListGet(Model model, HttpSession session, PageVO pVO,
-			@RequestParam(name="level", defaultValue = "100", required = false) int level) {
+	public String memberListGet(Model model, HttpSession session, PageVO pVO) {
 		pVO.setSection("member");
 		pVO = pagination.pagination(pVO);
 		
-		List<MemberVO> vos = memberService.getMemberList(pVO.getStartIndexNo(),pVO.getPageSize(),level);
+		List<MemberVO> vos = memberService.getMemberList(pVO.getStartIndexNo(), pVO.getPageSize(),"","");
 		
 		model.addAttribute("vos", vos);
 		model.addAttribute("pVO", pVO);
 		
 		return "member/memberList";
+	}
+	// 회원 찾기.
+	@GetMapping("/MemberSearch")
+	public String memberSearchGet(Model model, PageVO pVO,
+			@RequestParam(name = "search", defaultValue = "", required = false)String search,
+			@RequestParam(name = "searchStr", defaultValue = "", required = false)String searchStr) {
+		pVO.setSection("member");
+		pVO = pagination.pagination(pVO);
+		
+		List<MemberVO> vos = memberService.getMemberList(pVO.getStartIndexNo(), pVO.getPageSize(), search, searchStr);
+		
+		model.addAttribute("vos", vos);
+		return "member/memberSearch";
 	}
 	
 	// 회원정보 수정 관련.
@@ -390,12 +457,15 @@ public class MemberController {
 		}
 		else return "redirect:/Message/memberUpdateNo?mid="+vo.getMid();
 	}
-	// 새 비밀번호 DB에 저장.
+	// 비밀번호 변경.
 	@PostMapping("/MemberPwdChange")
-	public String memberPwdChangePost(String mid, String newPwd) {
+	public String memberPwdChangePost(HttpSession session, String mid, String newPwd) {
 		newPwd = passwordEncode.encode(newPwd);
 		int res = memberService.setMemberTempPwd(mid, newPwd);
-		if(res != 0) return "redirect:/Message/pwdChangeOk";
+		if(res != 0) {
+			session.removeAttribute("sLoginNew");
+			return "redirect:/Message/pwdChangeOk";
+		}
 		else return "redirect:/Message/pwdChangeNo";
 	}
 	

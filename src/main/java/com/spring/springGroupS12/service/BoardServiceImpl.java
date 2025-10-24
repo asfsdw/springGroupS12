@@ -267,4 +267,9 @@ public class BoardServiceImpl implements BoardService {
 	public int setBoardOpenSWUpdate(int idx, String openSW) {
 		return boardDAO.setBoardOpenSWUpdate(idx, openSW);
 	}
+
+	@Override
+	public BoardVO getPreNextSearch(int idx, String flag) {
+		return boardDAO.getPreNextSearch(idx, flag);
+	}
 }

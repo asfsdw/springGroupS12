@@ -19,13 +19,16 @@
 	<select id="getProductListHome" resultType="com.spring.springGroupS12.vo.ShopVO">
 		SELECT idx, title, productImage, price, quantity FROM shop WHERE openSW = '공개' ORDER BY idx DESC LIMIT 8;
 	</select>
+	<select id="getNewProductSub" resultType="com.spring.springGroupS12.vo.ShopVO">
+		SELECT * FROM shop WHERE openSW = '신청접수' AND shopDate >= date_add(now(), interval - 7 day);
+	</select>
 	
 	
 	
 	<insert id="setProductInput">
 		INSERT INTO shop VALUES(DEFAULT,#{vo.mid},#{vo.nickName},#{vo.kategorie},
-			#{vo.title},#{vo.productImage},#{vo.content},#{vo.price},#{vo.quantity},#{vo.pwd}, #{vo.openSW}, 
-			DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT);
+			#{vo.title},#{vo.productImage},#{vo.content},#{vo.price},#{vo.quantity},#{vo.openSW}, 
+			DEFAULT,DEFAULT,DEFAULT);
 	</insert>
 	
 	
@@ -40,6 +43,9 @@
 		UPDATE shop SET openSW = 
 		<if test="openSW != '공개/처리완료'">#{openSW}</if> 
 		<if test="openSW == '공개/처리완료'">'공개'</if> WHERE idx = #{idx};
+	</update>
+	<update id="setProductUpdate">
+		UPDATE shop SET kategorie = #{vo.kategorie}, quantity = #{vo.quantity}, content = #{vo.content} WHERE idx = #{vo.idx};
 	</update>
 	
 	

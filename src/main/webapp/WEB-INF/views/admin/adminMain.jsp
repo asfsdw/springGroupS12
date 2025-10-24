@@ -15,28 +15,18 @@
 	<div class="text-center">
 		<h2>관리자 메인화면</h2>
 		<hr/>
-		<table class="table table-bordered table-sm">
-			<tr>
-				<th>방명록 새글</th>
-				<td><a href="${ctp}/admin/guest/GuestList?flag=new"><font color="blue">${guestNewCount}</font></a>건</td>
-			</tr>
-			<tr>
-				<th>게시판 새글</th>
-				<td><a href="${ctp}/admin/board/BoardList?flag=new"><font color="blue">${boardNewCount}</font></a>건</td>
-			</tr>
-			<tr>
-				<th>신고글 새글</th>
-				<td><a href="${ctp}/admin/complaint/ComplaintList?flag=new"><font color="blue">${complaintNewCount}</font></a>건</td>
-			</tr>
-			<tr>
-				<th>신규회원</th>
-				<td><a href="${ctp}/admin/complaint/MemberList?flag=new"><font color="blue">${memberNewCount}</font></a>건</td>
-			</tr>
-			<tr>
-				<th>탈퇴신청회원</th>
-				<td><a href="${ctp}/admin/complaint/MemberList?level=999"><font color="blue">${cancelMember}</font></a>건</td>
-			</tr>
-		</table>
+		<div class="d-flex justify-content-center">
+			<table class="table table-bordered" style="width:400px">
+				<tr>
+					<td>새로운 신청</td>
+					<td>${newSubScript}</td>
+				</tr>
+				<tr>
+					<td>새로 가입한 회원</td>
+					<td>${newMember}</td>
+				</tr>
+			</table>
+		</div>
 		<p><br/></p>
 	</div>
 	<h6 id="topBtn" class="text-end me-3"><img src="${ctp}/images/arrowTop.gif" title="위로이동" /></h6>

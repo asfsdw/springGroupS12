@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.springGroupS12.common.Pagination;
+import com.spring.springGroupS12.service.ComplaintService;
 import com.spring.springGroupS12.service.DeliveryService;
 import com.spring.springGroupS12.service.FileService;
 import com.spring.springGroupS12.service.MemberService;
 import com.spring.springGroupS12.service.ReplyService;
 import com.spring.springGroupS12.service.ShopService;
+import com.spring.springGroupS12.vo.ComplaintVO;
 import com.spring.springGroupS12.vo.DeliveryVO;
 import com.spring.springGroupS12.vo.FileVO;
 import com.spring.springGroupS12.vo.MemberVO;
@@ -47,6 +49,8 @@ public class ShopController {
 	MemberService memberService;
 	@Autowired
 	ReplyService replyService;
+	@Autowired
+	ComplaintService complaintService;
 	
 	// 상품 리스트.
 	@GetMapping("/Goods")
@@ -72,15 +76,12 @@ public class ShopController {
 		if(vo.getMid().length() > 20 || vo.getMid() == null) return "redirect:/Message/wrongAccess";
 		if(vo.getNickName().length() > 20 || vo.getNickName() == null) return "redirect:/Message/wrongAccess";
 		if(vo.getKategorie().length() > 10 || vo.getKategorie() == null) return "redirect:/Message/wrongAccess";
-		if(vo.getTitle().length() > 30 || vo.getTitle() == null) return "redirect:/Message/wrongAccess";
-		String pwd = passwordEncoder.encode(vo.getPwd());
-		if(pwd.length() > 256 || vo.getPwd() == null) return "redirect:/Message/wrongAccess";
+		if(vo.getTitle().length() > 50 || vo.getTitle() == null) return "redirect:/Message/wrongAccess";
 		
 		if(fName.getOriginalFilename().equals("")) return "redirect:/Message/wrongAccess";
 		
 		// 상품 등록.
 		int res = 0;
-		vo.setPwd(pwd);
 		vo.setOpenSW("공개");
 		res = shopService.setProductImage(fName, vo, fVO);
 		
@@ -99,15 +100,12 @@ public class ShopController {
 		if(vo.getMid().length() > 20 || vo.getMid() == null) return "redirect:/Message/wrongAccess";
 		if(vo.getNickName().length() > 20 || vo.getNickName() == null) return "redirect:/Message/wrongAccess";
 		if(vo.getKategorie().length() > 10 || vo.getKategorie() == null) return "redirect:/Message/wrongAccess";
-		if(vo.getTitle().length() > 30 || vo.getTitle() == null) return "redirect:/Message/wrongAccess";
-		String pwd = passwordEncoder.encode(vo.getPwd());
-		if(pwd.length() > 256 || vo.getPwd() == null) return "redirect:/Message/wrongAccess";
+		if(vo.getTitle().length() > 50 || vo.getTitle() == null) return "redirect:/Message/wrongAccess";
 		
 		if(fName.getOriginalFilename().equals("")) return "redirect:/Message/wrongAccess";
 		
 		// 상품 등록 신청.
 		int res = 0;
-		vo.setPwd(pwd);
 		vo.setOpenSW("신청접수");
 		res = shopService.setProductImage(fName, vo, fVO);
 		
@@ -141,37 +139,37 @@ public class ShopController {
 		model.addAttribute("rVOS", rVOS);
 		return "shop/product";
 	}
-	
 	// 상품 구매.
 	@PostMapping("/Product")
 	public String ProductPost(Model model, DeliveryVO dVO,
 			@RequestParam(name = "idxs", defaultValue = "", required = false)String idxs,
-			@RequestParam(name = "orderQuantitys", defaultValue = "", required = false)String orderQuantitys,
-			@RequestParam(name = "titles", defaultValue = "", required = false)String titles) {
+			@RequestParam(name = "titles", defaultValue = "", required = false)String titles,
+			@RequestParam(name = "orderQuantitys", defaultValue = "", required = false)String orderQuantitys) {
 		// 구매할 개수와 재고 비교.
 		// 상품 페이지에서 바로 구매할 때.
 		if(idxs.equals("")) {
 			ShopVO searchSVO = shopService.getProduct(dVO.getIdx());
 			if(searchSVO.getQuantity() < dVO.getOrderQuantity()) {
 				model.addAttribute("title", dVO.getTitle());
-				return "redirect:/Message/lackQuantity";
+				return "redirect:/Message/lackQuantity?idx="+dVO.getIdx();
 			}
 		}
 		// 장바구니에서 구매할 때.
 		else {
 			String[] idx = idxs.split(",");
-			String[] orderQuantity = orderQuantitys.split(",");
 			String[] title = titles.split(",");
+			String[] orderQuantity = orderQuantitys.split(",");
 			for(int i=0; i<idx.length; i++) {
 				dVO = deliveryService.getShoppingBagDuplicat(dVO.getMid(), title[i], "대기중");
 				ShopVO searchSVO = shopService.getProduct(dVO.getParentIdx());
 				if(searchSVO.getQuantity() < Integer.parseInt(orderQuantity[i])) {
 					model.addAttribute("title", title[i]);
-					return "redirect:/Message/lackQuantity";
+					return "redirect:/Message/lackQuantity?idx="+dVO.getParentIdx();
 				}
 			}
 		}
 		
+		MemberVO mVO = memberService.getMemberMid(dVO.getMid());
 		// 회원이 구매.
 		if(!dVO.getMid().equals("")) {
 			List<DeliveryVO> searchdVOS = deliveryService.getShoppingBag(dVO.getMid());
@@ -202,7 +200,6 @@ public class ShopController {
 						}
 						// 상품화면에서 바로 구매눌렀는데 장바구니에 없는 경우.
 						else {
-							MemberVO mVO = memberService.getMemberMid(dVO.getMid());
 							dVO.setNickName(mVO.getNickName());
 							dVO.setEmail(mVO.getEmail());
 							dVO.setAddress(mVO.getAddress());
@@ -214,19 +211,21 @@ public class ShopController {
 			}
 			// 장바구니가 비어있음.
 			else {
-				MemberVO mVO = memberService.getMemberMid(dVO.getMid());
 				dVO.setNickName(mVO.getNickName());
 				dVO.setEmail(mVO.getEmail());
 				dVO.setAddress(mVO.getAddress());
 				
 				model.addAttribute("dVO", dVO);
 			}
+			
 		}
 		// 비회원 구매.
 		else {
 			dVO.setMid("noMember");
 			model.addAttribute("dVO", dVO);
 		}
+		
+		model.addAttribute("point", mVO==null?0:mVO.getPoint());
 		return "shop/productBuy";
 	}
 	
@@ -240,11 +239,11 @@ public class ShopController {
 		MemberVO vo = memberService.getMemberMid(mid);
 		ShopVO sVO = shopService.getProduct(idx);
 		
-		// 장바구니에 같은 상품이 있으면 수량만 증가.
+		// 장바구니에 같은 상품이 있으면 수량만 변경.
 		DeliveryVO dVO = deliveryService.getShoppingBagDuplicat(mid, sVO.getTitle(), "대기중");
 		if(dVO != null) return deliveryService.setShoppingBagUpdate(orderQuantity, dVO.getIdx());
 		
-		return deliveryService.setShoppingBag(idx, "", mid, vo.getNickName(), vo.getEmail(), sVO.getTitle(), orderQuantity, sVO.getPrice(), vo.getAddress(), sVO.getProductImage(), "대기중");
+		return deliveryService.setShoppingBag(idx, "", mid, vo.getNickName(), vo.getEmail(), sVO.getTitle(), orderQuantity, sVO.getPrice(), vo.getAddress(), sVO.getProductImage(), "대기중", 0);
 	}
 	// 장바구니 관련.
 	@GetMapping("/ShoppingBag")
@@ -268,6 +267,9 @@ public class ShopController {
 	@PostMapping("/Buy")
 	public String buyPost(Model model, DeliveryVO dVO,
 			@RequestParam(name = "idxs", defaultValue = "", required = false)String idxs) {
+		// 포인트 백엔드 검사(포인트를 사용했는데 100단위가 아닐 경우.
+		if(dVO.getUsedPoint() != 0 && dVO.getUsedPoint()%100 != 0) return "redirec:/Message/wrongAccess";
+		
 		// 결재금액.
 		int totPrice = 0;
 		if(dVO.getMid().contains(",")) {
@@ -280,8 +282,10 @@ public class ShopController {
 				DeliveryVO priceVO = deliveryService.getShoppingBagDuplicat(dVO.getMid(), titles[i], "대기중");
 				totPrice += priceVO.getPrice()*priceVO.getOrderQuantity();
 			}
+			if(dVO.getUsedPoint() != 0)
+			totPrice = totPrice - (dVO.getUsedPoint()/10);
 		}
-		else totPrice = dVO.getPrice();
+		else totPrice = dVO.getPrice() - (dVO.getUsedPoint()/10);
 		
 		model.addAttribute("dVO", dVO);
 		model.addAttribute("idxs", idxs);
@@ -301,7 +305,7 @@ public class ShopController {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 			String deliveryIdx = sdf.format(today)+UUID.randomUUID().toString().substring(0, 8);
 			
-			deliveryService.setShoppingBag(dVO.getIdx(), deliveryIdx, dVO.getMid(), "비회원", "", dVO.getTitle(), dVO.getOrderQuantity(), dVO.getPrice(), dVO.getAddress(), dVO.getProductImage(), "준비중");
+			deliveryService.setShoppingBag(dVO.getIdx(), deliveryIdx, dVO.getMid(), "비회원", "", dVO.getTitle(), dVO.getOrderQuantity(), dVO.getPrice(), dVO.getAddress(), dVO.getProductImage(), "준비중", dVO.getUsedPoint());
 			
 			shopService.setProductQuantityUpdate(dVO.getIdx(), dVO.getOrderQuantity());
 			
@@ -309,9 +313,11 @@ public class ShopController {
 			res = 1;
 		}
 		else {
+			// 배송 DB 업데이트.
 			if(!idxs.equals("")) res = deliveryService.setDeliveryLastUpdate(idxs, dVO);
 			else res = deliveryService.setDeliveryLastUpdate(dVO.getIdx()+"", dVO);
 			
+			// 주문번호 가져오기.
 			if(idxs.contains(",")) dVO = deliveryService.getShoppingBagDuplicat(dVO.getMid(), dVO.getTitle().substring(0,dVO.getTitle().indexOf(",")), "준비중");
 			else dVO = deliveryService.getShoppingBagDuplicat(dVO.getMid(), dVO.getTitle(), "준비중");
 			
@@ -338,11 +344,14 @@ public class ShopController {
 	@Transactional
 	@ResponseBody
 	@PostMapping("/DeliveryCancel")
-	public int deliveryCancelPost(String deliveryIdx) {
+	public int deliveryCancelPost(String deliveryIdx, int usedPoint) {
 		List<DeliveryVO> vos = deliveryService.getShoppingBagIdx(deliveryIdx);
+		String mid = "";
 		for(DeliveryVO vo : vos) {
 			shopService.setProductQuantityRollback(vo.getParentIdx(), vo.getOrderQuantity());
+			if(mid.equals("")) mid = vo.getMid();
 		}
+		if(usedPoint != 0) memberService.setMemberPointRollback(mid, usedPoint);
 		return deliveryService.setShoppingBagDeleteDeliveryIdx(deliveryIdx);
 	}
 	// 구매완료.
@@ -351,5 +360,38 @@ public class ShopController {
 	@PostMapping("/DeliveryComp")
 	public int deliveryCompPost(String deliveryIdx) {
 		return deliveryService.setDeliverySWUpdate(deliveryIdx, "구매완료");
+	}
+	
+	// 상품 신고.
+	@ResponseBody
+	@PostMapping("/ShopComplaint")
+	public int shopComplaintPost(ComplaintVO vo) {
+		int res = 0;
+		res = complaintService.setComplaintInput(vo);
+		if(res != 0) complaintService.setComplaintParentUpdate(vo.getPart(), vo.getPartIdx(), "OK");
+		return res;
+	}
+	
+	// 상품 수정 관련.
+	@GetMapping("/ProductUpdate")
+	public String shopUpdateGet(Model model, ShopVO vo) {
+		vo = shopService.getProduct(vo.getIdx());
+		
+		model.addAttribute("vo", vo);
+		return "shop/productUpdate";
+	}
+	// 상품 수정.
+	@PostMapping("/ProductUpdate")
+	public String shopUpdatePost(ShopVO vo) {
+		// 백엔드 검사.
+		if(vo.getMid().length() > 20 || vo.getMid() == null) return "redirect:/Message/wrongAccess";
+		if(vo.getNickName().length() > 20 || vo.getNickName() == null) return "redirect:/Message/wrongAccess";
+		if(vo.getKategorie().length() > 10 || vo.getKategorie() == null) return "redirect:/Message/wrongAccess";
+		if(vo.getTitle().length() > 50 || vo.getTitle() == null) return "redirect:/Message/wrongAccess";
+		
+		// 상품 수정.
+		int res = shopService.setProductUpdate(vo);
+		if(res != 0) return "redirect:/shop/Product?idx="+vo.getIdx();
+		else return "redirect:/Message/productUpdateNo?idx="+vo.getIdx();
 	}
 }

@@ -8,7 +8,7 @@ public interface DeliveryService {
 	
 	List<DeliveryVO> getShoppingBagList(String mid);
 
-	int setShoppingBag(int parentIdx, String deliveryIdx, String mid, String nickName, String email, String title, int orderQuantity, int price, String address, String productImage, String deliverySW);
+	int setShoppingBag(int parentIdx, String deliveryIdx, String mid, String nickName, String email, String title, int orderQuantity, int price, String address, String productImage, String deliverySW, int point);
 
 	List<DeliveryVO> getShoppingBag(String mid);
 	

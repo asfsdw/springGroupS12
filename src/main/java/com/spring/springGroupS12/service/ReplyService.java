@@ -14,7 +14,7 @@ public interface ReplyService {
 
 	ReplyVO getBoardParentReplyIdxCheck(int idx);
 
-	void setReplyOrderUp(int parentIdx, int re_order);
+	void setReplyOrderUp(int parentIdx, int reOrder);
 
 	int setReplyUpdate(ReplyVO vo);
 

@@ -36,4 +36,6 @@ public interface BoardDAO {
 
 	int setBoardOpenSWUpdate(@Param("idx") int idx, @Param("openSW") String openSW);
 
+	BoardVO getPreNextSearch(@Param("idx") int idx, @Param("flag") String flag);
+
 }

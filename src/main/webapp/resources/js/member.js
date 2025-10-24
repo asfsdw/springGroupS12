@@ -55,7 +55,7 @@ function subCheck(mid) {
 	subForm.submit();
 }
 
-function pwdCheck(ctp) {
+function pwdCheck(ctp, mid, flag) {
 	let pwd = $("#pwd").val().trim();
 	if(pwd == "") {
 		alert("비밀번호를 입력해주세요.");
@@ -64,20 +64,20 @@ function pwdCheck(ctp) {
 	}
 	
 	$.ajax({
-		url : "${ctp}/member/MemberPwdCheck",
+		url : ctp+"/member/MemberPwdCheck",
 		type: "post",
 		data: {
-			"mid" : "${sMid}",
+			"mid" : mid,
 			"pwd" : pwd
 		},
 		success : (res) => {
 			if(res != "0") {
-				if("${flag}" == "p") {
+				if(flag == "p") {
 					$("#myform").hide();
 					$("#yourform").show();
 				}
 				else {
-					location.href = ctp+"/member/MemberUpdate?mid=${sMid}";
+					location.href=ctp+"/member/MemberUpdate?mid="+mid;
 				}
 			}
 			else {

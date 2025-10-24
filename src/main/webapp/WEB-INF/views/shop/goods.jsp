@@ -18,11 +18,11 @@
 		<br/>
 		<div class="text-start">
 			<c:if test="${sLevel < 2}">
-				<input type="button" value="상품등록" onclick="location.href = '${ctp}/shop/ProductAdd'" class="btn btn-success btn-sm" />
+				<input type="button" value="상품등록" onclick="location.href='${ctp}/shop/ProductAdd'" class="btn btn-success btn-sm" />
 				<hr/>
 			</c:if>
 			<c:if test="${sLevel == 2}">
-				<input type="button" value="상품등록신청" onclick="location.href = '${ctp}/shop/ProductAddSub'" class="btn btn-success btn-sm" />
+				<input type="button" value="상품등록신청" onclick="location.href='${ctp}/shop/ProductAddSub'" class="btn btn-success btn-sm" />
 				<hr/>
 			</c:if>
 		</div>

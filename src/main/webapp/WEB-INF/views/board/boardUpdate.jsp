@@ -64,7 +64,7 @@
 					<td colspan="2" class="text-center">
 						<input type="button" value="수정하기" onclick="fCheck('${vo.mid}','${fVO}')" class="btn btn-success me-2" />
 						<input type="reset" value="다시입력" class="btn btn-warning me-2" />
-						<input type="button" value="돌아가기" onclick="location.href = '${ctp}/board/BoardList';" class="btn btn-danger" />
+						<input type="button" value="돌아가기" onclick="location.href='${ctp}/board/BoardList'" class="btn btn-danger" />
 					</td>
 				</tr>
 			</table>

@@ -54,53 +54,71 @@
 </head>
 <body>
 	<div class="container text-center">
-	<p></p>
-	<div class="row">
-		<div class="col"><img src="${ctp}/data/shop/${vo.productImage}" style="width:500px" /></div>
-		<div class="col text-start">
-			<div><h2>${vo.title}</h2></div>
-			<div><h3>가격: <fmt:formatNumber value="${vo.price}" />원</h3></div>
-			<div><h3>재고: ${vo.quantity}개</h3></div>
-			<div><h4>분류: ${vo.kategorie}</h4></div>
-			<hr/>
-			<div><h4>판매자: ${vo.nickName}</h4></div>
-			<div><h5>판매횟수: ${vo.sold}</h5></div>
-			<hr/>
-			<form name="productForm" method="post" action="${ctp}/shop/Product">
-				<div class="input-group">
-					<input type="number" value="1" min="1" max="10" id="orderQuantity" name="orderQuantity" />
-					<div class="input-group-text">개</div>
-				</div>
+		<p></p>
+		<div class="row">
+			<div class="col"><img src="${ctp}/data/shop/${vo.productImage}" style="width:500px" /></div>
+			<div class="col text-start">
+				<div><h2>${vo.title}</h2></div>
+				<div><h3>가격: <fmt:formatNumber value="${vo.price}" />원</h3></div>
+				<div><h3>재고: ${vo.quantity}개</h3></div>
+				<div><h4>분류: ${vo.kategorie}</h4></div>
+				<hr/>
+				<div><h4>판매자: ${vo.nickName}</h4></div>
+				<div><h5>판매횟수: ${vo.sold}회</h5></div>
+				<hr/>
+				<form name="productForm" method="post" action="${ctp}/shop/Product">
+					<div class="input-group">
+						<input type="number" value="1" min="1" max="10" id="orderQuantity" name="orderQuantity" />
+						<div class="input-group-text">개</div>
+					</div>
+					<p></p>
+					<div class="input-group">
+						<div id="tot" class="input-group-text"><fmt:formatNumber value="${vo.price*1}" />원</div>
+						<input type="button" value="구매" onclick="soldCheck()" class="btn btn-success" />
+					</div>
+					<input type="hidden" name="mid" value="${sMid}" />
+					<input type="hidden" name="idx" value="${vo.idx}" />
+					<input type="hidden" name="title" value="${vo.title}" />
+					<input type="hidden" id="price" name="price" value="${vo.price}" />
+					<input type="hidden" name="productImage" value="${vo.productImage}" />
+				</form>
 				<p></p>
-				<div class="input-group">
-					<div id="tot" class="input-group-text"><fmt:formatNumber value="${vo.price*1}" />원</div>
-					<input type="button" value="구매" onclick="soldCheck()" class="btn btn-success" />
-				</div>
-				<input type="hidden" name="mid" value="${sMid}" />
-				<input type="hidden" name="idx" value="${vo.idx}" />
-				<input type="hidden" name="title" value="${vo.title}" />
-				<input type="hidden" id="price" name="price" value="" />
-				<input type="hidden" name="productImage" value="${vo.productImage}" />
-			</form>
-			<p></p>
-			<c:if test="${sLevel < 5}">
-				<input type="button" value="장바구니에 담기" onclick="addShoppingBag('${vo.idx}','${sMid}','${sNickName}')" class="btn btn-primary me-2" />
-			</c:if>
-			<input type="button" value="굿즈일람" onclick="location.href = '${ctp}/shop/Goods'" class="btn btn-warning" />
+				<c:if test="${sLevel < 5}">
+					<input type="button" value="장바구니에 담기" onclick="addShoppingBag('${vo.idx}','${sMid}','${sNickName}')" class="btn btn-primary me-2" />
+				</c:if>
+				<input type="button" value="굿즈일람" onclick="location.href='${ctp}/shop/Goods'" class="btn btn-warning" />
+			</div>
 		</div>
-	</div>
-	<hr/>
-	<div class="text-start"><h2>상품설명</h2></div>
-	<p></p>
-	<div id="content" class="text-start">${vo.content}</div>
-	</div>
-	<p></p>
-	<div class="text-center">
-		<input type="button" value="굿즈일람" onclick="location.href = '${ctp}/shop/Goods'" class="btn btn-warning" />
+		<hr/>
+		<div class="text-start"><h2>상품설명</h2></div>
+		<p></p>
+		<div id="content" class="text-start">${vo.content}</div>
+		<p></p>
+		<div class="row">
+			<div class="col">
+			</div>
+			<div class="col">
+				<input type="button" value="굿즈일람" onclick="location.href='${ctp}/shop/Goods'" class="btn btn-warning" />
+			</div>
+			<div class="col">
+				<c:if test="${(vo.mid == sMid || sLevel == 0) && vo.complaint != 'OK'}">
+					<input type="button" value="수정" onclick="location.href='${ctp}/shop/ProductUpdate?idx=${vo.idx}'" class="btn btn-info me-1" />
+				</c:if>
+				<c:if test="${!empty sMid && vo.complaint != 'OK'}">
+					<input type="button" value="신고" data-bs-toggle="modal" data-bs-target="#myModal" class="btn btn-danger" />
+				</c:if>
+				<c:if test="${vo.complaint == 'OK'}">
+					<input type="button" value="신고중" disabled class="btn btn-outline-danger" />
+				</c:if>
+			</div>
+		</div>
 	</div>
 	<p></p>
 	<!-- 별점 및 리뷰 -->
-	<c:if test="${reviewSW == 'on'}">
+	<c:if test="${reviewSW != 'on' || sLevel >= 4}">
+		<div class="text-center"><h3>리뷰는 상품을 구입한 <font color="blue">정회원</font> 이상만 작성할 수 있습니다.</h3></div>
+	</c:if>
+	<c:if test="${reviewSW == 'on' && sLevel < 4}">
 	<div class="ps-5" style="width:94%">
 		<form name="reviewForm" id="reviewForm">
 			<fieldset style="border:0px;">
@@ -166,6 +184,38 @@
 			<c:set var="imsiIdx" value="${vo.idx}" />
 		</c:forEach>
 	</div>
+	<!-- 신고 -->
+	<div class="modal fade" id="myModal">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">현재 상품을 신고합니다.</h4>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body">
+					<b>신고사유 선택</b>
+					<hr class="border border-secondary">
+					<form name="modalForm">
+						<div><input type="radio" name="complaint" id="complaint1" value="광고,홍보,영리목적"/> 광고,홍보,영리목적</div>
+						<div><input type="radio" name="complaint" id="complaint2" value="욕설,비방,차별,혐오"/> 욕설,비방,차별,혐오</div>
+						<div><input type="radio" name="complaint" id="complaint3" value="불법정보"/> 불법정보</div>
+						<div><input type="radio" name="complaint" id="complaint4" value="음란,청소년유해"/> 음란,청소년유해</div>
+						<div><input type="radio" name="complaint" id="complaint5" value="개인정보노출,유포,거래"/> 개인정보노출,유포,거래</div>
+						<div><input type="radio" name="complaint" id="complaint6" value="도배,스팸"/> 도배,스팸</div>
+						<div><input type="radio" name="complaint" value="기타" onclick="etcShow()"/> 기타</div>
+						<div id="etc"><textarea rows="2" id="etcTxt" class="form-control" style="display:none"></textarea></div>
+						<hr class="border border-secondary">
+						<input type="button" value="신고하기" onclick="complaintCheck('${vo.idx}','${sMid}','${vo.title}')" class="btn btn-success form-control" />
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 신고 끝 -->
 	<h6 id="topBtn" class="text-end me-3"><img src="${ctp}/images/arrowTop.gif" title="위로이동" /></h6>
 </body>
 </html>

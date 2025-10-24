@@ -15,6 +15,18 @@
 <body>
 	<div class="container text-center">
 		<h2>신고목록</h2>
+		<div class="row mb-2">
+			<div class="col">
+				<span class="d-flex input-group-text ms-2" style="width:246px">신고상태별로 보기:&nbsp;&nbsp;
+					<select name="progressPage" id="progressPage" onchange="progressPageCheck()" class="form-select" style="width:102px">
+						<option ${progress=='전체'?'selected':''}>전체</option>
+						<option ${progress=='신고접수'?'selected':''}>신고접수</option>
+						<option ${progress=='신고반려'?'selected':''}>신고반려</option>
+						<option ${progress=='처리완료'?'selected':''}>처리완료</option>
+					</select>
+				</span>
+			</div>
+		</div>
 		<hr/>
 		<div class="container">
 			<table class="table table-bordered">

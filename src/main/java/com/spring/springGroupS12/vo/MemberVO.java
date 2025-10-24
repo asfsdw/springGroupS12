@@ -18,6 +18,7 @@ public class MemberVO {
 	private int level;
 	private int point;
 	private String userDelete;
+	private int loginCnt;
 	private String startDate;
 	private String lastDate;
 }

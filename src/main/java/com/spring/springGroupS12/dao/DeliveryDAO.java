@@ -10,7 +10,7 @@ public interface DeliveryDAO {
 	
 	List<DeliveryVO> getShoppingBagList(@Param("mid") String mid);
 
-	int setShoppingBag(@Param("parentIdx") int parentIdx, @Param("deliveryIdx") String deliveryIdx, @Param("mid") String mid, @Param("nickName") String nickName, @Param("email") String email, @Param("title") String title, @Param("orderQuantity") int orderQuantity, @Param("price") int price, @Param("address") String address, @Param("productImage") String productImage, @Param("deliverySW") String deliverySW);
+	int setShoppingBag(@Param("parentIdx") int parentIdx, @Param("deliveryIdx") String deliveryIdx, @Param("mid") String mid, @Param("nickName") String nickName, @Param("email") String email, @Param("title") String title, @Param("orderQuantity") int orderQuantity, @Param("price") int price, @Param("address") String address, @Param("productImage") String productImage, @Param("deliverySW") String deliverySW, @Param("point") int point);
 
 	List<DeliveryVO> getShoppingBag(@Param("mid") String mid);
 	

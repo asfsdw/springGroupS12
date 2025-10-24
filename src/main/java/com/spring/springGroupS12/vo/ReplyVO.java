@@ -10,8 +10,8 @@ public class ReplyVO {
 	private String mid;
 	private String nickName;
 	private String content;
-	private int re_step;
-	private int re_order;
+	private int reStep;
+	private int reOrder;
 	private int star;
 	private String hostIP;
 	private String replyDate;

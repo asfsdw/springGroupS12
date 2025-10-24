@@ -13,10 +13,7 @@ public class ShopVO {
 	private String content;
 	private int price;
 	private int quantity;
-	private String pwd;
 	private String openSW;
-	private int views;
-	private int good;
 	private int sold;
 	private String complaint;
 	private String shopDate;

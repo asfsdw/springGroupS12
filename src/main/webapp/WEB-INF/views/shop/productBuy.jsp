@@ -19,14 +19,23 @@
 		
 		// 초기 구매 가격들 설정.
 		$(() => {
-			let price
+			let price = 0;
 			let totPrice = 0;
 			
-			for(let i=1; i<=$("[id^=price]").length; i++) {
-				totPrice += parseInt($("#price"+i).text());
+			for(let i=0; i<$("[id^=price]").length; i++) {
+				totPrice += parseInt($("#price"+i).text().replace(",","").replace("원",""));
 			}
-			$("#totPrice").html(totPrice+"원");
+			$("#totPrice").html(totPrice.toLocaleString()+"원");
+			
+			// 포인트 사용시 최소 100단위로 사용해야함.
+			$("#point").on("blur", function() {
+				let val = parseInt($(this).val()) || 0;
+				val = Math.floor(val / 100) * 100; // 100단위 내림
+				if(val > ${point}) val = ${point};
+				$(this).val(val);
+			});
 		});
+		
 	</script>
 </head>
 <body>
@@ -52,7 +61,7 @@
 					<td><img src="${ctp}/data/shop/${dVO.productImage}" style="width:150px"/></td>
 					<td>${dVO.title}</td>
 					<td>${dVO.orderQuantity}개</td>
-					<td id="price1"><fmt:formatNumber value="${dVO.price}" />원</td>
+					<td id="price0"><fmt:formatNumber value="${dVO.price}" />원</td>
 				</tr>
 				<input type="hidden" name="idx" value="${dVO.idx}" />
 				<input type="hidden" name="mid" value="${dVO.mid}" />
@@ -83,7 +92,7 @@
 						<td><img src="${ctp}/data/shop/${vo.productImage}" style="width:150px"/></td>
 						<td>${vo.title}</td>
 						<td>${vo.orderQuantity}</td>
-						<td id="price${st.count}">${vo.price * vo.orderQuantity}원</td>
+						<td id="price${st.index}"><fmt:formatNumber value="${vo.price * vo.orderQuantity}" />원</td>
 					</tr>
 					<input type="hidden" name="idxs" value="${vo.idx}" />
 					<input type="hidden" name="parentIdx" value="${vo.parentIdx}" />
@@ -98,13 +107,27 @@
 			</c:if>
 		</table>
 		<p></p>
+		<c:if test="${!empty sMid}">
+			<div class="row input-group ps-3">
+				<div class="col input-group-text justify-content-center">보유 포인트: ${point}</div>
+				<input type="number" id="point" name="point" value="0" min="0" max="${point}" step="100" class="col form-control text-end" />
+			</div>
+			<p></p>
+			<div class="row">
+				<div class="col text-center" style="margin-left:130px">(포인트를 사용하면 구매할 때<br/>포인트 10 : 가격 1 비율로 구매가격이 할인됩니다.)</div>
+				<div class="col text-end"><input type="button" value="포인트적용" onclick="pointUse(1)" class="btn btn-success" /></div>
+				<div class="col"><input type="button" value="포인트해제" onclick="pointUse(2)" class="btn btn-warning" /></div>
+			</div>
+			<p></p>
+		</c:if>
+		<input type="hidden" id="usedPoint" name="usedPoint" value="0" />
 		<div class="row input-group ps-3">
 			<div id="totPrice" class="col input-group-text justify-content-center"></div>
 			<c:if test="${addresss == ''}">
-				<input type="button" value="주소입력" id="buyBtn" onclick="buy()" class=" col btn btn-primary" />
+				<input type="button" value="배송지입력" id="buyBtn" onclick="buy()" class=" col btn btn-primary" />
 			</c:if>
 			<c:if test="${addresss != ''}">
-				<input type="button" value="주소입력" id="buyBtn" onclick="buy('${addresss[0]}','${addresss[1]}','${addresss[2]}','${addresss[3]}')" class=" col btn btn-primary" />
+				<input type="button" value="배송지입력" id="buyBtn" onclick="buy('${addresss[0]}','${addresss[1]}','${addresss[2]}','${addresss[3]}')" class=" col btn btn-primary" />
 			</c:if>
 		</div>
 		<p><br/></p>

@@ -168,5 +168,15 @@ public class ShopServiceImpl implements ShopService {
 	public List<ShopVO> getProductListHome() {
 		return shopDAO.getProductListHome();
 	}
+
+	@Override
+	public int setProductUpdate(ShopVO vo) {
+		return shopDAO.setProductUpdate(vo);
+	}
+
+	@Override
+	public List<ShopVO> getNewProductSub() {
+		return shopDAO.getNewProductSub();
+	}
 	
 }

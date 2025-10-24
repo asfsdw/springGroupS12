@@ -3,17 +3,17 @@
 <c:set var="ctp" value="${pageContext.request.contextPath}"></c:set>
 <!-- Automatic Slideshow Images -->
 <div class="mySlides w3-display-container w3-center">
-	<img src="${ctp}/images/slide1.jpg" style="width:100%; height:250px">
+	<img src="${ctp}/images/miniSlide1.jpg" style="width:100%; height:250px">
 	<div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32 w3-hide-small">
 	</div>
 </div>
 <div class="mySlides w3-display-container w3-center">
-	<img src="${ctp}/images/slide2.jpg" style="width:100%; height:250px">
+	<img src="${ctp}/images/miniSlide2.jpg" style="width:100%; height:250px">
 	<div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32 w3-hide-small">
 	</div>
 </div>
 <div class="mySlides w3-display-container w3-center">
-	<img src="${ctp}/images/slide3.jpg" style="width:100%; height:250px">
+	<img src="${ctp}/images/miniSlide3.jpg" style="width:100%; height:250px">
 	<div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32 w3-hide-small">
 	</div>
 </div>

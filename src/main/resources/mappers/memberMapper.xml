@@ -6,7 +6,7 @@
 		<if test="flag == 'new'">WHERE startDate >= date_add(now(), interval -7 day)</if>;
 	</select>
 	<select id="getMemberList" resultType="com.spring.springGroupS12.vo.MemberVO">
-		SELECT * FROM member WHERE userDelete = '활동' AND level != 99<if test="level != 100"> AND level = #{level}</if> ORDER BY mid LIMIT #{startIndexNo}, #{pageSize};
+		SELECT * FROM member WHERE userDelete = '활동' AND level != 99<if test="searchStr != ''"> AND ${search} LIKE concat("%"#{searchStr}"%")</if> ORDER BY mid LIMIT #{startIndexNo}, #{pageSize};
 	</select>
 	<select id="getMemberMid" resultType="com.spring.springGroupS12.vo.MemberVO">
 		SELECT * FROM member WHERE mid = #{mid};
@@ -23,22 +23,32 @@
 	<select id="getMemberSearch" resultType="com.spring.springGroupS12.vo.MemberVO">
 		SELECT * FROM member WHERE ${search} LIKE concat("%"#{searchStr}"%");
 	</select>
+	<select id="getNewMember" resultType="com.spring.springGroupS12.vo.MemberVO">
+		SELECT * FROM member WHERE startDate >= date_add(now(), interval - 7 day);
+	</select>
 	
 	<select id="getSubScriptList" resultType="com.spring.springGroupS12.vo.SubScriptVO">
 		SELECT * FROM sub_script <if test="mid != '전체'">WHERE mid = #{mid}</if>;
 	</select>
 	<select id="getSubScript" resultType="int">
 		SELECT count(subContent) FROM sub_script WHERE subContent 
-			LIKE <if test="vo.levelUp == ''">concat(#{vo.subContent}"%")</if>  
-			<if test="vo.levelUp != ''">concat(#{vo.subContent}"/"#{vo.levelUp}"%")</if> 
+			LIKE <if test="vo.levelUp == ''">concat(#{vo.subContent}"%") </if>
+			<if test="vo.levelUp != ''">concat(#{vo.subContent}"/"#{vo.levelUp}"%") </if> 
 			AND mid = #{vo.mid};
+	</select>
+	<select id="getNewSubScript" resultType="com.spring.springGroupS12.vo.SubScriptVO">
+		SELECT * FROM sub_script WHERE subDate >= date_add(now(), interval - 7 day);
+	</select>
+	
+	<select id="getMemberStatList" resultType="com.spring.springGroupS12.vo.MemberLoginStatVO">
+		SELECT nickName, loginCnt, point FROM member WHERE lastDate >= date_add(now(), interval -1 month) AND loginCnt > 0 ORDER BY loginCnt DESC LIMIT 5;
 	</select>
 	
 	
 	
 	<insert id="setSignUpMember">
 		INSERT INTO member VALUES(DEFAULT,#{vo.mid},#{vo.pwd},#{vo.nickName},#{vo.name},#{vo.age},#{vo.email},
-			#{vo.address},#{vo.content},#{vo.userInfo},#{vo.myImage},DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT);
+			#{vo.address},#{vo.content},#{vo.userInfo},#{vo.myImage},DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT);
 	</insert>
 	<insert id="setKakaoMemberInput">
 		INSERT INTO member(mid, pwd, nickName, name, age, email) VALUES(#{mid},#{pwd},#{nickName},#{nickName},#{age},#{email});
@@ -70,6 +80,15 @@
 		UPDATE member SET level = #{level}, 
 			<if test="level == 999">userDelete = '삭제'</if> 
 			<if test="level != 999">userDelete = '활동'</if> WHERE idx = #{idx};
+	</update>
+	<update id="setLoginCnt">
+		UPDATE member SET loginCnt = loginCnt + #{loginCnt} WHERE mid = #{mid};
+	</update>
+	<update id="setMemberPointDown">
+		UPDATE member SET point = point - #{point} WHERE mid = #{mid};
+	</update>
+	<update id="setMemberPointRollback">
+		UPDATE member SET point = point + #{point} WHERE mid = #{mid};
 	</update>
 	
 	<update id="setProductProgressSWUpdate">

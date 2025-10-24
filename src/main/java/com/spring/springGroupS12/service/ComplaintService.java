@@ -10,7 +10,7 @@ public interface ComplaintService {
 
 	int setComplaintInput(ComplaintVO vo);
 
-	List<ComplaintVO> getComplaintList();
+	List<ComplaintVO> getComplaintList(String progress);
 
 	int setComplaintProgressUpdate(int idx, String progress);
 

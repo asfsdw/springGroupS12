@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.springGroupS12.dao.DeliveryDAO;
+import com.spring.springGroupS12.dao.MemberDAO;
 import com.spring.springGroupS12.dao.ShopDAO;
 import com.spring.springGroupS12.vo.DeliveryVO;
 
@@ -20,6 +21,8 @@ public class DeliveryServiceImpl implements DeliveryService {
 	DeliveryDAO deliveryDAO;
 	@Autowired
 	ShopDAO shopDAO;
+	@Autowired
+	MemberDAO memberDAO;
 	
 	@Override
 	public List<DeliveryVO> getShoppingBagList(String mid) {
@@ -27,8 +30,8 @@ public class DeliveryServiceImpl implements DeliveryService {
 	}
 
 	@Override
-	public int setShoppingBag(int parentIdx, String deliveryIdx, String mid, String nickName, String email, String title, int orderQuantity, int price, String address, String productImage, String deliverySW) {
-		return deliveryDAO.setShoppingBag(parentIdx, deliveryIdx, mid, nickName, email, title, orderQuantity, price, address, productImage, deliverySW);
+	public int setShoppingBag(int parentIdx, String deliveryIdx, String mid, String nickName, String email, String title, int orderQuantity, int price, String address, String productImage, String deliverySW, int point) {
+		return deliveryDAO.setShoppingBag(parentIdx, deliveryIdx, mid, nickName, email, title, orderQuantity, price, address, productImage, deliverySW, point);
 	}
 
 	@Override
@@ -86,6 +89,9 @@ public class DeliveryServiceImpl implements DeliveryService {
 	public int setDeliveryLastUpdate(String idx, DeliveryVO dVO) {
 		int res = 0;
 		String address = dVO.getAddress();
+		int point = dVO.getUsedPoint() == 0 ? 0 : dVO.getUsedPoint();
+		
+		// 주문번호 생성.
 		Date today = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		String deliveryIdx = sdf.format(today)+UUID.randomUUID().toString().substring(0, 8);
@@ -99,6 +105,11 @@ public class DeliveryServiceImpl implements DeliveryService {
 				dVO.setDeliveryIdx(deliveryIdx);
 				dVO.setAddress(address);
 				dVO.setDeliverySW("준비중");
+				// 포인트를 사용했을 때, 첫 번째 상품에 할인 적용, 사용한 포인트 갱신.
+				if(point != 0 && i == 0) {
+					dVO.setUsedPoint(point);
+					memberDAO.setMemberPointDown(dVO.getMid(), point);
+				}
 				
 				shopDAO.setProductQuantityUpdate(dVO.getParentIdx(), dVO.getOrderQuantity());
 				res = deliveryDAO.setDeliveryLastUpdate(idxs[i], dVO);
@@ -108,7 +119,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 			// 회원이 상품 페이지에서 직접 구매.
 			if(dVO.getParentIdx() == 0) {
 				dVO.setParentIdx(dVO.getIdx());
-				deliveryDAO.setShoppingBag(dVO.getParentIdx(), deliveryIdx, dVO.getMid(), dVO.getNickName(), dVO.getEmail(), dVO.getTitle(), dVO.getOrderQuantity(), dVO.getPrice(), dVO.getAddress(), dVO.getProductImage(), "준비중");
+				deliveryDAO.setShoppingBag(dVO.getParentIdx(), deliveryIdx, dVO.getMid(), dVO.getNickName(), dVO.getEmail(), dVO.getTitle(), dVO.getOrderQuantity(), dVO.getPrice(), dVO.getAddress(), dVO.getProductImage(), "준비중", point);
 				res = 1;
 			}
 			// 장바구니에서 상품 한 개 구매.
@@ -117,6 +128,11 @@ public class DeliveryServiceImpl implements DeliveryService {
 				dVO.setDeliveryIdx(deliveryIdx);
 				dVO.setAddress(address);
 				dVO.setDeliverySW("준비중");
+				// 포인트를 사용했을 때, 상품에 할인 적용, 사용한 포인트 갱신.
+				if(point != 0) {
+					dVO.setUsedPoint(point);
+					memberDAO.setMemberPointDown(dVO.getMid(), point);
+				}
 				res = deliveryDAO.setDeliveryLastUpdate(idx, dVO);
 			}
 			

@@ -39,4 +39,6 @@ public interface BoardService {
 
 	int setBoardOpenSWUpdate(int idx, String openSW);
 
+	BoardVO getPreNextSearch(int idx, String flag);
+
 }

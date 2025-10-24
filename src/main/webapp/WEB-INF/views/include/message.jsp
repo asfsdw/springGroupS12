@@ -18,7 +18,7 @@
 		if("${mid}" != "") url = "${url}?mid=${mid}";
 		else url = "${url}";
 		
-		location.href = "${ctp}/"+url;
+		location.href="${ctp}/"+url;
 	</script>
 </head>
 <body>

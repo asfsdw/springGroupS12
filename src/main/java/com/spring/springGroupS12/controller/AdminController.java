@@ -1,6 +1,9 @@
 package com.spring.springGroupS12.controller;
 
+import java.io.File;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +25,7 @@ import com.spring.springGroupS12.vo.BoardVO;
 import com.spring.springGroupS12.vo.ComplaintVO;
 import com.spring.springGroupS12.vo.DeliveryVO;
 import com.spring.springGroupS12.vo.MemberVO;
+import com.spring.springGroupS12.vo.PageVO;
 import com.spring.springGroupS12.vo.ShopVO;
 import com.spring.springGroupS12.vo.SubScriptVO;
 
@@ -43,7 +47,19 @@ public class AdminController {
 	
 	// 관리자 메뉴.
 	@GetMapping("/AdminMain")
-	public String adminMainGet() {
+	public String adminMainGet(Model model) {
+		int newSubScript = 0;
+		int newMember = 0;
+		
+		List<SubScriptVO> subVOS = memberService.getNewSubScript();
+		if(subVOS != null) newSubScript += subVOS.size();
+		List<ShopVO> shopVOS = shopService.getNewProductSub();
+		if(shopVOS != null) newSubScript += shopVOS.size();
+		List<MemberVO> memberVOS = memberService.getNewMember();
+		if(memberVOS != null) newMember = memberVOS.size();
+		
+		model.addAttribute("newSubScript", newSubScript);
+		model.addAttribute("newMember", newMember);
 		return "admin/adminMain";
 	}
 	
@@ -189,15 +205,18 @@ public class AdminController {
 				return -1;
 			}
 		}
+		else if(!idxs.equals("")) return memberService.setMemberLevelUp(Integer.parseInt(idxs), level);
 		return memberService.setMemberLevelUp(idx, level);
 	}
 	
 	// 신고목록.
 	@GetMapping("/ComplaintList")
-	public String complaintListGet(Model model) {
-		List<ComplaintVO> vos = complaintService.getComplaintList();
+	public String complaintListGet(Model model,
+			@RequestParam(name = "progress", defaultValue = "신고접수", required = false)String progress) {
+		List<ComplaintVO> vos = complaintService.getComplaintList(progress);
 		
 		model.addAttribute("vos", vos);
+		model.addAttribute("progress", progress);
 		return "admin/complaint/complaintList";
 	}
 	// 신고상태 변경.
@@ -206,7 +225,7 @@ public class AdminController {
 	@PostMapping("/ComplaintChange")
 	public int complaintChangePost(String progress, String part,
 			@RequestParam(name = "idx", defaultValue = "0", required = false)int idx,
-			@RequestParam(name = "idxs", defaultValue = "", required = false)int idxs) {
+			@RequestParam(name = "idxs", defaultValue = "", required = false)String idxs) {
 		if(part.equals("게시판")) part = "board";
 		else if(part.equals("굿즈")) part = "shop";
 		int res = 0;
@@ -273,5 +292,39 @@ public class AdminController {
 		}
 		
 		return res;
+	}
+	
+	// 파일 정리 관련.
+	@GetMapping("/FileManagement")
+	public String fileManagementGet(HttpServletRequest request, Model model, PageVO pVO) {
+		// part를 넣기위해 설정.
+		pVO = pagination.pagination(pVO);
+			
+		String realPath = "";
+		if(pVO.getPart().equals("전체")) realPath = request.getSession().getServletContext().getRealPath("/resources/data");
+		else realPath = request.getSession().getServletContext().getRealPath("/resources/data/"+pVO.getPart());
+		
+		String[] files = new File(realPath).list();
+		
+		// 파일의 총 수.
+		pVO.setTotRecCnt(files.length);
+		// totPage를 구하기 위해 다시 설정.
+		pVO = pagination.pagination(pVO);
+		
+		// 페이징 처리.
+		// 한 페이지에 보여줄 파일 정보를 담을 배열 생성(크기는 전체 파일 갯수만큼).
+		String[] file = new String[files.length];
+		// startIndexNo(pag-1 * pageSize)부터 startIndexNo+pageSize만큼 반복문을 돌린다.
+		// pag=1, pageSize=10일 경우(0~9까지. pag=2일 경우 10~20까지.)
+		for(int i=pVO.getStartIndexNo(); i<pVO.getStartIndexNo()+pVO.getPageSize(); i++) {
+			// i가 전체 파일 갯수보다 작을 때까지만 돌려야한다(배열의 인덱스는 0부터 시작하고 length는 1부터 시작하니까).
+			if(i < files.length) file[i] = files[i];
+			// i가 전체 파일 갯수보다 크면 반복문 탈출.
+			else break;
+		}
+		
+		model.addAttribute("pVO", pVO);
+		model.addAttribute("files", file);
+		return "admin/folder/fileManagement";
 	}
 }

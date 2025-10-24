@@ -24,8 +24,8 @@ public class ComplaintServiceImpl implements ComplaintService {
 	}
 
 	@Override
-	public List<ComplaintVO> getComplaintList() {
-		return complaintDAO.getComplaintList();
+	public List<ComplaintVO> getComplaintList(String progress) {
+		return complaintDAO.getComplaintList(progress);
 	}
 
 	@Override

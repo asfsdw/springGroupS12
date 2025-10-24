@@ -10,23 +10,8 @@
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script src="${ctp}/js/postCode.js"></script>
 	<script src="${ctp}/js/signUp.js"></script>
-	<title>Sign Up</title>
-	<style>
-		h6 {
-			position: fixed;
-			right: 1rem;
-			bottom: -50px;
-			transition: 0.7s ease;
-			z-index: 2;
-		}
-		.on {
-			opacity: 0.8;
-			cursor: pointer;
-			bottom: 0;
-		}
-		
-		label {width:100px;}
-	</style>
+	<link type="text/css" rel="stylesheet" href="${ctp}/css/member.css" />
+	<title></title>
 </head>
 <body>
 	<div class="container text-center">
@@ -35,83 +20,83 @@
 			<br/>
 			<div class="input-group mb-3">
 				<label for="mid" class="input-group-text boxWidth">아이디</label>
-				<input type="text" class="form-control" name="mid" id="mid" placeholder="아이디를 입력하세요." required autofocus/>
-				<input type="button" value="아이디 중복체크" id="midBtn" class="btn btn-secondary btn-sm" onclick="idCheck()"/>
+				<input type="text" id="mid" name="mid" placeholder="아이디를 입력하세요." autofocus required class="form-control" />
+				<input type="button" id="midBtn" value="아이디 중복체크" onclick="idCheck()" class="btn btn-secondary btn-sm" />
 			</div>
 			<div class="input-group mb-3">
 				<label for="pwd" class="input-group-text boxWidth">비밀번호</label>
-				<input type="password" name="pwd" id="pwd" placeholder="비밀번호를 입력하세요." class="form-control" required />
+				<input type="password" id="pwd" name="pwd" placeholder="비밀번호를 입력하세요." required class="form-control" />
 			</div>
 			<div class="input-group mb-3">
 				<label for="nickName" class="input-group-text boxWidth">닉네임</label>
-				<input type="text" name="nickName" id="nickName" placeholder="닉네임을 입력하세요." class="form-control" required />
-				<input type="button" id="nickNameBtn" value="닉네임 중복체크" class="btn btn-secondary btn-sm" onclick="nickNameCheck()"/>
+				<input type="text" id="nickName" name="nickName" placeholder="닉네임을 입력하세요." required class="form-control" />
+				<input type="button" id="nickNameBtn" value="닉네임 중복체크" onclick="nickNameCheck()" class="btn btn-secondary btn-sm" />
 			</div>
 			<div class="input-group mb-3">
 				<label for="name" class="input-group-text boxWidth">성 명</label>
-				<input type="text" name="name" id="name" placeholder="성명을 입력하세요." class="form-control" required />
+				<input type="text" id="name" name="name" placeholder="성명을 입력하세요." required class="form-control" />
 			</div>
 			<div class="input-group mb-3">
 				<label for="birthday" class="input-group-text boxWidth">생년월일</label>
-				<input type="date" name="birthday" id="birthday" class="form-control" required />
+				<input type="date" id="birthday" name="birthday" required class="form-control" />
 			</div>
 			<div class="input-group mb-3">
 				<label for="email" class="input-group-text boxWidth">이메일</label>
-				<input type="text" name="email1" id="email1" placeholder="이메일을 입력하세요." required class="form-control" />
+				<input type="text" id="email1" name="email1" placeholder="이메일을 입력하세요." required class="form-control" />
 				<span class="input-group-text">@</span>
-				<select name="email2" id="email2" class="form-select">
+				<select id="email2" name="email2" class="form-select">
+					<option>gmail.com</option>
 					<option>naver.com</option>
-					<option selected>gmail.com</option>
 					<option>daum.net</option>
 				</select>
-				<input type="button" value="이메일중복확인" onclick="emailCheck()" id="emailCheckBtn" class="btn btn-success" />
-				<input type="button" value="인증번호받기" onclick="emailCertification(${year})" id="certificationBtn" class="btn btn-success" style="display:none" />
+				<input type="button" id="emailCheckBtn" value="이메일 중복체크" onclick="emailCheck()" class="btn btn-secondary btn-sm" />
+				<input type="button" id="certificationBtn" value="인증번호받기" onclick="emailCertification(${year})" class="btn btn-success btn-sm" style="display:none" />
 			</div>
 			<div id="demoSpin"></div>
 			<div id="addContent" style="display:none">
 				<div class="input-group mb-3 col" >
 					<label for="address" class="input-group-text boxWidth">주 소</label>
-					<input type="text" name="postcode" id="sample6_postcode" placeholder="우편번호" class="form-control">
-					<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기" class="btn btn-secondary btn-sm">
+					<input type="text" id="sample6_postcode" name="postcode" placeholder="우편번호" class="form-control">
+					<input type="button" value="우편번호 찾기" onclick="sample6_execDaumPostcode()" class="btn btn-secondary btn-sm">
 				</div>
 				<div class="input-group mb-3">
-					<input type="text" name="roadAddress" id="sample6_address" size="50" placeholder="주소" class="form-control mb-1">
+					<input type="text" id="sample6_address" name="roadAddress" size="50" placeholder="주소" class="form-control mb-1" />
 				</div>
 				<div class="input-group mb-3">
-					<input type="text" name="detailAddress" id="sample6_detailAddress" placeholder="상세주소" class="form-control me-2">
-					<input type="text" name="extraAddress" id="sample6_extraAddress" placeholder="참고항목" class="form-control">
+					<input type="text" id="sample6_detailAddress" name="detailAddress" placeholder="상세주소" class="form-control me-2" />
+					<input type="text" id="sample6_extraAddress" name="extraAddress" placeholder="참고항목" class="form-control" />
 				</div>
 				<div class="input-group mb-3">
 					<label for="content" class="input-group-text boxWidth">자기소개</label>
-					<textarea rows="6" name="content" id="content" placeholder="자기소개를 입력해주세요." class="form-control"></textarea>
+					<textarea rows="6" id="content" name="content" placeholder="자기소개를 입력해주세요." class="form-control"></textarea>
 				</div>
 				<div class="input-group mb-3 border ">
 					<label for="content" class="input-group-text boxWidth">정보공개여부</label>&nbsp;&nbsp;
 					<div class="form-check-inline mt-2">
 						<label class="form-check-label">
-							<input type="radio" class="form-check-input" name="userInfo" value="공개" checked> 공개&nbsp;
+							<input type="radio" name="userInfo" value="공개" checked class="form-check-input" /> 공개&nbsp;
 						</label>
 					</div>
 					<div class="form-check-inline mt-2">
 						<label class="form-check-label">
-							<input type="radio" class="form-check-input" name="userInfo" value="비공개" > 비공개
+							<input type="radio" name="userInfo" value="비공개" class="form-check-input" /> 비공개
 						</label>
 					</div>
 				</div>
 				<div class="input-group mb-3">
 					<label for="photo" class="input-group-text boxWidth">프로필 사진</label>
-					<input type="file" name="fName" id="file" class="form-control" />
+					<input type="file" id="file" name="fName" class="form-control" />
 				</div>
 			</div>
 			<hr/>
 			<div class="text-center">
-				<button type="button" class="btn btn-success" onclick="fCheck(${year})">회원가입</button>&nbsp;
-				<button type="button" class="btn btn-warning" onclick="location.reload()">다시작성</button>&nbsp;
-				<button type="button" class="btn btn-info" onclick="location.href = '${ctp}/member/Login'">돌아가기</button>&nbsp;
+				<button type="button" id="fCheck" onclick="fCheck(${year})" disabled class="btn btn-success">회원가입</button>&nbsp;
+				<button type="button" onclick="location.reload()" class="btn btn-warning" >다시작성</button>&nbsp;
+				<button type="button" onclick="location.href='${ctp}/member/Login'" class="btn btn-info" >돌아가기</button>&nbsp;
 			</div>
-			<input type="hidden" name="age" id="age" value="" />
-			<input type="hidden" name="email" id="email" value="" />
-			<input type="hidden" name="address" id="address" value="" />
+			<input type="hidden" id="age" name="age" value="" />
+			<input type="hidden" id="email" name="email" value="" />
+			<input type="hidden" id="address" name="address" value="" />
 		</form>
 	</div>
 	<br/>

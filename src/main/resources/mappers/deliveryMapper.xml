@@ -27,25 +27,25 @@
 	</select>
 	<select id="getDeliveryListMain" resultType="com.spring.springGroupS12.vo.DeliveryVO">
 		SELECT parentIdx, deliveryIdx, title, deliverySW, (SELECT idx FROM reply WHERE delivery.parentIdx = reply.parentIdx AND reply.part = 'shop' AND reply.mid = #{mid}) AS replyIdx 
-		FROM delivery WHERE mid = #{mid} ORDER BY deliveryIdx LIMIT 5;
+		FROM delivery WHERE mid = #{mid} AND deliverySW != '대기중' ORDER BY deliveryIdx LIMIT 5;
 	</select>
 
 
 	
 	<insert id="setShoppingBag">
-		INSERT INTO delivery VALUES(DEFAULT,#{parentIdx},#{deliveryIdx},#{mid},#{nickName},#{email},#{title},#{orderQuantity},#{price},#{address},#{productImage},#{deliverySW},DEFAULT);
+		INSERT INTO delivery VALUES(DEFAULT,#{parentIdx},#{deliveryIdx},#{mid},#{nickName},#{email},#{title},#{orderQuantity},#{price},#{address},#{productImage},#{deliverySW},#{point},DEFAULT);
 	</insert>
 	
 	
 	
 	<update id="setShoppingBagUpdate">
-		UPDATE delivery SET orderQuantity = orderQuantity + #{orderQuantity} WHERE idx = #{idx};
+		UPDATE delivery SET orderQuantity = #{orderQuantity} WHERE idx = #{idx};
 	</update>
 	<update id="setShoppingBagLastUpdate">
 		UPDATE delivery SET orderQuantity = #{orderQuantity} WHERE idx = #{idx};
 	</update>
 	<update id="setDeliveryLastUpdate">
-		UPDATE delivery SET deliveryIdx = #{dVO.deliveryIdx}, price = ${dVO.price * dVO.orderQuantity}, address = #{dVO.address}, deliverySW = #{dVO.deliverySW}, orderDate = now() WHERE idx = #{idx};
+		UPDATE delivery SET deliveryIdx = #{dVO.deliveryIdx}, price = (#{dVO.price}*#{dVO.orderQuantity})<if test="dVO.usedPoint != 0"> - (#{dVO.usedPoint}/10)</if>, address = #{dVO.address}, deliverySW = #{dVO.deliverySW}, usedPoint = #{dVO.usedPoint}, orderDate = now() WHERE idx = #{idx};
 	</update>
 	<update id="setDeliverySWUpdate">
 		UPDATE delivery SET deliverySW = #{deliverySW}, orderDate = now() WHERE deliveryIdx = #{deliveryIdx};

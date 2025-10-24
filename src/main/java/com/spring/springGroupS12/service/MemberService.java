@@ -2,6 +2,7 @@ package com.spring.springGroupS12.service;
 
 import java.util.List;
 
+import com.spring.springGroupS12.vo.MemberLoginStatVO;
 import com.spring.springGroupS12.vo.MemberVO;
 import com.spring.springGroupS12.vo.SubScriptVO;
 
@@ -31,7 +32,7 @@ public interface MemberService {
 
 	int getSubScript(SubScriptVO vo);
 
-	List<MemberVO> getMemberList(int startIndexNo, int pageSize, int level);
+	List<MemberVO> getMemberList(int startIndexNo, int pageSize, String search, String searchStr);
 
 	int setMemberUpdate(MemberVO vo);
 
@@ -46,5 +47,15 @@ public interface MemberService {
 	List<MemberVO> getMemberSearch(String search, String searchStr);
 
 	int setMemberLevelUp(int idx, int level);
+
+	List<MemberLoginStatVO> getMemberStatList();
+
+	void setLoginCnt(String mid, int loginCnt);
+
+	void setMemberPointRollback(String mid, int point);
+
+	List<SubScriptVO> getNewSubScript();
+
+	List<MemberVO> getNewMember();
 
 }

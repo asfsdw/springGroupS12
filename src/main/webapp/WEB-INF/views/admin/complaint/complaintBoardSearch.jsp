@@ -23,6 +23,7 @@
 				<th>게시글 제목</th>
 				<th>올린이</th>
 				<th>신고상태</th>
+				<th>신고이유</th>
 				<th>신고날짜</th>
 				<th>공개상태</th>
 				<th>비고</th>
@@ -34,6 +35,7 @@
 					<td>${vo.title}</td>
 					<td>${vo.mid}</td>
 					<td>${vo.complaint}</td>
+					<td>${vo.cpContent}</td>
 					<td>${fn:substring(vo.cpDate,0,10)}</td>
 					<td class="d-flex justify-content-center">
 						<select id="openSW${st.index}" class="form-select" style="width:90px">
@@ -54,6 +56,7 @@
 				<div class="input-group-text"><b>검색:</b></div>
 				<select name="search" id="search" class="form-select" style="width:120px; flex:0 0 auto;">
 					<option value="idx">게시글 번호</option>
+					<option value="mid">올린이</option>
 				</select>
 				<input type="text" name="searchStr" id="searchStr" required class="form-control" />
 				<input type="button" value="검색" onclick="complaintBoardSearch()" class="btn btn-info" />

@@ -31,4 +31,8 @@ public interface ShopService {
 
 	List<ShopVO> getProductListHome();
 
+	int setProductUpdate(ShopVO vo);
+
+	List<ShopVO> getNewProductSub();
+
 }

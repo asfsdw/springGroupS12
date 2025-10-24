@@ -28,12 +28,12 @@ function fCheck(mid, fVO) {
 	
 	if(mid.replace(" ","") == "") {
 		alert("글쓰기는 로그인 후, 사용 가능합니다.");
-		location.href = "member/Login";
+		location.href="member/Login";
 		return false;
 	}
 	else if(nickName == "") {
 		alert("글쓰기는 로그인 후, 사용 가능합니다.");
-		location.href = "member/Login";
+		location.href="member/Login";
 		return false;
 	}
 	else if(title == "") {
@@ -126,7 +126,7 @@ function goodCheckMinus(idx) {
 // 게시글 삭제.
 function deleteCheck(idx) {
 	let ans = confirm("게시글을 삭제하시겠습니까?");
-	if(ans) location.href = "BoardDelete?idx="+idx;
+	if(ans) location.href="BoardDelete?idx="+idx;
 }
 
 // 댓글 입력.
@@ -147,7 +147,7 @@ function replyCheck(ctp, parentIdx, mid, nickName, hostIP) {
 	};
 	
 	$.ajax ({
-		url : ctp+"/ReplyInput",
+		url : ctp+"/reply/ReplyInput",
 		type : "post",
 		data : query,
 		success : (res) => {
@@ -165,7 +165,7 @@ function replyDelete(ctp, idx) {
 	let ans = confirm("댓글을 삭제하시겠습니까?");
 	if(ans) {
 		$.ajax ({
-			url : ctp+"/ReplyDelete",
+			url : ctp+"/reply/ReplyDelete",
 			type : "post",
 			data : {"idx" : idx},
 			success : (res) => {
@@ -210,7 +210,7 @@ function replyUpdate(ctp, idx, content) {
 				"content" : $("#content"+idx).val(),
 			};
 			$.ajax({
-				url : ctp+"/ReplyUpdate",
+				url : ctp+"/reply/ReplyUpdate",
 				type : "post",
 				data : query,
 				success : (res) => {
@@ -274,7 +274,7 @@ function reReplyForm(ctp, replyIdx, parentIdx, mid, nickName, hostIP) {
 			}
 			
 			$.ajax({
-				url : ctp+"/ReplyInput",
+				url : ctp+"/reply/ReplyInput",
 				type : "post",
 				data : query,
 				success : (res) => {
@@ -302,7 +302,6 @@ $(() => {
 
 // 게시글 신고 처리.
 function complaintCheck(idx, mid, title) {
-	console.log(title);
 	if(!$("input[type='radio'][name='complaint']:checked").is(':checked')) {
 		alert("신고항목을 선택해주세요.");
 		return false;

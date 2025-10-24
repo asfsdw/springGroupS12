@@ -12,7 +12,7 @@ public interface ComplaintDAO {
 
 	int setComplaintInput(@Param("vo") ComplaintVO vo);
 
-	List<ComplaintVO> getComplaintList();
+	List<ComplaintVO> getComplaintList(@Param("progress") String progress);
 
 	int setComplaintProgressUpdate(@Param("idx") int idx, @Param("progress") String progress);
 

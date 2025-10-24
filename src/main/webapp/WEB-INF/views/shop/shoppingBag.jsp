@@ -28,23 +28,24 @@
 				</tr>
 				<c:forEach var="vo" items="${vos}" varStatus="st">
 					<tr>
-						<td><input type="checkbox" id="bagCheck${st.count}" name="bagCheck" onchange="checkChange(${st.count},${vo.price})" checked /></td>
+						<td><input type="checkbox" id="bagCheck${st.index}" name="bagCheck" onchange="checkChange(${st.index},${vo.price})" checked /></td>
 						<td><img src="${ctp}/data/shop/${vo.productImage}" style="width:150px" /></td>
 						<td>${vo.title}</td>
-						<td><input type="number" value="${vo.orderQuantity}" id="orderQuantity${st.count}" min="1" max="10" onchange="priceChange(${st.count}, ${vo.price})" class="form-control" /></td>
-						<td id="price${st.count}"><fmt:formatNumber value="${vo.price}" />원</td>
+						<td><input type="number" value="${vo.orderQuantity}" id="orderQuantity${st.index}" min="1" max="10" onchange="priceChange(${st.index}, ${vo.price})" class="form-control" /></td>
+						<td id="productPrice${st.index}"><fmt:formatNumber value="${vo.price}" />원</td>
 						<td><input type="button" value="삭제" onclick="shoppingBagDelete(${vo.idx})" class="btn btn-danger" /></td>
 					</tr>
-					<input type="hidden" id="idx${st.count}" value="${vo.idx}" />
-					<input type="hidden" id="title${st.count}" value="${vo.title}" />
+					<input type="hidden" id="idx${st.index}" value="${vo.idx}" />
+					<input type="hidden" id="title${st.index}" value="${vo.title}" />
+					<input type="hidden" id="price${st.index}" value="" />
 				</c:forEach>
 			</table>
 			<div class="row input-group ps-3">
 				<div id="totPrice" class="col input-group-text justify-content-center"></div>
 				<input type="button" value="구매" onclick="buyCheck()" class=" col btn btn-success" />
 			</div>
-			<input type="hidden" id="mid" name="mid" value="${sMid}" />
 			<input type="hidden" id="idxs" name="idxs" value="" />
+			<input type="hidden" id="mid" name="mid" value="${sMid}" />
 			<input type="hidden" id="titles" name="titles" value="" />
 			<input type="hidden" id="orderQuantitys" name="orderQuantitys" value="" />
 		</form>

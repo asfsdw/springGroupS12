@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.spring.springGroupS12.vo.MemberLoginStatVO;
 import com.spring.springGroupS12.vo.MemberVO;
 import com.spring.springGroupS12.vo.SubScriptVO;
 
@@ -33,7 +34,7 @@ public interface MemberDAO {
 
 	int getSubScript(@Param("vo") SubScriptVO vo);
 
-	List<MemberVO> getMemberList(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("level") int level);
+	List<MemberVO> getMemberList(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("search") String search, @Param("searchStr") String searchStr);
 
 	int setMemberUpdate(@Param("vo") MemberVO vo);
 
@@ -48,5 +49,17 @@ public interface MemberDAO {
 	List<MemberVO> getMemberSearch(@Param("search") String search, @Param("searchStr") String searchStr);
 
 	int setMemberLevelUp(@Param("idx") int idx, @Param("level") int level);
+
+	List<MemberLoginStatVO> getMemberStatList();
+
+	void setLoginCnt(@Param("mid") String mid, @Param("loginCnt") int loginCnt);
+
+	void setMemberPointDown(@Param("mid") String mid, @Param("point") int point);
+
+	void setMemberPointRollback(@Param("mid") String mid, @Param("point") int point);
+
+	List<SubScriptVO> getNewSubScript();
+
+	List<MemberVO> getNewMember();
 
 }

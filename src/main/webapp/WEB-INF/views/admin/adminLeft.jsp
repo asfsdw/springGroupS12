@@ -32,6 +32,10 @@
 				<p><a href="${ctp}/admin/ComplaintList">신고목록</a></p>
 				<p><a href="${ctp}/admin/ComplaintBoardList">신고된 게시글</a></p>
 			</div>
+			<div class="main ms-3 mb-2"><b>파일정리</b></div>
+			<div class="sub">
+				<p><a href="${ctp}/admin/FileManagement">파일목록</a></p>
+			</div>
 		</div>
 	</div>
 	<h6 id="topBtn" class="text-end me-3"><img src="${ctp}/images/arrowTop.gif" title="위로이동" /></h6>

@@ -13,7 +13,7 @@
 					success : (res) => {
 						if(res != 0) {
 							alert("회원탈퇴되었습니다.");
-							location.href = "${ctp}/";
+							location.href="${ctp}/";
 						}
 						else alert("회원탈퇴에 실패했습니다.\n다시 시도해주세요.");
 					},
@@ -65,7 +65,6 @@
 		<c:if test="${!empty sLevel}">
 			<a href="${ctp}/member/Logout" class="w3-bar-item w3-button w3-padding-large w3-hide-small">로그아웃</a>
 		</c:if>
-		<a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i class="fa fa-search"></i></a>
 	</div>
 </div>
 <!-- Navbar on small screens (remove the onclick attribute if you want the navbar to always show on top of the content when clicking on the links) -->

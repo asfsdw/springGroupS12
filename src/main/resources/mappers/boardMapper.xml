@@ -36,6 +36,12 @@
 	<select id="getComplaintBoard" resultType="com.spring.springGroupS12.vo.BoardVO">
 		SELECT b.*, c.cpContent AS cpContent, c.cpDate AS cpDate FROM board b, complaint c WHERE b.idx = c.partIdx AND b.${search} = #{searchStr} ORDER BY c.cpDate DESC;
 	</select>
+	<select id="getPreNextSearch" resultType="com.spring.springGroupS12.vo.BoardVO">
+		SELECT idx, title FROM board WHERE openSW != '숨기기' 
+			<if test="flag == 'preVO'">AND <![CDATA[idx < #{idx}]]> ORDER BY idx DESC</if>
+			<if test="flag != 'preVO'">AND <![CDATA[idx > #{idx}]]> ORDER BY idx</if> 
+			LIMIT 1;
+	</select>
 	
 	
 	

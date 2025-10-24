@@ -8,11 +8,12 @@ $(window).scroll(function() {
 });
 
 // 정규식을 이용한 유효성검사처리.
-const regMid = /^[a-zA-Z0-9_]{4,20}$/;	// 아이디는 4~20의 영문 대/소문자와 숫자와 밑줄 가능
-const regNickName = /^[a-zA-Z가-힣0-9_]{2,20}$/;	// 닉네임은 영문, 한글, 숫자, 밑줄만 가능
-const regName = /^[a-zA-Z가-힣]+$/;	// 이름은 한글/영문 가능
-const regEmail = /^[a-zA-Z0-9-_]+@[a-zA-Z.]+\.[a-zA-Z]{2,}$/; //이메일 형식 맞춰야함.
-const regURL = /^(https?:\/\/)?([a-z\d\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?$/;
+const regMid = /^[a-zA-Z0-9_]{4,20}$/;					// 아이디는 4~20의 영문 대/소문자와 숫자와 밑줄 가능.
+const regNickName = /^[a-zA-Z가-힣0-9_]{2,20}$/;	// 닉네임은 영문, 한글, 숫자, 밑줄만 가능.
+const regName = /^[a-zA-Z가-힣]+$/;								// 이름은 한글/영문 가능.
+const regEmail = /^[a-zA-Z0-9-_]+@[a-zA-Z.]+\.[a-zA-Z]{2,}$/;	//이메일 형식 맞춰야함.
+// 비밀번호는 영문 대, 소문자, 특수문자 한 글자 이상 포함
+const regPwd = /^(?=[a-zA-Z0-9]*[!@#$%^&*()\-_=+?][a-zA-Z0-9]*$)[a-zA-Z0-9!@#$%^&*()\-_=+?]{2,}$/
 
 let idCheckSW = 0;
 let nickNameCheckSW = 0;
@@ -136,6 +137,7 @@ function emailCertification(year) {
 		$("#nickNameBtn").focus();
 		return false;
 	}
+	
 	// 메일 인증 전에 정보를 입력했는지 확인.
 	let pwd = $("#pwd").val().replace(" ","");
 	let name = $("#name").val().replace(" ","");
@@ -156,7 +158,12 @@ function emailCertification(year) {
 		$("#name").focus();
 		return false;
 	}
-	else if(age < 20) {
+	else if($("#birthday").val().replace(" ","").split("-") == "") {
+		alert("생년월일을 입력해주세요.");
+		("#birthday").focus();
+		return false;
+	}
+	else if(age < 19) {
 		alert("미성년자는 가입하실 수 없습니다.");
 		$("#birthday").focus();
 		return false;
@@ -172,6 +179,7 @@ function emailCertification(year) {
 	spin += "메일 발송중입니다. 잠시만 기다려주세요</div>";
 	$("#demoSpin").html(spin);
 	spin = "";
+	$("#certificationBtn").attr("disabled", true);
 	
 	// ajax로 인증번호 발송.
 	$.ajax({
@@ -184,12 +192,15 @@ function emailCertification(year) {
 				let str = '<div class="input-group mb-3">';
 				str += '<input type="text" name="checkKey" id="checkKey" class="form-control" />';
 				str += '<span id="accessTime" class="input-group-text">남은 시간: 120초</span>';
-				str += '<input type="button" value="인증번호확인" onclick="emailCertificationOk()" class="btn btn-primary" />';
+				str += '<input type="button" value="인증번호확인" onclick="emailCertificationOk()" class="btn btn-primary btn-sm" />';
 				str += '</div>';
 				$("#demoSpin").html(str);
 				timer();
 			}
-			else alert("인증번호를 다시 받아주세요.");
+			else {
+				alert("인증번호가 발송되지 않았습니다.\n잠시 후, 다시 시도해주세요.");
+				$("#certificationBtn").attr("disabled", false);
+			};
 		},
 	error : () => alert("전송오류")
 	});
@@ -211,7 +222,10 @@ function timer() {
 		$.ajax({
 			url : "SignUpEmailCheckNo",
 			type: "post",
-			success : (res) => alert("인증시간이 만료되었습니다.\n인증번호를 다시 받아주세요."),
+			success : () => {
+				alert("인증시간이 만료되었습니다.\n인증번호를 다시 받아주세요.");
+				$("#certificationBtn").attr("disabled", false);
+			},
 			error : () => alert("전송오류")
 		});
 		// 제한시간 처리 function 초기화.
@@ -240,8 +254,12 @@ function emailCertificationOk() {
 				clearInterval(interval);
 				$("#demoSpin").hide();
 				$("#addContent").show();
+				// 회원가입 버튼을 바로 활성화하면 실제 화면에서는 갱신되지 않은 채로 있기 때문에 0.1초 텀을 준다.
+				setTimeout(() => {
+					$("#fCheck").attr("disabled", false);
+				}, 100);
 			}
-			else alert("인증번호를 다시 받아주세요.");
+			else alert("인증번호가 일치하지 않습니다.");
 		},
 		error : () => alert("전송오류")
 	});
@@ -265,8 +283,25 @@ function fCheck(year) {
 	let address = postcode + "/" + roadAddress + "/" + detailAddress + "/" + extraAddress;
 	let submitFlag = 0; // 체크완료를 위한 변수.
 	
-	// DB에 NOT NULL 처리한 것들과 DEFAULT값이 없는 것들만 프론트에서 체크한다(입력받지 않았고 NOT NULL이 아닌 것은 백에서 DEFAULT처리).
+	// DB에 NOT NULL 처리한 것들과 DEFAULT값이 없는 것들만 프론트에서 체크한다.
 	// 아이디, 닉네임 중복체크 했는지 확인.
+	if(idCheckSW == 0) {
+		alert("아이디 중복체크버튼을 눌러주세요.");
+		$("#midBtn").focus();
+		return false;
+	}
+	else if(nickNameCheckSW == 0) {
+		alert("닉네임 중복체크버튼을 눌러주세요.");
+		$("#nickNameBtn").focus();
+		return false;
+	}
+	/*
+	if(!regPwd.test(pwd)) {
+		alert("비밀번호는 영문 대, 소문자, 특수문자 한 글자 이상 포함해서 만들어주세요.");
+		$("#pwd").focus();
+		return false;
+	}
+	*/
 	if(pwd.length < 4 || pwd.length > 20) {
 		alert("비밀번호는 4~20 자리로 작성해주세요.");
 		$("#pwd").focus();
@@ -277,7 +312,7 @@ function fCheck(year) {
 		$("#name").focus();
 		return false;
 	}
-	else if(age < 20) {
+	else if(age < 19) {
 		alert("미성년자는 가입하실 수 없습니다.");
 		$("#birthday").focus();
 		return false;
@@ -339,7 +374,7 @@ function updateCheck() {
 		$("#name").focus();
 		return false;
 	}
-	else if(age < 20) {
+	else if(age < 19) {
 		alert("미성년자는 가입하실 수 없습니다.");
 		$("#age").focus();
 		return false;

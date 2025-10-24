@@ -128,6 +128,10 @@ public class BoardController {
 		}
 		session.setAttribute("sContentIdx", contentView);
 		
+		// 이전글, 다음글.
+		BoardVO preVO = boardService.getPreNextSearch(vo.getIdx(), "preVO");
+		BoardVO nextVO = boardService.getPreNextSearch(vo.getIdx(), "nextVO");
+		
 		vo = boardService.getBoard(vo.getIdx());
 		fVO = fileService.getFile("board", vo.getIdx());
 		List<ReplyVO> reVOS = replyService.getReply(vo.getIdx());
@@ -136,6 +140,8 @@ public class BoardController {
 		model.addAttribute("vo", vo);
 		model.addAttribute("fVO", fVO);
 		model.addAttribute("reVOS", reVOS);
+		model.addAttribute("preVO", preVO);
+		model.addAttribute("nextVO", nextVO);
 		return "board/boardContent";
 	}
 	//좋아요, 싫어요 처리.
@@ -250,7 +256,7 @@ public class BoardController {
 	public int boardComplaintPost(ComplaintVO vo) {
 		int res = 0;
 		res = complaintService.setComplaintInput(vo);
-		if(res != 0) complaintService.setComplaintParentUpdate("board", vo.getPartIdx(), "OK");
+		if(res != 0) complaintService.setComplaintParentUpdate(vo.getPart(), vo.getPartIdx(), "OK");
 		return res;
 	}
 	

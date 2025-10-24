@@ -13,27 +13,6 @@
 	<title>Member List</title>
 	<script src="${ctp}/js/admin.js"></script>
 	<link type="text/css" rel="stylesheet" href="${ctp}/css/admin.css" />
-	<script>
-		// 회원삭제.
-		function memberDelete(idx) {
-			let ans = confirm("선택한 회원을 삭제하시겠습니까?");
-			if(ans) {
-				$.ajax({
-					url : "${ctp}/admin/member/MemberDelete",
-					type: "post",
-					data: {"idx" : idx},
-					success : (res) => {
-						if(res != 0) {
-							alert("회원이 삭제되었습니다.");
-							location.reload();
-						}
-						else alert("회원 삭제에 실패했습니다.");
-					},
-					error : () => alert("전송오류")
-				});
-			}
-		}
-	</script>
 </head>
 <body>
 	<div class="container text-center">
@@ -83,7 +62,7 @@
 			</tr>
 			<c:forEach var="vo" items="${mVOS}" varStatus="st">
 				<tr>
-					<td><input type="checkbox" name="idxFlag" id="idxFlag${st.index}" ${vo.level==0?'disabled':''} /></td>
+					<td><input type="checkbox" id="idxFlag${st.index}" name="idxFlag" ${vo.level==0?'disabled':''} /></td>
 					<td>${vo.mid}</td>
 					<td>${vo.nickName}</td>
 					<td>${vo.name}</td>
@@ -94,7 +73,7 @@
 						<c:if test="${vo.userDelete == '삭제'}">탈퇴대기중</c:if>
 					</td>
 					<td class="d-flex justify-content-center">
-						<select name="level" id="level" onchange="levelChange(${st.index}, ${vo.idx})" class="form-select" style="width:102px">
+						<select id="level${st.index}" name="level" class="form-select" style="width:102px">
 							<option value="0" ${vo.level==0?'selected':''}>관리자</option>
 							<option value="1" ${vo.level==1?'selected':''}>업자</option>
 							<option value="2" ${vo.level==2?'selected':''}>우수회원</option>
@@ -113,14 +92,14 @@
 		<p><br/></p>
 	</div>
 	<!-- 검색기 시작 -->
-	<form name="searchForm" action="MemberSearch">
-		<div class="text-center">
-			<b>검색:</b>
-			<select name="search" id="search">
+	<form name="searchForm" action="MemberSearch" class="d-flex justify-content-center">
+		<div class="input-group" style="width:500px">
+			<b class="input-group-text">검색:</b>
+			<select name="search" id="search" class="form-select" style="width:120px; flex:0 0 auto;">
 				<option value="mid">아이디</option>
 			</select>
 			<input type="text" name="searchStr" id="searchStr" required />
-			<input type="submit" value="검색" class="btn btn-info btn-sm mb-1" />
+			<input type="submit" value="검색" class="btn btn-info btn-sm" />
 		</div>
 	</form>
 	<!-- 검색기 끝 -->

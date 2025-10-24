@@ -10,24 +10,8 @@
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script src="${ctp}/js/postCode.js"></script>
 	<script src="${ctp}/js/signUp.js"></script>
-	<title>Member Update</title>
-	<style>
-		h6 {
-			position: fixed;
-			right: 1rem;
-			bottom: -50px;
-			transition: 0.7s ease;
-			z-index: 2;
-		}
-		.on {
-			opacity: 0.8;
-			cursor: pointer;
-			bottom: 0;
-		}
-		
-		label {width:100px;}
-		.boxWidth {width: 18%;}
-	</style>
+	<link type="text/css" rel="stylesheet" href="${ctp}/css/member.css" />
+	<title></title>
 </head>
 <body>
 	<p><br/></p>
@@ -58,14 +42,14 @@
 				<input type="text" name="email1" id="email1" value="${email[0]}" required class="form-control" />
 				<span class="input-group-text">@</span>
 				<select name="email2" id="email2" class="form-select">
-	        <option value="naver.com" ${email[1]=='naver.com' ? 'selected' : ''}>naver.com</option>
-	        <option value="gmail.com" ${email[1]=='gmail.com' ? 'selected' : ''}>gmail.com</option>
-	        <option value="hanmail.net" ${email[1]=='daum.net' ? 'selected' : ''}>hanmail.net</option>
-	      </select>
+					<option value="naver.com" ${email[1]=='naver.com' ? 'selected' : ''}>naver.com</option>
+					<option value="gmail.com" ${email[1]=='gmail.com' ? 'selected' : ''}>gmail.com</option>
+					<option value="hanmail.net" ${email[1]=='daum.net' ? 'selected' : ''}>hanmail.net</option>
+				</select>
 			</div>
 			<div class="input-group mb-3 col" >
 				<c:set var="address" value="${fn:split(vo.address, '/')}" />
-	     	<label for="address" class="input-group-text boxWidth">주 소</label>
+				<label for="address" class="input-group-text boxWidth">주 소</label>
 				<input type="text" name="postcode" id="sample6_postcode" value="${fn:trim(address[0])}" placeholder="우편번호" class="form-control">
 				<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기" class="btn btn-secondary btn-sm">
 			</div>
@@ -107,13 +91,14 @@
 			<div class="text-center">
 				<button type="button" class="btn btn-success" onclick="updateCheck()">회원정보수정</button>&nbsp;
 				<button type="button" class="btn btn-warning" onclick="location.reload()">다시작성</button>&nbsp;
-				<button type="button" class="btn btn-info" onclick="location.href = '${ctp}/memberMain'">돌아가기</button>&nbsp;
+				<button type="button" class="btn btn-info" onclick="location.href='${ctp}/member/Main'">돌아가기</button>&nbsp;
 			</div>
 			<input type="hidden" name="email" id="email" value="" />
 			<input type="hidden" name="address" id="address" value="" />
 			<input type="hidden" name="myImage" id="myImage" value="${vo.myImage}" />
 		</form>
 	</div>
+	<p><br/></p>
 	<h6 id="topBtn" class="text-end me-3"><img src="${ctp}/images/arrowTop.gif" title="위로이동" /></h6>
 </body>
 </html>

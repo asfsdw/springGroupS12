@@ -1,5 +1,6 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <c:set var="ctp" value="${pageContext.request.contextPath}"></c:set>
 <!DOCTYPE html>
 <html>
@@ -51,17 +52,23 @@
 						<td><img src="${ctp}/data/shop/${vo.productImage}" style="width:150px" /></td>
 						<td>${vo.title}</td>
 						<td>${vo.orderQuantity}</td>
-						<td>${vo.price}</td>
+						<td>
+							<fmt:formatNumber value="${vo.price}" />
+							<c:if test="${vo.usedPoint != 0}">
+							<br/>
+							(사용한 포인트: ${vo.usedPoint})
+							</c:if>
+						</td>
 						<c:if test="${deliveryIdx != vo.deliveryIdx}">
 							<td rowspan="${cnt}">${vo.deliverySW}</td>
 							<c:if test="${vo.deliverySW == '준비중'}">
-								<td rowspan="${cnt}"><input type="button" value="주문취소" onclick="deliveryCancel('${vo.deliveryIdx}')" class="btn btn-danger" /></td>
+								<td rowspan="${cnt}"><input type="button" value="주문취소" onclick="deliveryCancel('${vo.deliveryIdx}','${vo.usedPoint}')" class="btn btn-danger" /></td>
 							</c:if>
 							<c:if test="${vo.deliverySW == '배송완료'}">
 								<td rowspan="${cnt}"><input type="button" value="구매완료" onclick="deliveryComp('${vo.deliveryIdx}')" class="btn btn-success" /></td>
 							</c:if>
 							<c:if test="${vo.deliverySW != '준비중' && vo.deliverySW != '배송완료'}">
-								<td rowspan="${cnt}">${vo.deliverySW}</td>
+								<td rowspan="${cnt}"><input type="button" value="${vo.deliverySW}" disabled class="btn btn-outline-success" /></td>
 							</c:if>
 							<c:set var="deliveryIdx" value="${vo.deliveryIdx}" />
 						</c:if>

@@ -9,7 +9,9 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
-	<title>Member Main</title>
+	<script src="${ctp}/js/member.js"></script>
+	<link type="text/css" rel="stylesheet" href="${ctp}/css/member.css" />
+	<title></title>
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 	<script type="text/javascript">
 		// 관리자일 경우에만 스크립트 실행.
@@ -20,11 +22,11 @@
 			function drawChart1() {
 				let str = [];
 				let statNickNames = "${statNickName}".split("/");
-				let statVisitCnts = "${statVisitCnt}".split("/");
+				let statLoginCnts = "${statLoginCnt}".split("/");
 				let statPoints = "${statPoint}".split("/");
 				
 				for(let i=0; i<statNickNames.length; i++) {
-					str.push([statNickNames[i],Number(statVisitCnts[i]),Number(statPoints[i])]);
+					str.push([statNickNames[i],Number(statLoginCnts[i]),Number(statPoints[i])]);
 				}
 				
 				var data = google.visualization.arrayToDataTable([
@@ -59,10 +61,10 @@
 				function drawChart2() {
 					let str = [];
 					let statNickNames = "${statNickName}".split("/");
-					let statVisitCnts = "${statVisitCnt}".split("/");
+					let statLoginCnts = "${statLoginCnt}".split("/");
 					
 					for(let i=0; i<statNickNames.length; i++) {
-						str.push([statNickNames[i],Number(statVisitCnts[i])]);
+						str.push([statNickNames[i],Number(statLoginCnts[i])]);
 					}
 					
 					var data = google.visualization.arrayToDataTable([
@@ -79,73 +81,28 @@
 				}
 			}
 		}
-  </script>
-  <script>
-		'use strict';
-		
-		$(window).scroll(function() {
-			if($(this).scrollTop() > 100) $("#topBtn").addClass("on");
-			else $("#topBtn").removeClass("on");
-			
-			$("#topBtn").click(function() {
-				window.scrollTo({top:0, behavior: "smooth"});
-			});
-		});
 	</script>
-	<style>
-		h6 {
-			position: fixed;
-			right: 1rem;
-			bottom: -50px;
-			transition: 0.7s ease;
-			z-index: 2;
-		}
-		.on {
-			opacity: 0.8;
-			cursor: pointer;
-			bottom: 0;
-		}
-		
-		#yellow td {background-color: #FF6 !important;}
-		#red td {
-			background-color: #F66 !important;
-			color: #FFF !important;
-		}
-	</style>
 </head>
 <body>
 	<div class="container text-center">
 		<h2>${sNickName} 회원님 전용 방입니다.</h2>
+		<c:if test="${sLoginNew == 'OK'}">
+			<p></p>
+			<div>
+				<h4>현재 임시 비밀번호를 사용 중입니다.<br/>계정 보호를 위해 비밀번호를 변경해주세요.</h4>
+				<input type="button" value="비밀번호 변경" onclick="location.href='${ctp}/member/MemberPwdCheck/p'" class="btn btn-success" />
+			</div>
+		</c:if>
 		<hr/>
 		<div class="row">
-			<div class="col text-start">
+			<div class="col">
 				현재 회원 등급: ${sStrLevel}<br/>
 				현재 포인트: ${mVO.point}<br/>
-				이전 방문일: ${sLastDate}<br/>
+				이전 방문일: ${fn:substring(sLastDate,0,10)}<br/>
+				총 방문일: ${mVO.loginCnt}<br/>
 			</div>
 			<div class="col">
 				<img src="${ctp}/member/${mVO.myImage}" style="width:200px" />
-			</div>
-			<div class="col text-end">
-				<div class="text-center fs-5">${date} 오늘의 일정</div>
-				<table class="table table-hover table-bordered text-center">
-					<tr class="table-secondary">
-						<th>분류</th>
-						<th>내용</th>
-					</tr>
-					<c:forEach var="vo" items="${vos}">
-						<tr>
-							<td>${vo.part}</td>
-							<c:if test="${fn:indexOf(vo.content,newLine) != -1}">
-								<td>${fn:substring(vo.content,0,fn:indexOf(vo.content,newLine))}</td>
-							</c:if>
-							<c:if test="${fn:indexOf(vo.content,newLine) == -1}">
-								<td>${fn:substring(vo.content,0,10)}</td>
-							</c:if>
-						</tr>
-					</c:forEach>
-				</table>
-				<div class="text-center"><a href="${ctp}/schedule/Schedule" class="btn btn-info btn-sm">전체 일정 보기</a></div>
 			</div>
 		</div>
 		<hr/>
@@ -216,7 +173,7 @@
 			<hr/>
 			<div class="row">
 				<div class="col">
-					<div id="chartView" style="width: 400px; height: 200px;"></div>
+					<div id="chartView" style="width: 400px; height: 300px;"></div>
 					<div class="text-start mt-2">
 						<input type="button" value="그래프보기" id="chart1" onclick="chartView(1)" 
 							class="btn btn-primary btn-sm" style="width: 100px; margin-left: 100px; display: none;" />

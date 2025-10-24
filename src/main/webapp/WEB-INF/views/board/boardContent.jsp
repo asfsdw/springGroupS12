@@ -68,15 +68,15 @@
 			<tr>
 				<td class="text-start">
 					<c:if test="${empty pVO.search}">
-						<input type="button" value="돌아가기" onclick="location.href = '${ctp}/board/BoardList?pag=${pVO.pag}&pageSize=${pVO.pageSize}';" class="btn btn-info" />
+						<input type="button" value="돌아가기" onclick="location.href='${ctp}/board/BoardList?pag=${pVO.pag}&pageSize=${pVO.pageSize}'" class="btn btn-info" />
 					</c:if>
 					<c:if test="${!empty pVO.search}">
-						<input type="button" value="돌아가기" onclick="location.href = '${ctp}/board/BoardSearchList?pag=${pVO.pag}&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}';" class="btn btn-info" />
+						<input type="button" value="돌아가기" onclick="location.href='${ctp}/board/BoardSearchList?pag=${pVO.pag}&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}'" class="btn btn-info" />
 					</c:if>
 				</td>
 				<td class="text-end">
 					<c:if test="${vo.mid == sMid && vo.complaint != 'OK'}">
-						<input type="button" value="수정" onclick="location.href = '${ctp}/board/BoardUpdate?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}';" class="btn btn-warning" />
+						<input type="button" value="수정" onclick="location.href='${ctp}/board/BoardUpdate?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}'" class="btn btn-warning" />
 					</c:if>
 					<c:if test="${vo.mid == sMid || sLevel == 0 && vo.complaint != 'OK'}">
 						<input type="button" value="삭제" onclick="deleteCheck(${vo.idx})" class="btn btn-danger" />
@@ -85,7 +85,7 @@
 						<input type="button" value="신고" data-bs-toggle="modal" data-bs-target="#myModal" class="btn btn-secondary" />
 					</c:if>
 					<c:if test="${vo.complaint == 'OK'}">
-						<font color="red">신고 중</font>
+						<input type="button" value="신고중" disabled class="btn btn-outline-danger" />
 					</c:if>
 				</td>
 			</tr>
@@ -104,8 +104,8 @@
 				<c:forEach var="reVO" items="${reVOS}" varStatus="st">
 					<tr>
 						<td>
-							<c:if test="${reVO.re_step > 1}">
-								<c:forEach var="i" begin="1" end="${reVO.re_step}"> &nbsp;</c:forEach>
+							<c:if test="${reVO.reStep > 1}">
+								<c:forEach var="i" begin="1" end="${reVO.reStep}"> &nbsp;</c:forEach>
 								└▶ 
 							</c:if>
 							<c:if test="${reVO.mid == 'noMember'}">${reVO.hostIP}</c:if>
@@ -156,7 +156,7 @@
 							비밀글입니다.
 						</c:if>
 						<c:if test="${nextVO.openSW != 'NO'}">
-							👆<a href="${ctp}/board/BoardContent?idx=${nextVO.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}">다음글: ${nextVO.title}</a>
+							⬆<a href="${ctp}/board/BoardContent?idx=${nextVO.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}">다음글: ${nextVO.title}</a>
 						</c:if>
 					</c:if>
 				</td>
@@ -168,7 +168,7 @@
 							비밀글입니다.
 						</c:if>
 						<c:if test="${preVO.openSW != 'NO'}">
-							👇<a href="${ctp}/board/BoardContent?idx=${preVO.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}">이전글: ${preVO.title}</a>
+							⬇<a href="${ctp}/board/BoardContent?idx=${preVO.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}">이전글: ${preVO.title}</a>
 						</c:if>
 					</c:if>
 				</td>
@@ -176,6 +176,7 @@
 		</table>
 	</div>
 	<p><br/></p>
+	<!-- 신고 -->
 	<div class="modal fade" id="myModal">
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
@@ -200,13 +201,13 @@
 						<input type="button" value="신고하기" onclick="complaintCheck('${vo.idx}','${sMid}','${vo.title}')" class="btn btn-success form-control" />
 					</form>
 				</div>
-				<!-- Modal footer -->
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 				</div>
 			</div>
 		</div>
 	</div>
+	<!-- 신고 끝 -->
 	<h6 id="topBtn" class="text-end me-3"><img src="${ctp}/images/arrowTop.gif" title="위로이동" /></h6>
 </body>
 </html>

@@ -8,21 +8,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
 	<script src="${ctp}/js/member.js"></script>
+	<link type="text/css" rel="stylesheet" href="${ctp}/css/member.css" />
 	<title></title>
 	<style>
-		h6 {
-			position: fixed;
-			right: 1rem;
-			bottom: -50px;
-			transition: 0.7s ease;
-			z-index: 2;
-		}
-		.on {
-			opacity: 0.8;
-			cursor: pointer;
-			bottom: 0;
-		}
-		
 		#green td {background-color: #6F6 !important;}
 		#yellow td {background-color: #FF6 !important;}
 		#red td {

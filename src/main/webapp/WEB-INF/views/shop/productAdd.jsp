@@ -21,7 +21,7 @@
 			<table class="table table-bordered">
 				<tr>
 					<th>등록자</th>
-					<td><input type="text" value="${sNickName}" id="nickName" name="nickName" readonly class="form-control" /></td>
+					<td><input type="text" id="nickName" name="nickName" value="${sNickName}" readonly class="form-control" /></td>
 					<th>상품명</th>
 					<td><input type="text" id="title" name="title" placeholder="상품의 이름을 입력해주세요." required class="form-control" /></td>
 					<th>상품대표이미지</th>
@@ -46,10 +46,6 @@
 					<td><input type="number" id="quantity" name="quantity" min="0" placeholder="재고 개수를 입력해주세요." required class="form-control" /></td>
 				</tr>
 				<tr>
-					<th>비밀번호</th>
-					<td colspan="5"><input type="password" id="pwd" name="pwd" required class="form-control" /></td>
-				</tr>
-				<tr>
 					<th>상품설명</th>
 					<td colspan="5">
 						<textarea rows="6" id="CKEDITOR" name="content" placeholder="내용을 입력해주세요." required class="form-control"></textarea>
@@ -71,7 +67,7 @@
 		<c:if test="${sLevel == 2}">
 			<input type="button" value="상품등록신청" onclick="subCheck('${ctp}')" class="btn btn-success btn-sm me-1" />
 		</c:if>
-		<input type="button" value="돌아가기" onclick="location.href = '${ctp}/shop/Goods'" class="btn btn-warning btn-sm" />
+		<input type="button" value="돌아가기" onclick="location.href='${ctp}/shop/Goods'" class="btn btn-warning btn-sm" />
 		<p><br/></p>
 	</div>
 	<h6 id="topBtn" class="text-end me-3"><img src="${ctp}/images/arrowTop.gif" title="위로이동" /></h6>
