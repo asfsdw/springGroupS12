@@ -50,6 +50,8 @@ public class AdminController {
 	public String adminMainGet(Model model) {
 		int newSubScript = 0;
 		int newMember = 0;
+		int newProduct = 0;
+		int newDelivery = 0;
 		
 		List<SubScriptVO> subVOS = memberService.getNewSubScript();
 		if(subVOS != null) newSubScript += subVOS.size();
@@ -57,9 +59,15 @@ public class AdminController {
 		if(shopVOS != null) newSubScript += shopVOS.size();
 		List<MemberVO> memberVOS = memberService.getNewMember();
 		if(memberVOS != null) newMember = memberVOS.size();
+		List<ShopVO> productVOS = shopService.getNewProduct();
+		if(productVOS != null) newProduct = productVOS.size();
+		List<DeliveryVO> deliveryVOS = deliveryService.getNewDelivery();
+		if(deliveryVOS != null) newDelivery = deliveryVOS.size();
 		
 		model.addAttribute("newSubScript", newSubScript);
 		model.addAttribute("newMember", newMember);
+		model.addAttribute("newProduct", newProduct);
+		model.addAttribute("newDelivery", newDelivery);
 		return "admin/adminMain";
 	}
 	
@@ -127,10 +135,19 @@ public class AdminController {
 	
 	// 상품 리스트.
 	@GetMapping("/ProductList")
-	public String productListGet(Model model) {
-		List<ShopVO> vos = shopService.getProductList();
+	public String productListGet(Model model,
+			@RequestParam(name = "idx", defaultValue = "0", required = false)int idx) {
+		List<ShopVO> vos = null;
+		ShopVO vo = null;
+		if(idx == 0) {
+			vos = shopService.getProductList(0, 0, "전체");
+			model.addAttribute("vos", vos);
+		}
+		else if(idx != 0) {
+			vo = shopService.getProduct(idx);
+			model.addAttribute("vo", vo);
+		}
 		
-		model.addAttribute("vos", vos);
 		return "admin/shop/productList";
 	}
 	// 배송 리스트.

@@ -40,4 +40,6 @@ public interface DeliveryDAO {
 
 	List<DeliveryVO> getDeliveryListMain(@Param("mid") String mid);
 
+	List<DeliveryVO> getNewDelivery();
+
 }

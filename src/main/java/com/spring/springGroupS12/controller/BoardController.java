@@ -134,7 +134,7 @@ public class BoardController {
 		
 		vo = boardService.getBoard(vo.getIdx());
 		fVO = fileService.getFile("board", vo.getIdx());
-		List<ReplyVO> reVOS = replyService.getReply(vo.getIdx());
+		List<ReplyVO> reVOS = replyService.getReply(vo.getIdx(), "board");
 		
 		model.addAttribute("pVO", pVO);
 		model.addAttribute("vo", vo);

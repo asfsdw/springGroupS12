@@ -12,7 +12,7 @@ public class Level1Interceptor extends HandlerInterceptorAdapter {
 		HttpSession session = request.getSession();
 		int level = session.getAttribute("sLevel") == null ? 99 : (int)session.getAttribute("sLevel");
 		if(level > 1) {
-			if(level > 4) request.getRequestDispatcher("/Message/loginNo").forward(request, response);
+			if(level > 4) request.getRequestDispatcher("/Message/loginPlz").forward(request, response);
 			else request.getRequestDispatcher("/Message/levelNo").forward(request, response);
 			return false;
 		}

@@ -13,7 +13,7 @@ public interface ShopService {
 
 	int setProductImage(MultipartFile fName, ShopVO vo, FileVO fVO);
 
-	List<ShopVO> getProductList();
+	List<ShopVO> getProductList(int startIndexNo, int pageSize, String kategorie);
 
 	ShopVO getProduct(int idx);
 
@@ -34,5 +34,7 @@ public interface ShopService {
 	int setProductUpdate(ShopVO vo);
 
 	List<ShopVO> getNewProductSub();
+
+	List<ShopVO> getNewProduct();
 
 }

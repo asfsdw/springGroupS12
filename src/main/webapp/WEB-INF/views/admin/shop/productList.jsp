@@ -26,9 +26,28 @@
 				<th>상품상태</th>
 				<th>상품신고</th>
 			</tr>
-			<c:forEach var="vo" items="${vos}" varStatus="st">
+			<c:if test="${!empty vos}">
+				<c:forEach var="vo" items="${vos}" varStatus="st">
+					<tr>
+						<td><input type="checkbox" id="idxFlag${st.index}" name="idxFlag" /></td>
+						<td><img src="${ctp}/data/shop/${vo.productImage}" style="width:200px" /></td>
+						<td>${vo.title}</td>
+						<td>${vo.price}</td>
+						<td>${vo.quantity}</td>
+						<td>${vo.sold}</td>
+						<td>${vo.openSW}</td>
+						<c:if test="${vo.complaint == 'NO'}">
+							<td>정상</td>
+						</c:if>
+						<c:if test="${vo.complaint != 'NO'}">
+							<td><font color="red">신고</font></td>
+						</c:if>
+					</tr>
+				</c:forEach>
+			</c:if>
+			<c:if test="${!empty vo}">
 				<tr>
-					<td><input type="checkbox" id="idxFlag${st.index}" name="idxFlag" /></td>
+					<td><input type="checkbox" id="idxFlag0" name="idxFlag" /></td>
 					<td><img src="${ctp}/data/shop/${vo.productImage}" style="width:200px" /></td>
 					<td>${vo.title}</td>
 					<td>${vo.price}</td>
@@ -42,7 +61,7 @@
 						<td><font color="red">신고</font></td>
 					</c:if>
 				</tr>
-			</c:forEach>
+			</c:if>
 		</table>
 		<p><br/></p>
 	</div>

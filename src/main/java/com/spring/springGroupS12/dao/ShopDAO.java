@@ -12,7 +12,7 @@ public interface ShopDAO {
 
 	int setProductInput(@Param("vo") ShopVO vo);
 
-	List<ShopVO> getProductList();
+	List<ShopVO> getProductList(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("kategorie") String kategorie);
 
 	ShopVO getProduct(@Param("idx") int idx);
 
@@ -33,5 +33,7 @@ public interface ShopDAO {
 	int setProductUpdate(@Param("vo") ShopVO vo);
 
 	List<ShopVO> getNewProductSub();
+
+	List<ShopVO> getNewProduct();
 
 }

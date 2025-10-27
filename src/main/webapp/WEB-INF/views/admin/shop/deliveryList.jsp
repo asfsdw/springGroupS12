@@ -23,7 +23,7 @@
 					<option ${deliverySW=='준비완료'?'selected':''}>준비완료</option>
 					<option ${deliverySW=='배송중'?'selected':''}>배송중</option>
 					<option ${deliverySW=='배송완료'?'selected':''}>배송완료</option>
-					<option ${deliverySW=='구매완료'?'selected':''}>구매완료</option>
+					<option ${deliverySW=='구매완료'?'selected disabled':''}>구매완료</option>
 				</select>
 			</div>
 			<div class="col text-end">
@@ -44,7 +44,7 @@
 				<input type="button" value="변경" onclick="deliverySWAllChange()" class="btn btn-success btn-sm" />
 			</div>
 		</div>
-		<p></p>
+		<hr/>
 		<table class="table table-bordered">
 			<tr class="table-secondary">
 				<th><input type="checkbox" id="check" name="check" onclick="checkClick()" /></th>

@@ -54,10 +54,12 @@ public class ShopController {
 	
 	// 상품 리스트.
 	@GetMapping("/Goods")
-	public String goodsGet(Model model, PageVO pVO) {
+	public String goodsGet(Model model, PageVO pVO,
+			@RequestParam(name = "kategorie", defaultValue = "전체", required = false)String kategorie) {
 		pVO.setSection("shop");
 		pVO = pagination.pagination(pVO);
-		List<ShopVO> vos = shopService.getProductList();
+		
+		List<ShopVO> vos = shopService.getProductList(pVO.getStartIndexNo(), pVO.getPageSize(), kategorie);
 		
 		model.addAttribute("pVO", pVO);
 		model.addAttribute("vos", vos);

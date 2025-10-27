@@ -15,7 +15,12 @@
 	
 	<interceptors>
 		<interceptor>
-			<mapping path="/reply/**"/>
+			<mapping path="/board/BoardInput"/>
+			<beans:ref bean="level4Interceptor" />
+		</interceptor>
+		<interceptor>
+			<mapping path="/reply/ReviewInput"/>
+			<mapping path="/reply/ReviewDelete"/>
 			<beans:ref bean="level3Interceptor" />
 		</interceptor>
 		<interceptor>
@@ -23,19 +28,7 @@
 			<beans:ref bean="level2Interceptor" />
 		</interceptor>
 		<interceptor>
-			<mapping path="/shop/**" />
-			<exclude-mapping path="/shop/Goods"/>
-			<exclude-mapping path="/shop/ProductAddSub"/>
-			<exclude-mapping path="/shop/Product"/>
-			<exclude-mapping path="/shop/ShoppingBag"/>
-			<exclude-mapping path="/shop/ShoppingBagDelete"/>
-			<exclude-mapping path="/shop/Buy"/>
-			<exclude-mapping path="/shop/PaymentResult"/>
-			<exclude-mapping path="/shop/DeliveryOk"/>
-			<exclude-mapping path="/shop/DeliveryCancel"/>
-			<exclude-mapping path="/shop/DeliveryComp"/>
-			<exclude-mapping path="/shop/ShopComplaint"/>
-			<exclude-mapping path="/shop/ProductUpdate"/>
+			<mapping path="/shop/ProductAdd" />
 			<beans:ref bean="level1Interceptor" />
 		</interceptor>
 		<interceptor>

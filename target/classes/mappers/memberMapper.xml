@@ -6,7 +6,7 @@
 		<if test="flag == 'new'">WHERE startDate >= date_add(now(), interval -7 day)</if>;
 	</select>
 	<select id="getMemberList" resultType="com.spring.springGroupS12.vo.MemberVO">
-		SELECT * FROM member WHERE userDelete = '활동' AND level != 99<if test="searchStr != ''"> AND ${search} LIKE concat("%"#{searchStr}"%")</if> ORDER BY mid LIMIT #{startIndexNo}, #{pageSize};
+		SELECT * FROM member WHERE userDelete = '활동' AND level != 99<if test="searchStr != ''"> AND ${search} LIKE concat("%"#{searchStr}"%")</if> ORDER BY userInfo, mid LIMIT #{startIndexNo}, #{pageSize};
 	</select>
 	<select id="getMemberMid" resultType="com.spring.springGroupS12.vo.MemberVO">
 		SELECT * FROM member WHERE mid = #{mid};

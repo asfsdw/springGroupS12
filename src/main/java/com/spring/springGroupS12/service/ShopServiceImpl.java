@@ -125,8 +125,8 @@ public class ShopServiceImpl implements ShopService {
 	}
 
 	@Override
-	public List<ShopVO> getProductList() {
-		return shopDAO.getProductList();
+	public List<ShopVO> getProductList(int startIndexNo, int pageSize, String kategorie) {
+		return shopDAO.getProductList(startIndexNo, pageSize, kategorie);
 	}
 
 	@Override
@@ -177,6 +177,11 @@ public class ShopServiceImpl implements ShopService {
 	@Override
 	public List<ShopVO> getNewProductSub() {
 		return shopDAO.getNewProductSub();
+	}
+
+	@Override
+	public List<ShopVO> getNewProduct() {
+		return shopDAO.getNewProduct();
 	}
 	
 }

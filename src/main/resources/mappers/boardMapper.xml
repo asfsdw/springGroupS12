@@ -9,7 +9,7 @@
 	</select>
 	<select id="getBoardList" resultType="com.spring.springGroupS12.vo.BoardVO">
 		SELECT *, timestampdiff(hour, boardDate, now()) AS hourDiff, datediff(now(), boardDate) AS dateDiff, 
-			(SELECT count(*) FROM reply WHERE parentIdx = board.idx) AS replyCnt 
+			(SELECT count(*) FROM reply WHERE parentIdx = board.idx AND part = 'board') AS replyCnt 
 			FROM board WHERE openSW != '숨기기' 
 			<if test="search != ''">AND ${search} LIKE concat("%"#{searchStr}"%")</if> 
 			ORDER BY idx DESC LIMIT #{startIndexNo}, #{pageSize};
@@ -22,7 +22,7 @@
 	</select>
 	<select id="getBoardBest" resultType="com.spring.springGroupS12.vo.BoardVO">
 		SELECT *, timestampdiff(hour, boardDate, now()) AS hourDiff, datediff(now(), boardDate) AS dateDiff, 
-			(SELECT count(*) FROM reply WHERE parentIdx = board.idx) AS replyCnt 
+			(SELECT count(*) FROM reply WHERE parentIdx = board.idx AND part = 'board') AS replyCnt 
 			FROM board WHERE openSW != '숨기기' AND good >= 5 
 			<if test="search != ''">AND ${search} LIKE concat("%"#{searchStr}"%")</if> 
 			ORDER BY idx DESC LIMIT #{startIndexNo}, #{pageSize};

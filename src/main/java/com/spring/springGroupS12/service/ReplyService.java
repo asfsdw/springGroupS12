@@ -6,7 +6,7 @@ import com.spring.springGroupS12.vo.ReplyVO;
 
 public interface ReplyService {
 
-	List<ReplyVO> getReply(int parentIdx);
+	List<ReplyVO> getReply(int parentIdx, String part);
 	
 	int setReply(ReplyVO vo);
 

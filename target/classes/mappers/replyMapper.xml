@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.springGroupS12.dao.ReplyDAO">
 	<select id="getReply" resultType="com.spring.springGroupS12.vo.ReplyVO">
-		SELECT * FROM reply WHERE parentIdx = #{parentIdx} ORDER BY reOrder;
+		SELECT * FROM reply WHERE part = #{part} AND parentIdx = #{parentIdx} ORDER BY reOrder;
 	</select>
 	<select id="getBoardParentReplyCheck" resultType="com.spring.springGroupS12.vo.ReplyVO">
 		SELECT * FROM reply WHERE parentIdx = #{parentIdx} ORDER BY reOrder DESC LIMIT 1;

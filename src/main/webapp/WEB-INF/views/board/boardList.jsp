@@ -62,20 +62,15 @@
 				<tr>
 					<td>${pVO.curScrStartNo-st.index}</td>
 					<td class="text-start" <c:if test="${vo.good>=5}">style="background-color: #ff9"</c:if>>
-						<c:if test="${vo.complaint == 'HI' && sLevel != 0}">
-							신고된 글입니다.
-						</c:if>
-						<c:if test="${vo.complaint == 'HI' && sLevel == 0}">
+						<c:if test="${vo.complaint == 'OK'}">
 							<font color="red">(신고글) </font>
-							<a href="${ctp}/board/BoardContent?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}"
-									class="text-primary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover">${vo.title}</a>
 						</c:if>
-						<c:if test="${vo.openSW == '비공개' && vo.complaint != 'HI'}">
+						<c:if test="${vo.openSW == '비공개'}">
 							<font color="red">(비밀글) </font>
-							<a href="#" data-bs-toggle="modal" data-bs-target="#myModal" onclick="$('#idx').val(${vo.idx})"
+							<a href="#" data-bs-toggle="modal" data-bs-target="#myModal" onclick="$('#idx').val(${vo.idx});$('#pag').val(${pVO.pag});$('#pageSize').val(${pVO.pageSize})"
 								class="text-primary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover">${vo.title}</a>
 						</c:if>
-						<c:if test="${vo.openSW != '비공개' && vo.complaint != 'HI'}">
+						<c:if test="${vo.openSW != '숨기기' && vo.openSW != '비공개'}">
 							<a href="${ctp}/board/BoardContent?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}"
 								class="text-primary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover">${vo.title}</a>
 						</c:if>
@@ -146,6 +141,8 @@
 							<input type="submit" value="열람" class="btn btn-success" />
 						</div>
 						<input type="hidden" name="idx" id="idx" value="" />
+						<input type="hidden" name="pag" id="pag" value="" />
+						<input type="hidden" name="pageSize" id="pageSize" value="" />
 					</form>
 				</div>
 				<!-- Modal footer -->

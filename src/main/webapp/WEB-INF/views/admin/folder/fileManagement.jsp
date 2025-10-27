@@ -14,8 +14,8 @@
 <body>
 	<div class="container text-center">
 		<h2>파일 관리자입니다.</h2>
-		<hr/>
 		<div class="row mb-2">
+		<p></p>
 			<div class="col text-start">
 				<!-- 폴더에 들어갔을 경우 -->
 				<c:if test="${pVO.part != '전체'}">
@@ -30,6 +30,7 @@
 				<input type="button" value="선택삭제" onclick="fileDelete('${pVO.part}','')" class="btn btn-danger btn-sm" />
 			</div>
 		</div>
+		<hr/>
 		<table class="table table-hover">
 			<tr class="table-secondary">
 				<th>번호</th>

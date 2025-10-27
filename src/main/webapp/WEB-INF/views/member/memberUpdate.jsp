@@ -17,7 +17,7 @@
 	<p><br/></p>
 	<div class="container">
 		<form name="myform" method="post" enctype="multipart/form-data" class="was-validated">
-			<h2 class="text-center">회 원 가 입</h2>
+			<h2 class="text-center">회 원 정 보 수 정</h2>
 			<br/>
 			<div class="input-group mb-3">
 				<label for="mid" class="input-group-text boxWidth">아이디</label>

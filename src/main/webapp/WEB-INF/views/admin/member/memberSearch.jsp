@@ -20,7 +20,7 @@
 		<div class="row mb-2">
 			<div class="col">
 				<span class="d-flex input-group-text ms-2" style="width:214px">등급별로 보기:&nbsp;&nbsp;
-					<select name="levelPage" id="levelPage" onchange="levelPageCheck()" class="form-select" style="width:100px">
+					<select name="levelPage" id="levelPage" onchange="levelPageCheck()" class="form-select" style="width:102px">
 						<option value="100" ${level==100?'selected':''}>전체회원</option>
 						<option value="0" ${level==0?'selected':''}>관리자</option>
 						<option value="1" ${level==1?'selected':''}>업자</option>

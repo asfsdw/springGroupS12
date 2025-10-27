@@ -222,7 +222,7 @@ function priceChange(index, price) {
 	$("#productPrice"+index).html((price*$("#orderQuantity"+index).val()).toLocaleString()+"원");
 	
 	for(let i=0; i<length; i++) {
-		if(document.getElementById("bagCheck"+i).checked == true) {
+		if($("#bagCheck"+i).is(":checked") == true) {
 			totPrice += parseInt($("#productPrice"+i).text().replace(",","").replace("원",""));
 		}
 	}
@@ -594,4 +594,10 @@ function ProductUpdateCheck() {
 	}
 	
 	productUpdateForm.submit();
+}
+
+// 상품 목록 카테고리 별로 보기.
+function kategorieChange(ctp) {
+	let kategorie = $("#kategorie").val();
+	location.href=ctp+"/shop/Goods?kategorie="+kategorie;
 }

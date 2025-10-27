@@ -38,4 +38,6 @@ public interface DeliveryService {
 
 	List<DeliveryVO> getDeliveryListMain(String mid);
 
+	List<DeliveryVO> getNewDelivery();
+
 }

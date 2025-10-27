@@ -64,6 +64,14 @@ public class MessageController {
 			model.addAttribute("message", mid+"님 로그아웃 되셨습니다.");
 			model.addAttribute("url", "member/Login");
 		}
+		else if(msgFlag.equals("loginPlz")) {
+			model.addAttribute("message", "로그인이 필요한 항목입니다.\\n로그인 화면으로 이동합니다.");
+			model.addAttribute("url", "member/Login");
+		}
+		else if(msgFlag.equals("levelNo")) {
+			model.addAttribute("message", "더 높은 등급을 요구하는 항목입니다.\\n등급업을 신청해주세요.");
+			model.addAttribute("url", "member/SubScript");
+		}
 		else if(msgFlag.equals("memberUpdateOk")) {
 			model.addAttribute("message", "정보가 수정되었습니다.");
 			model.addAttribute("url", "/member/Main");

@@ -14,8 +14,8 @@ public class ReplyServiceImpl implements ReplyService {
 	ReplyDAO replyDAO;
 	
 	@Override
-	public List<ReplyVO> getReply(int parentIdx) {
-		return replyDAO.getReply(parentIdx);
+	public List<ReplyVO> getReply(int parentIdx, String part) {
+		return replyDAO.getReply(parentIdx, part);
 	}
 
 	@Override

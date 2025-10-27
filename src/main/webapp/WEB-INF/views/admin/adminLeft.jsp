@@ -20,7 +20,7 @@
 			<div class="main ms-3 mb-2"><b>신청처리</b></div>
 			<div class="sub">
 				<p><a href="${ctp}/admin/SubScriptList">신청보기</a></p>
-				<p><a href="${ctp}/admin/MemberList">멤버관리</a></p>
+				<p><a href="${ctp}/admin/MemberList">회원관리</a></p>
 			</div>
 			<div class="main ms-3 mb-2"><b>상품관리</b></div>
 			<div class="sub">
@@ -32,7 +32,7 @@
 				<p><a href="${ctp}/admin/ComplaintList">신고목록</a></p>
 				<p><a href="${ctp}/admin/ComplaintBoardList">신고된 게시글</a></p>
 			</div>
-			<div class="main ms-3 mb-2"><b>파일정리</b></div>
+			<div class="main ms-3 mb-2"><b>파일관리</b></div>
 			<div class="sub">
 				<p><a href="${ctp}/admin/FileManagement">파일목록</a></p>
 			</div>

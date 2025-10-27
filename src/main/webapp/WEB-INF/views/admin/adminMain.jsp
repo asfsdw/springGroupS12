@@ -13,10 +13,15 @@
 </head>
 <body>
 	<div class="text-center">
+		<p><br/></p>
 		<h2>관리자 메인화면</h2>
 		<hr/>
 		<div class="d-flex justify-content-center">
 			<table class="table table-bordered" style="width:400px">
+				<tr>
+					<th>7일 이내 올라온 정보</th>
+					<th>개수</th>
+				</tr>
 				<tr>
 					<td>새로운 신청</td>
 					<td>${newSubScript}</td>
@@ -24,6 +29,14 @@
 				<tr>
 					<td>새로 가입한 회원</td>
 					<td>${newMember}</td>
+				</tr>
+				<tr>
+					<td>새로 등록된 상품</td>
+					<td>${newMember}</td>
+				</tr>
+				<tr>
+					<td>신규 주문</td>
+					<td>${newDelivery}</td>
 				</tr>
 			</table>
 		</div>

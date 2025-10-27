@@ -5,7 +5,7 @@
 		SELECT count(idx) FROM shop ORDER BY idx DESC;
 	</select>
 	<select id="getProductList" resultType="com.spring.springGroupS12.vo.ShopVO">
-		SELECT * FROM shop WHERE openSW = '공개' ORDER BY idx DESC;
+		SELECT * FROM shop WHERE openSW = '공개' <if test="kategorie != '전체'">AND kategorie = #{kategorie}</if> ORDER BY idx DESC <if test="pageSize != 0">LIMIT #{startIndexNo}, #{pageSize}</if>;
 	</select>
 	<select id="getProduct" resultType="com.spring.springGroupS12.vo.ShopVO">
 		SELECT * FROM shop WHERE idx = #{idx};
@@ -21,6 +21,9 @@
 	</select>
 	<select id="getNewProductSub" resultType="com.spring.springGroupS12.vo.ShopVO">
 		SELECT * FROM shop WHERE openSW = '신청접수' AND shopDate >= date_add(now(), interval - 7 day);
+	</select>
+	<select id="getNewProduct" resultType="com.spring.springGroupS12.vo.ShopVO">
+		SELECT * FROM shop WHERE openSW = '공개' AND shopDate >= date_add(now(), interval - 7 day);
 	</select>
 	
 	

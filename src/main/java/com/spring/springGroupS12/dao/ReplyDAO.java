@@ -8,7 +8,7 @@ import com.spring.springGroupS12.vo.ReplyVO;
 
 public interface ReplyDAO {
 
-	List<ReplyVO> getReply(@Param("parentIdx") int parentIdx);
+	List<ReplyVO> getReply(@Param("parentIdx") int parentIdx, @Param("part") String part);
 	
 	int setReply(@Param("vo") ReplyVO vo);
 

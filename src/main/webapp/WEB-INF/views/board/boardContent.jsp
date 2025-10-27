@@ -11,6 +11,7 @@
 		<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
 		<script src="${ctp}/js/board.js"></script>
 		<link type="text/css" rel="stylesheet" href="${ctp}/css/board.css" />
+		<link type="text/css" rel="stylesheet" href="${ctp}/css/linkOrange.css" />
 		<title>${vo.title}</title>
 	</head>
 <body>
@@ -56,9 +57,10 @@
 						<c:set var="sFileNames" value="${fn:split(fVO.SFileName,'/')}" />
 						<c:set var="fileSizes" value="${fn:split(fVO.fileSize,'/')}" />
 						<c:forEach var="i" begin="0" end="${fn:length(fileSizes)}">
-								<c:if test="${fileSizes[i] != '0'}">
-									<a href="${ctp}/board/${sFileNames[i]}" download=${oFileNames[i]}>${oFileNames[i]}</a>
-								</c:if>
+							<c:if test="${fileSizes[i] != '0'}">
+								<a href="${ctp}/board/${sFileNames[i]}" download=${oFileNames[i]}>${oFileNames[i]}</a>
+								<c:if test="${i<fn:length(fileSizes)-1}">,&nbsp;</c:if>
+							</c:if>
 						</c:forEach>
 					</td>
 				</tr>

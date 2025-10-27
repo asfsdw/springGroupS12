@@ -87,7 +87,7 @@ public class MemberController {
 		if(vo != null) res = 1;
 		return res;
 	}
-	//이메일로 인증번호 발송.
+	// 이메일로 인증번호 발송.
 	@ResponseBody
 	@PostMapping("/SignUpEmailCheck")
 	public int signUpEmailCheckPost(HttpSession session, String email) throws MessagingException {

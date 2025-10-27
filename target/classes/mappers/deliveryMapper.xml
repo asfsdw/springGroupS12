@@ -20,14 +20,17 @@
 		SELECT * FROM delivery WHERE deliveryIdx = #{deliveryIdx} AND deliverySW = '준비중';
 	</select>
 	<select id="getDeliveryListDeliveryMid" resultType="com.spring.springGroupS12.vo.DeliveryVO">
-		SELECT * FROM delivery WHERE mid = #{mid} AND deliverySW != '구매완료' ORDER BY deliveryIdx;
+		SELECT * FROM delivery WHERE mid = #{mid} AND deliverySW != '구매완료' AND deliverySW != '대기중' ORDER BY deliveryIdx;
 	</select>
 	<select id="getDeliveryListDeliveryDelivery" resultType="com.spring.springGroupS12.vo.DeliveryVO">
 		SELECT *, to_days(now()) - to_days(orderDate) AS compDate FROM delivery WHERE deliverySW != '대기중'<if test="deliverySW != '전체'"> AND deliverySW = #{deliverySW}</if> ORDER BY deliveryIdx; 
 	</select>
 	<select id="getDeliveryListMain" resultType="com.spring.springGroupS12.vo.DeliveryVO">
 		SELECT parentIdx, deliveryIdx, title, deliverySW, (SELECT idx FROM reply WHERE delivery.parentIdx = reply.parentIdx AND reply.part = 'shop' AND reply.mid = #{mid}) AS replyIdx 
-		FROM delivery WHERE mid = #{mid} AND deliverySW != '대기중' ORDER BY deliveryIdx LIMIT 5;
+		FROM delivery WHERE mid = #{mid} AND deliverySW != '대기중' ORDER BY deliveryIdx DESC LIMIT 5;
+	</select>
+	<select id="getNewDelivery" resultType="com.spring.springGroupS12.vo.DeliveryVO">
+		SELECT * FROM delivery WHERE deliverySW = '준비중' AND orderDate >= date_add(now(), interval - 7 day);
 	</select>
 
 

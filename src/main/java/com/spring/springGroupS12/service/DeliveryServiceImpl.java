@@ -173,4 +173,9 @@ public class DeliveryServiceImpl implements DeliveryService {
 		return deliveryDAO.getDeliveryListMain(mid);
 	}
 
+	@Override
+	public List<DeliveryVO> getNewDelivery() {
+		return deliveryDAO.getNewDelivery();
+	}
+
 }
