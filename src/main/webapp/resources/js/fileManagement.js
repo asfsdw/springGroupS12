@@ -5,22 +5,20 @@ function selectFolder(extName) {
 
 // 전체선택.
 function allCheck() {
-	for(let i=0; i<document.getElementsByName("fileCheck").length; i++) {
-		document.getElementsByName("fileCheck")[i].checked = true;
+	for(let i=0; i<$("[name = fileCheck]").length; i++) {
+		$("#fileCheck"+i).prop("checked", true);
 	}
 }
 // 전체해제.
 function allReset() {
-	for(let i=0; i<document.getElementsByName("fileCheck").length; i++) {
-		document.getElementsByName("fileCheck")[i].checked = false;
+	for(let i=0; i<$("[name = fileCheck]").length; i++) {
+		$("#fileCheck"+i).prop("checked", false);
 	}
 }
 // 선택삭제.
 function fileDelete(part, file) {
-	console.log(part);
-	console.log(file);
 	// 파일 선택했는지.
-	if(file == "") {
+	if($("[name = fileCheck]").is(":checked") == false && file == "") {
 		swal.fire("삭제할 파일을 선택해주세요.","","info");
 		return false;
 	}
@@ -38,10 +36,10 @@ function fileDelete(part, file) {
 			let fName = "";
 			
 			// 선택삭제(체크박스 체크)를 했을 경우.
-			if(document.getElementsByName("fileCheck")[0].checked != false) {
-				for(let i=0; i<document.getElementsByName("fileCheck").length; i++) {
+			if($("[name = fileCheck]").is(":checked") != false) {
+				for(let i=0; i<$("[name = fileCheck]").length; i++) {
 					// 체크한 파일의 이름(value(file))을 fName에 저장.
-					if(document.getElementsByName("fileCheck")[i].checked) fName += document.getElementsByName("fileCheck")[i].value+"/";
+					if($("[name = fileCheck]").is(":checked")) fName += $("#fileCheck"+i).val()+"/";
 				}
 				// 마지막 / 제거.
 				fName = fName.substring(0, fName.length-1);
@@ -54,7 +52,7 @@ function fileDelete(part, file) {
 					"fNames" : fName
 			}
 			$.ajax({
-				url : "${ctp}/admin/folder/FileManagement",
+				url : "FileManagement",
 				type: "post",
 				data: qurey,
 				success : (res) => {

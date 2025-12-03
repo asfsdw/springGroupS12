@@ -55,15 +55,15 @@
 					<td>${vo.nickName}</td>
 					<td>${vo.title}</td>
 					<td>${vo.shopDate}</td>
-					<td>
-						<select id="openSW${st.index}" class="form-select" style="width:102px">
+					<td class="d-flex justify-content-center">
+						<select id="openSW${cnt}" class="form-select" style="width:102px">
 							<option ${vo.openSW=='신청접수'?'selected':''}>신청접수</option>
 							<option ${vo.openSW=='신청반려'?'selected':''}>신청반려</option>
 							<option ${vo.openSW=='공개'?'selected':''}>공개</option>
 							<option>삭제</option>
 						</select>
 					</td>
-					<td><input type="button" value="변경" onclick="openSWChange('${st.index}','shop','${vo.idx}')" class="btn btn-success btn-sm" /></td>
+					<td><input type="button" value="변경" onclick="openSWChange('${cnt}','shop','${vo.idx}')" class="btn btn-success btn-sm" /></td>
 				</tr>
 				<input type="hidden" id="idx${cnt}" value="${vo.idx}" />
 				<c:set var="cnt" value="${cnt+1}" />
@@ -82,14 +82,14 @@
 					</c:if>
 					<td>${vo.subDate}</td>
 					<td class="d-flex justify-content-center">
-						<select id="openSW${st.index}" class="form-select" style="width:102px">
+						<select id="openSW${cnt}" class="form-select" style="width:102px">
 							<option ${vo.subProgress=='신청접수'?'selected':''}>신청접수</option>
 							<option ${vo.subProgress=='신청반려'?'selected':''}>신청반려</option>
 							<option ${vo.subProgress=='처리완료'?'selected':''}>처리완료</option>
 							<option>삭제</option>
 						</select>
 					</td>
-					<td><input type="button" value="변경" onclick="openSWChange('${st.index}','sub','${vo.idx}')" class="btn btn-success btn-sm" /></td>
+					<td><input type="button" value="변경" onclick="openSWChange('${cnt}','sub','${vo.idx}')" class="btn btn-success btn-sm" /></td>
 				</tr>
 				<input type="hidden" id="idx${cnt}" value="${vo.idx}" />
 				<c:set var="cnt" value="${cnt+1}" />

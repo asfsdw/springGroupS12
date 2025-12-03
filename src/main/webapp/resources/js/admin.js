@@ -83,6 +83,9 @@ function checkClick() {
 
 // 신청현황 변경.
 function openSWChange(i, part, idx) {
+	console.log("i: ",i);
+	console.log("part: ",part);
+	console.log("idx: ",idx);
 	let ans = confirm("신청현황을 변경하시겠습니까?");
 	if(ans) {
 		if(part == 'shop') {

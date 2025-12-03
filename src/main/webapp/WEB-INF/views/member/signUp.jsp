@@ -90,7 +90,7 @@
 			</div>
 			<hr/>
 			<div class="text-center">
-				<button type="button" id="fCheck" onclick="fCheck(${year})" disabled class="btn btn-success">회원가입</button>&nbsp;
+				<button type="button" id="fCheckBtn" onclick="fCheck(${year})" disabled class="btn btn-success">회원가입</button>&nbsp;
 				<button type="button" onclick="location.reload()" class="btn btn-warning" >다시작성</button>&nbsp;
 				<button type="button" onclick="location.href='${ctp}/member/Login'" class="btn btn-info" >돌아가기</button>&nbsp;
 			</div>

@@ -119,6 +119,11 @@ public class DeliveryServiceImpl implements DeliveryService {
 			// 회원이 상품 페이지에서 직접 구매.
 			if(dVO.getParentIdx() == 0) {
 				dVO.setParentIdx(dVO.getIdx());
+				// 포인트를 사용했을 때, 상품에 할인 적용, 사용한 포인트 갱신.
+				if(point != 0) {
+					dVO.setUsedPoint(point);
+					memberDAO.setMemberPointDown(dVO.getMid(), point);
+				}
 				deliveryDAO.setShoppingBag(dVO.getParentIdx(), deliveryIdx, dVO.getMid(), dVO.getNickName(), dVO.getEmail(), dVO.getTitle(), dVO.getOrderQuantity(), dVO.getPrice(), dVO.getAddress(), dVO.getProductImage(), "준비중", point);
 				res = 1;
 			}

@@ -89,6 +89,10 @@ public class AdminController {
 	public int openSWChangePost(String part, String flag,
 			@RequestParam(name = "idx", defaultValue = "0", required = false)int idx,
 			@RequestParam(name = "idxs", defaultValue = "", required = false)String idxs) {
+		System.out.println("part: "+part);
+		System.out.println("flag: "+flag);
+		System.out.println("idx: "+idx);
+		System.out.println("idxs: "+idxs);
 		if(idxs.contains(",")) {
 			String[] sParts = part.split(",");
 			String[] sIdxs = idxs.split(",");
@@ -343,5 +347,46 @@ public class AdminController {
 		model.addAttribute("pVO", pVO);
 		model.addAttribute("files", file);
 		return "admin/folder/fileManagement";
+	}
+	@ResponseBody
+	@PostMapping("/FileManagement")
+	public int fileManagementPost(HttpServletRequest request, Model model, PageVO pVO, String fileName, String fNames) {
+		// fileName = 삭제버튼으로 파일을 삭제할 경우의 파일이름. fNames = 선택삭제로 파일을 삭제할 경우의 파일이름.
+		int res = 0;
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/"+pVO.getPart()+"/");
+		String[] fName = null;
+		// 삭제할 파일이 여러개일 때.
+		if(fNames.contains("/")) {
+			fName = fNames.split("/");
+		}
+		
+		// 삭제 버튼으로 삭제했을 때.
+		if(fileName != "") {
+			File file = new File(realPath+fileName);
+			if(!file.isDirectory()) file.delete();
+			res = 1;
+		}
+		// 여러 파일 삭제.
+		else if(fName != null) {
+			for(int i=0; i<fName.length; i++) {
+				File file = new File(realPath+fName[i]);
+				if(!file.isDirectory()) {
+					file.delete();
+				}
+			}
+			res = 1;
+		}
+		// 선택을 하나만 했을 경우.
+		else {
+			if(!fNames.contains("/")) {
+				File file = new File(realPath+fNames);
+				if(!file.isDirectory()) file.delete();
+			}
+			res = 1;
+		}
+		
+		model.addAttribute("pVO", pVO);
+		
+		return res;
 	}
 }

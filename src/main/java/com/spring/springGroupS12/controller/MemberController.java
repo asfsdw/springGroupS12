@@ -128,7 +128,7 @@ public class MemberController {
 		if(vo.getMid().length() > 20) return "redirect:/Message/wrongAccess";
 		if(vo.getNickName().length() > 20) return "redirect:/Message/wrongAccess";
 		if(vo.getName().length() > 20) return "redirect:/Message/wrongAccess";
-		if(vo.getAge() > 19) return "redirect:/Message/wrongAccess";
+		if(vo.getAge() < 20) return "redirect:/Message/wrongAccess";
 		if(vo.getEmail().length() > 50) return "redirect:/Message/wrongAccess";
 		
 		// 비밀번호 암호화.
@@ -295,9 +295,10 @@ public class MemberController {
 		
 		String strLevel = "";
 		if(vo.getLevel() == 0) strLevel = "관리자";
-		else if(vo.getLevel() == 1) strLevel = "우수회원";
-		else if(vo.getLevel() == 2) strLevel = "정회원";
-		else if(vo.getLevel() == 3) strLevel = "준회원";
+		else if(vo.getLevel() == 1) strLevel = "업자";
+		else if(vo.getLevel() == 2) strLevel = "우수회원";
+		else if(vo.getLevel() == 3) strLevel = "정회원";
+		else if(vo.getLevel() == 4) strLevel = "준회원";
 		
 		// 로그인 세션처리.
 		session.setAttribute("sMid", vo.getMid());

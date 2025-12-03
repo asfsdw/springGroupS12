@@ -68,7 +68,7 @@
 				<hr/>
 				<form name="productForm" method="post" action="${ctp}/shop/Product">
 					<div class="input-group">
-						<input type="number" value="1" min="1" max="10" <if test="${vo.quantity == 0}">disabled</if> id="orderQuantity" name="orderQuantity" />
+						<input type="number" value="1" min="1" max="10" id="orderQuantity" name="orderQuantity" />
 						<div class="input-group-text">개</div>
 					</div>
 					<p></p>

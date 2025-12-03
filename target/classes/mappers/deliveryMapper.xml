@@ -36,7 +36,7 @@
 
 	
 	<insert id="setShoppingBag">
-		INSERT INTO delivery VALUES(DEFAULT,#{parentIdx},#{deliveryIdx},#{mid},#{nickName},#{email},#{title},#{orderQuantity},#{price},#{address},#{productImage},#{deliverySW},#{point},DEFAULT);
+		INSERT INTO delivery VALUES(DEFAULT,#{parentIdx},#{deliveryIdx},#{mid},#{nickName},#{email},#{title},#{orderQuantity},#{price}<if test="point != 0"> - (#{point}/10)</if>,#{address},#{productImage},#{deliverySW},#{point},DEFAULT);
 	</insert>
 	
 	

@@ -63,6 +63,7 @@ public class ShopController {
 		
 		model.addAttribute("pVO", pVO);
 		model.addAttribute("vos", vos);
+		model.addAttribute("kategorie", kategorie);
 		return "shop/goods";
 	}
 	

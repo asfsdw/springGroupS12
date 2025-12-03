@@ -45,9 +45,9 @@
 						<td><input type="checkbox" id="idxFlag${st.index}" name="idxFlag" /></td>
 						<c:if test="${vo.part == 'board'}"><td id="part${st.index}">게시판</td></c:if>
 						<c:if test="${vo.part == 'shop'}"><td id="part${st.index}">굿즈</td></c:if>
-						<td>${vo.parentTitle}</td>
+						<td><a href="${ctp}/admin/ComplaintBoardList?idx=${vo.partIdx}" class="link-primary">${vo.parentTitle}</a></td>
 						<c:if test="${vo.part == 'board'}">
-							<td><a href="${ctp}/admin/ComplaintBoardList?idx=${vo.partIdx}">${vo.cpContent}</a></td>
+							<td>${vo.cpContent}</td>
 						</c:if>
 						<c:if test="${vo.part == 'shop'}">
 							<td><a href="${ctp}/">${vo.cpContent}</a></td>

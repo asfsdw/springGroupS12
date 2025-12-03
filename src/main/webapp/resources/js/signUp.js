@@ -256,7 +256,7 @@ function emailCertificationOk() {
 				$("#addContent").show();
 				// 회원가입 버튼을 바로 활성화하면 실제 화면에서는 갱신되지 않은 채로 있기 때문에 0.1초 텀을 준다.
 				setTimeout(() => {
-					$("#fCheck").attr("disabled", false);
+					$("#fCheckBtn").attr("disabled", false);
 				}, 100);
 			}
 			else alert("인증번호가 일치하지 않습니다.");
@@ -367,7 +367,7 @@ function updateCheck() {
 		$("#name").focus();
 		return false;
 	}
-	else if(age < 19) {
+	else if(age < 20) {
 		alert("미성년자는 가입하실 수 없습니다.");
 		$("#age").focus();
 		return false;

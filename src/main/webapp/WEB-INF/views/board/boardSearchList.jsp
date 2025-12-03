@@ -94,16 +94,16 @@
 		<p></p>
 		<!-- 블록페이지 끝 -->
 		<!-- 검색기 시작 -->
-		<form name="searchForm" action="BoardSearchList">
-			<div class="text-center">
-				<b>검색:</b>
-				<select name="search" id="search">
+		<form name="searchForm" action="BoardSearchList" class="d-flex justify-content-center">
+			<div class="input-group" style="width:500px">
+				<b class="input-group-text">검색:</b>
+				<select name="search" id="search" class="form-select" style="width:120px; flex:0 0 auto;">
 					<option value="title">글제목</option>
 					<option value="nickName">글쓴이</option>
 					<option value="content">글내용</option>
 				</select>
 				<input type="text" name="searchStr" id="searchStr" required />
-				<input type="submit" value="검색" class="btn btn-info btn-sm mb-1" />
+				<input type="submit" value="검색" class="btn btn-info btn-sm mb" />
 			</div>
 		</form>
 		<!-- 검색기 끝 -->

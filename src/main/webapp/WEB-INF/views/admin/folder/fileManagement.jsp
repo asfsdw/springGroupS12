@@ -39,9 +39,9 @@
 				<th>비고</th>
 			</tr>
 			<c:forEach var="file" items="${files}" varStatus="st">
-			<!-- 파일(폴더)명과 확장자 분리. -->
-			<c:set var="ext" value="${fn:split(file,'.')}"></c:set>
-			<c:set var="extName" value="${ext[fn:length(ext)-1]}"></c:set>
+				<!-- 파일(폴더)명과 확장자 분리. -->
+				<c:set var="ext" value="${fn:split(file,'.')}"></c:set>
+				<c:set var="extName" value="${ext[fn:length(ext)-1]}"></c:set>
 				<!-- files는 pageSize만큼만 채우고 남은 공간은 비어있기 때문에 null이 아닐때만 출력하게 한다. -->
 				<c:if test="${file != null}">
 					<tr>
@@ -52,7 +52,7 @@
 								<input type="checkbox" id="fileCheck${st.index}" name="fileCheck" value="${file}" />
 							</c:if>
 						</td>
-						<td>${file}</td>
+						<td id="fileName${st.index}">${file}</td>
 						<td>
 							<!-- 확장자가 없을 때(폴더일 때). -->
 							<c:if test="${extName == ext[0]}">폴더</c:if>
@@ -91,7 +91,7 @@
 	<!-- 블록페이지 시작 -->
 	<div class="input-group justify-content-center">
 		<div class="pagination">
-			<c:if test="${pVO.pag > 1}"><a href="${ctp}/admin/folder/FileManagement?pag=1&pageSize=${pVO.pageSize}&part=${pVO.part}" class="page-item page-link text-dark">첫 페이지</a></c:if>
+			<c:if test="${pVO.pag > 1}"><a href="${ctp}/admin/FileManagement?pag=1&pageSize=${pVO.pageSize}&part=${pVO.part}" class="page-item page-link text-dark">첫 페이지</a></c:if>
 			<c:if test="${pVO.curBlock > 0}">
 				<a href="${ctp}/admin/FileManagement?pag=${(pVO.curBlock - 1) * pVO.blockSize + 1}&pageSize=${pVO.pageSize}&part=${pVO.part}" class="page-item page-link text-dark">이전 블록</a>
 			</c:if>
