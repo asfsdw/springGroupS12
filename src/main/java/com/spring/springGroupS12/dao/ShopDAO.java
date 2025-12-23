@@ -36,4 +36,8 @@ public interface ShopDAO {
 
 	List<ShopVO> getNewProduct();
 
+	int setProductUpdateAdmin(@Param("vo") ShopVO vo);
+
+	List<ShopVO> getProductListAdmin(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("openSW") String openSW);
+
 }

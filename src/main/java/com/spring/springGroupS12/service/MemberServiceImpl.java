@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.springGroupS12.dao.MemberDAO;
 import com.spring.springGroupS12.vo.MemberLoginStatVO;
@@ -111,8 +112,17 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	@Transactional
 	public int setMemberLevelUp(int idx, int level) {
-		return memberDAO.setMemberLevelUp(idx, level);
+		int res = memberDAO.setMemberLevelUp(idx, level);
+		if(res != 0) {
+			MemberVO memberVO = memberDAO.getMemberIdx(idx);
+			List<SubScriptVO> subVOS = memberDAO.getSubScriptList(memberVO.getMid());
+			subVOS.forEach(subVO -> {
+				if(subVO.getSubContent().contains("등급업")) memberDAO.setProductProgressSWUpdate(subVO.getIdx(), "처리완료");
+			});
+		}
+		return res;
 	}
 
 	@Override

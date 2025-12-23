@@ -70,7 +70,12 @@
 			<tr>
 				<td class="text-start">
 					<c:if test="${empty pVO.search}">
-						<input type="button" value="돌아가기" onclick="location.href='${ctp}/board/BoardList?pag=${pVO.pag}&pageSize=${pVO.pageSize}'" class="btn btn-info" />
+						<c:if test="${btnSW == 'off'}">
+							<input type="button" value="돌아가기" onclick="location.href='${ctp}/board/BoardList?pag=${pVO.pag}&pageSize=${pVO.pageSize}'" class="btn btn-info" />
+						</c:if>
+						<c:if test="${btnSW == 'on'}">
+							<input type="button" value="돌아가기" onclick="location.href='${ctp}/board/BoardBest?pag=${pVO.pag}&pageSize=${pVO.pageSize}'" class="btn btn-info" />
+						</c:if>
 					</c:if>
 					<c:if test="${!empty pVO.search}">
 						<input type="button" value="돌아가기" onclick="location.href='${ctp}/board/BoardSearchList?pag=${pVO.pag}&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}'" class="btn btn-info" />

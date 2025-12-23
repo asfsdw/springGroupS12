@@ -76,7 +76,7 @@ public class BoardController {
 	}
 	// 글 작성.
 	@PostMapping("/BoardInput")
-	public String boardInputPost(MultipartHttpServletRequest mFile, Model model,PageVO pVO,BoardVO vo, FileVO fVO,
+	public String boardInputPost(MultipartHttpServletRequest mFile, Model model, PageVO pVO, BoardVO vo, FileVO fVO,
 			@RequestParam(name = "fName", defaultValue = "", required = false)String fName) {
 		int res = 0;
 		// 제목에 대하여 html 태그를 사용할 수 없도록 처리.
@@ -107,7 +107,8 @@ public class BoardController {
 	// 글보기.
 	@GetMapping("/BoardContent")
 	public String boardContentGet(Model model, HttpSession session, PageVO pVO, BoardVO vo, FileVO fVO, ReplyVO reVO,
-			@RequestParam(name = "password", defaultValue = "", required = false)String password) {
+			@RequestParam(name = "password", defaultValue = "", required = false)String password,
+			@RequestParam(name = "btnSW", defaultValue = "off", required = false)String btnSW) {
 		vo = boardService.getBoard(vo.getIdx());
 		if(vo.getOpenSW().equals("비공개")) {
 			if(password.equals("")) return "redirect:/Message/pwdInputNo";
@@ -142,6 +143,7 @@ public class BoardController {
 		model.addAttribute("reVOS", reVOS);
 		model.addAttribute("preVO", preVO);
 		model.addAttribute("nextVO", nextVO);
+		model.addAttribute("btnSW", btnSW);
 		return "board/boardContent";
 	}
 	//좋아요, 싫어요 처리.

@@ -48,6 +48,9 @@ function idCheck() {
 				myform.mid.readOnly=true;
 				$("#pwd").focus();
 				idCheckSW = 1;
+				setTimeout(() => {
+					$("#midBtn").prop("disabled", true);
+				}, 100);
 				return false;
 			}
 		},
@@ -82,6 +85,9 @@ function nickNameCheck() {
 			else {
 				alert("사용 가능한 닉네임입니다.");
 				myform.nickName.readOnly=true;
+				setTimeout(() => {
+					$("#nickNameBtn").prop("disabled", true);
+				}, 100);
 				$("#name").focus();
 				nickNameCheckSW = 1;
 				return false;
@@ -90,11 +96,6 @@ function nickNameCheck() {
 		error :() => alert("전송오류")
 	});
 }
-// 중복체크 버튼 클릭했는지 확인.
-$(() => {
-	$("#midBtn").on("blur", () => idCheckSW = 1);
-	$("#nickNameBtn").on("blur", () => nickNameCheckSW = 1);
-});
 
 // 이메일 중복체크.
 function emailCheck() {

@@ -17,11 +17,11 @@
 			pay_method : 'card',
 			merchant_uid : 'springGroupS12_' + new Date().getTime(),
 			name : '${dVO.title}',
-			amount : 10,
 			/*
+			amount : 10,
 			실제 가격.
-			amount : ${totPrice},
 			*/
+			amount : ${totPrice},
 			buyer_name : '${dVO.nickName}',
 			buyer_email : '${dVO.email}',
 			buyer_addr : '${dVO.address}',

@@ -183,5 +183,20 @@ public class ShopServiceImpl implements ShopService {
 	public List<ShopVO> getNewProduct() {
 		return shopDAO.getNewProduct();
 	}
+
+	@Override
+	public int setProductUpdateAdmin(ShopVO vo) {
+		if(vo.getProductImage() == null) {
+			ShopVO oldVO = shopDAO.getProduct(vo.getIdx());
+			vo.setProductImage(oldVO.getProductImage());
+		}
+		
+		return shopDAO.setProductUpdateAdmin(vo);
+	}
+
+	@Override
+	public List<ShopVO> getProductListAdmin(int startIndexNo, int pageSize, String openSW) {
+		return shopDAO.getProductListAdmin(startIndexNo, pageSize, openSW);
+	}
 	
 }

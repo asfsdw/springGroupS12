@@ -140,7 +140,7 @@ function openSWAllChange() {
 		return false;
 	}
 	
-	let ans = confirm("선택한 신청의 신청현황을 변경하시겠습니까?");
+	let ans = confirm("선택한 목록의 상태를 변경하시겠습니까?");
 	if(ans) {
 		let index = [];
 		let cnt = 0;
@@ -151,7 +151,7 @@ function openSWAllChange() {
 			}
 		}
 		if(index.length == 0) {
-			alert("배송현황을 변경할 회원을 선택해주세요.");
+			alert("상태를 변경할 목록을 선택해주세요.");
 			return false;
 		}
 		
@@ -176,14 +176,50 @@ function openSWAllChange() {
 			},
 			success : (res) => {
 				if(res == -1) {
-					alert("신청현황이 변경되지 않는 신청이 존재합니다.\n신청현황을 확인하시고 다시 시도해주세요.");
+					alert("상태가 변경되지 않는 항목이 존재합니다.\n항목을 확인하시고 다시 시도해주세요.");
 					location.reload();
 				}
 				else if(res != 0) {
-					alert("선택한 신청들의 신청현황이 변경되었습니다.");
+					alert("선택한 항목들의 상태가 변경되었습니다.");
 					location.reload();
 				}
-				else alert("신청현황 변경에 실패했습니다.\n잠시 후, 다시 시도해주세요.");
+				else alert("상태 변경에 실패했습니다.\n잠시 후, 다시 시도해주세요.");
+			},
+			error : () => alert("전송오류")
+		});
+	}
+}
+
+// 상품 목록 상품상태 별로 보기.
+function openSWPageCheck() {
+	console.log("들어옴");
+	location.href = "ProductList?openSW="+$("#openSWPage").val();
+}
+
+// 상품 수정.
+function productUpdate(ctp, idx) {
+	location.href = ctp+"/admin/productUpdate?idx="+idx;
+}
+// 상품 삭제.
+function productDelete(ctp, idx) {
+	let ans = confirm("상품을 정말로 삭제하시겠습니까?");
+	if(ans) {
+		$.ajax({
+			url : ctp+"/admin/productDelete",
+			type: "post",
+			data: {
+				"idx" : idx
+			},
+			success : (res) => {
+				if(res == -1) {
+					alert("삭제되지 않는 상품이 존재합니다.\n상품 상태를 확인하시고 다시 시도해주세요.");
+					location.reload();
+				}
+				else if(res != 0) {
+					alert("선택한 상품이 삭제되었습니다.");
+					location.reload();
+				}
+				else alert("상품 삭제에 실패했습니다.\n잠시 후, 다시 시도해주세요.");
 			},
 			error : () => alert("전송오류")
 		});

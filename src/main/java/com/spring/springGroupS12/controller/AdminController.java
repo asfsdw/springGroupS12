@@ -86,7 +86,7 @@ public class AdminController {
 	@Transactional
 	@ResponseBody
 	@PostMapping("/OpenSWChange")
-	public int openSWChangePost(String part, String flag,
+	public int openSWChangePost(String part, String flag, String openSW,
 			@RequestParam(name = "idx", defaultValue = "0", required = false)int idx,
 			@RequestParam(name = "idxs", defaultValue = "", required = false)String idxs) {
 		System.out.println("part: "+part);
@@ -99,6 +99,8 @@ public class AdminController {
 			int res = 0;
 			try {
 				for(int i=0; i<sIdxs.length; i++) {
+					if(sIdxs.length != sParts.length) sParts = new String[sIdxs.length];
+					if(sParts[i] == null) sParts[i] = "";
 					if(sParts[i].equals("shop")) {
 						if(flag.equals("삭제")) res = shopService.setProductSubDelete(Integer.parseInt(sIdxs[i]));
 						else res = shopService.setProductOpenSWUpdate(Integer.parseInt(sIdxs[i]), flag);
@@ -106,6 +108,9 @@ public class AdminController {
 					else if(sParts[i].equals("sub")) {
 						if(flag.equals("삭제")) res = memberService.setSubScriptDelete(Integer.parseInt(sIdxs[i]));
 						else res = memberService.setProductProgressSWUpdate(Integer.parseInt(sIdxs[i]), flag);
+					}
+					else {
+						res = shopService.setProductOpenSWUpdate(Integer.parseInt(sIdxs[i]), flag);
 					}
 				}
 				return res;
@@ -134,17 +139,18 @@ public class AdminController {
 				return memberService.setProductProgressSWUpdate(Integer.parseInt(idxs), flag);
 			}
 		}
-		return 0;
+		else return shopService.setProductOpenSWUpdate(Integer.parseInt(idxs), flag);
 	}
 	
 	// 상품 리스트.
 	@GetMapping("/ProductList")
 	public String productListGet(Model model,
-			@RequestParam(name = "idx", defaultValue = "0", required = false)int idx) {
+			@RequestParam(name = "idx", defaultValue = "0", required = false)int idx,
+			@RequestParam(name = "openSW", defaultValue = "전체", required = false)String openSW) {
 		List<ShopVO> vos = null;
 		ShopVO vo = null;
 		if(idx == 0) {
-			vos = shopService.getProductList(0, 0, "전체");
+			vos = shopService.getProductListAdmin(0, 0, openSW);
 			model.addAttribute("vos", vos);
 		}
 		else if(idx != 0) {
@@ -152,7 +158,18 @@ public class AdminController {
 			model.addAttribute("vo", vo);
 		}
 		
+		model.addAttribute("openSW", openSW);
 		return "admin/shop/productList";
+	}
+	// 상품 삭제.
+	@ResponseBody
+	@PostMapping("/productDelete")
+	public int productDeletePost(int idx) {
+		int res = 0;
+		try {
+			res = shopService.setProductSubDelete(idx);
+		} catch (Exception e) {return -1;}
+		return res;
 	}
 	// 배송 리스트.
 	@GetMapping("/DeliveryList")
@@ -188,6 +205,19 @@ public class AdminController {
 	@PostMapping("/DeliveryDelete")
 	public int deliveryDeletePost(String deliveryIdx) {
 		return deliveryService.setShoppingBagDeleteDeliveryIdx(deliveryIdx);
+	}
+	
+	// 상품 업데이트 폼 이동.
+	@GetMapping("/productUpdate")
+	public String productUpdateGet(Model model, int idx) {
+		model.addAttribute("vo", shopService.getProduct(idx));
+		return "admin/shop/productUpdate";
+	}
+	// 상품 업데이트.
+	@PostMapping("/productUpdate")
+	public String productUpdatePost(ShopVO vo) {
+		int res = shopService.setProductUpdateAdmin(vo);
+		return "redirect:/admin/ProductList";
 	}
 	
 	// 멤버 목록.
@@ -307,6 +337,9 @@ public class AdminController {
 			}
 			else {
 				res = boardService.setBoardDelete(idx);
+				
+				ComplaintVO searchVO = complaintService.getComplaintPartIdx(idx, "board");
+				res = complaintService.setComplaintProgressUpdate(searchVO.getIdx(), "처리완료");
 			}
 		} catch (Exception e) {
 			return -1;

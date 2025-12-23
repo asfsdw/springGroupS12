@@ -37,4 +37,8 @@ public interface ShopService {
 
 	List<ShopVO> getNewProduct();
 
+	int setProductUpdateAdmin(ShopVO vo);
+
+	List<ShopVO> getProductListAdmin(int startIndexNo, int pageSize, String openSW);
+
 }

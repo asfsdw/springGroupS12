@@ -26,6 +26,9 @@
 	<select id="getNewMember" resultType="com.spring.springGroupS12.vo.MemberVO">
 		SELECT * FROM member WHERE startDate >= date_add(now(), interval - 7 day);
 	</select>
+	<select id="getMemberIdx" resultType="com.spring.springGroupS12.vo.MemberVO">
+		SELECT * FROM member WHERE idx = #{idx};
+	</select>
 	
 	<select id="getSubScriptList" resultType="com.spring.springGroupS12.vo.SubScriptVO">
 		SELECT * FROM sub_script <if test="mid != '전체'">WHERE mid = #{mid}</if>;

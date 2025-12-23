@@ -25,6 +25,9 @@
 	<select id="getNewProduct" resultType="com.spring.springGroupS12.vo.ShopVO">
 		SELECT * FROM shop WHERE openSW = '공개' AND shopDate >= date_add(now(), interval - 7 day);
 	</select>
+	<select id="getProductListAdmin" resultType="com.spring.springGroupS12.vo.ShopVO">
+		SELECT * FROM shop <if test="openSW != '전체'">WHERE openSW = #{openSW}</if> ORDER BY idx DESC;
+	</select>
 	
 	
 	
@@ -49,6 +52,9 @@
 	</update>
 	<update id="setProductUpdate">
 		UPDATE shop SET kategorie = #{vo.kategorie}, quantity = #{vo.quantity}, content = #{vo.content} WHERE idx = #{vo.idx};
+	</update>
+	<update id="setProductUpdateAdmin">
+		UPDATE shop SET nickName = #{vo.nickName}, kategorie = #{vo.kategorie}, title = #{vo.title}, productImage = #{vo.productImage}, content = #{vo.content}, price = #{vo.price}, quantity = #{vo.quantity} WHERE idx = #{vo.idx};
 	</update>
 	
 	

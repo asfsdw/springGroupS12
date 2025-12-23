@@ -62,4 +62,6 @@ public interface MemberDAO {
 
 	List<MemberVO> getNewMember();
 
+	MemberVO getMemberIdx(@Param("idx") int idx);
+
 }

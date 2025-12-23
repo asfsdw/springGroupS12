@@ -24,19 +24,19 @@
 				</tr>
 				<tr>
 					<td>새로운 신청</td>
-					<td>${newSubScript}</td>
+					<td><a href="${ctp}/admin/SubScriptList">${newSubScript}</a></td>
 				</tr>
 				<tr>
 					<td>새로 가입한 회원</td>
-					<td>${newMember}</td>
+					<td><a href="${ctp}/admin/MemberList">${newMember}</a></td>
 				</tr>
 				<tr>
 					<td>새로 등록된 상품</td>
-					<td>${newMember}</td>
+					<td><a href="${ctp}/admin/ProductList">${newMember}</a></td>
 				</tr>
 				<tr>
 					<td>신규 주문</td>
-					<td>${newDelivery}</td>
+					<td><a href="${ctp}/admin/DeliveryList">${newDelivery}</a></td>
 				</tr>
 			</table>
 		</div>
