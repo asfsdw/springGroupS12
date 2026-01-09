@@ -10,8 +10,8 @@
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url" value="jdbc:mysql://localhost:3306/springgroup12" />
-		<property name="username" value="root" />
-		<property name="password" value="cjgreen" />
+		<property name="username" value="db이름" />
+		<property name="password" value="db비밀번호" />
 	</bean>
 	
 	<!-- myBatis SessionFactory 설정 -->
